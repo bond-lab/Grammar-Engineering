@@ -1,0 +1,1130 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>Knowledge Engineering for NLP: Testsuite specifications</title>
+<link rel="stylesheet" type="text/css" href="style.css"/>
+</head>
+
+<body>
+<h1>Testsuite Specifications</h1>
+
+
+<h2>Navigation</h2>
+
+<ul>
+<li><a href="#preliminaries">Preliminaries</a>
+<li><a href="#guidelines">General Guidelines</a>
+<li><a href="#phenomena">Phenomena</a>
+<li><a href="#formatting">Formatting</a>
+<li><a href="index.html">Back to course page</a>
+</ul>
+
+
+<h2><a name="preliminaries">Preliminaries</a></h2>
+
+<ul>
+  <li>If your language uses non-ascii characters, you'll need to either:
+
+      <ul>
+      <li>Settle on a system of transliteration (preferably both non-lossy and standard for the language, but at least the former)
+      <li>Figure out an input method for the standard orthography in emacs as well as how to create unicode files.
+    </ul>
+<li>If your language has complex morphophonology, you'll need to
+    work out an underlying representation to use for your testsuite (and lexicon/lexical rules).
+    
+<li>If you're not a native speaker of your language, you might try to
+    find out whether there are native speakers you could contact for
+    judgments on examples.  (Is the language taught at UW? Is there a
+    student organization that's likely to attract speakers of the
+    language? Is there a cultural organization in Seattle? Is there a
+    forum somewhere on the web?)  If you are working with a field linguist,
+    you should find out from him/her to what extent you would be able to 
+    get judgments on new examples.
+</ul>
+
+<p><a href="testsuites.html">Back to top</a>
+
+<h2><a name="guidelines">Test suites: General guidelines</a></h2>
+
+<ul>
+  <li>Your test suite should include both grammatical and
+ungrammatical examples, and ideally more ungrammatical examples than
+grammatical ones.  In the description of grammatical phenomena below,
+I'll give examples of how this might be done.
+
+  <li>Your test suite should include examples showing the interaction
+of various phenomena (e.g., negative questions), to the extent that
+you can find this data.
+
+  <li>In general, you'll want to keep your vocabulary as small as
+      possible, using distinct word types only when required to
+      illustrate particular phenomena. On the other hand, we'll
+      eventually want to add enough words to each grammar so that we
+      can do the MT exercise and, more importantly, to the extent that
+      you can collect examples that have been vetted by native
+      speakers (as the examples in your reference grammars should have
+      been), these will are more valuable than examples that have been
+      constructed on the basis of a grammar, but not validated.
+
+  <li>Steer clear of sentences with copulas or non-verbal predicates
+  (e.g., <i>The cat is old</i>), except in the portion of the testsuite
+  dedicated to these phenomena.
+
+  <li>Ungrammatical examples should generally have only one thing wrong with them.  These are more useful for diagnostic purposes.
+
+  <li>Grammatical examples should be complete sentences, even if you're illustrating something to do with smaller phrases (e.g., just NPs).  We won't be dealing with fragments in this class.
+      
+</ul>
+      
+<p><a href="testsuites.html">Back to top</a>
+
+<h2><a name="phenomena">Grammatical phenomena</a></h2>
+
+<p>This section describes the grammatical phenomena we expect to cover,
+and the type of examples you should use to illustrate them.   (NB: This document has grown over the years, and some phenomena not treated in this year's 567 are still included for posterity.  You should follow the links from the lab instructions to find the phenomena for each lab.)
+
+<ul>
+  <li><a href="#wordorder">Basic Word Order</a>
+  <li><a href="#pronouns">Pronouns</a>
+  <li><a href="#restNP">The Rest of the NP</a>
+  <li><a href="#opt">Argument Optionality</a>
+  <li><a href="#agreement">Agreement</a>
+  <li><a href="#case">Case</a>
+  <li><a href="#neg">Negation</a>
+  <li><a href="#yesno">Matrix yes-no questions</a>
+  <li><a href="#emb">Embedded complement clauses</a>
+  <li><a href="#clmod">Adverbial clausal modifiers</a>
+  <li><a href="#modal">Modals</a>
+  <li><a href="#coord">Coordination</a>
+  <li><a href="#agrcoord">Agreement in NP Coordination</a>
+  <li><a href="#tma">Tense/aspect</a>
+  <li><a href="#demo">Demonstratives/definiteness</a>
+  <li><a href="#poss">Possessives</a>
+  <li><a href="#adj">Attributive adjectives</a>
+  <li><a href="#adv">Adverbs</a>
+  <li><a href="#copula">Non-verbal predicates</a>
+  <li><a href="#info">Information Structure</a>
+  <li><a href="#wh">Matrix wh questions</a>
+  <li><a href="#valchange">Valence-Changing Lexical Rules</a>
+  <li><a href="#evidentials">Evidentials</a>
+</ul>
+
+      <h3><a name="wordorder">Basic Word Order</a></h3>
+
+<p>In declarative matrix clauses, what is the order of the major
+constituents (subject, verb, complements)?  Be sure to consider
+both intransitive and transitive verbs.  Note that some languages strongly prefer one order,
+while allowing some variation, while others are better characteried as
+free or partially free, even if there is still a most frequent word order.
+
+<p>Do sentences in your language typically contain auxiliaries?  Where
+does the auxiliary occur with respect to the verb?
+
+<p>Your ungrammatical examples in this section should explore all of
+the possible orders that are not allowed in your language.  Likewise,
+your grammatical examples should illustrate all the possible orders.
+For a transitive verb, then, we expect six sentences (all possible
+orders of S, V, and O) with the number of grammatical v. ungrammatical
+sentences varying depending on the language type.
+
+<p>In some languages, full NPs are arguably always adjuncts (topics, etc.)
+with the valence requirements of the verb being filled by affixes.  If
+your language seems to fall into this type, you should still try to find
+examples with full NPs illustrating where they can occur, but please
+discuss this in your write up.
+
+<p>Another more complicated word-order pattern is "V2", where the verb
+(or a finite auxiliary) must be the second thing in the clause, but
+anything can come first (S, O, adverb, etc).  If your language is described
+as V2, your word order examples should include ungrammatical examples
+where the verb is not in second position, and a variety of grammatical
+examples where it is.
+
+<p>If your language is strict about the order of S and O, be careful
+in your assignment of (un)grammaticality in examples where S and O are
+reversed.  Whether the string is strictly ungrammatical or actually
+just means something different depends on how else your language marks
+subjects and objects (e.g., with case or agreement).  For example, in
+English, <i>Cats chase dogs</i> and <i>Dogs chase cats</i> are both
+grammatical, they just mean different things.
+
+<p>Please use full NPs for the basic word order examples (i.e., something
+like <i>the cat</i> or <i>cats</i> instead of <i>Fluffy</i> or <i>them</i>).
+
+<h3><a name="pronouns">Pronouns</a></h3>
+
+<p>We'll be addressing agreement, and to get interesting subject-verb
+(or object-verb) agreement, it's useful to have non-third person forms.
+
+<p>Find the paradigm(s) for pronouns in your language: Do they vary by person, number, gender, case?
+
+<p>Do pronouns have the same distribution as full NPs in your language?
+(I.e., can they appear in the same places in the string?)  If not, add
+some examples illustrating the contrast to your test suite. In either case,
+add some examples to your test suite illustrating the full paradigm.
+(Ungrammatical examples involving case and agreement will come up under
+those topics below.)
+
+<p>Note that we are NOT concerned with reflexive pronouns, so don't worry
+about collecting these.
+
+<h3><a name="restNP">The rest of the NP</a></h3>
+
+<p>This section is meant to address the other obligatory elements of
+an NP (particularly, an NP headed by a common noun).  Does the
+language require determimers?  Require determiners only with certain
+nouns?  Allow determiners optionally?  Allow determiners even with
+proper nouns and pronouns?  What is the order of the determiner with
+respect to the noun?  The space of examples here (abstracting away
+from order) should look something like this:
+
+<ul>
+  <li>det n1 itr-verb
+  <li>n1 itr-verb
+  <li>det n2 itr-verb
+  <li>n2 itr-verb
+  <li>det n3 itr-verb
+  <li>n3 itr-verb
+  <li>n1 det itr-verb (illustrating other possible order of n and det)
+</ul>
+
+<p>Note that n1, n2, and n3 are supposed to be of different types
+(e.g., nouns that require determiners always, nouns that disallow
+determiners always, and nouns that optionally allow determiners).  Not
+all languages will necessarily have three types.  
+
+<p>Is there anything else that is required with NPs?
+
+<p>(Note that one common thing is case-marking adpositions.  If your
+language has these, you'll want to illustrate them under "case".)
+
+      <h3><a name="opt">Argument optionality</a></h3>
+
+<p>This section concerns whether and under what circumstances verbal
+arguments can be left unexpressed.  Languages vary in the restrictions
+they place on unexpressed arguments.  For subjects and objects each, find
+out if your language:
+
+<ul>
+  <li>allows them to be dropped for any verb, or just with some verbs.
+  <li>requires agreement markers on the verb when the subject/object is
+  unexpressed.
+  <li>allows them to be dropped in any context, or only in particular
+  contexts (e.g., particular tense/aspect combinations, particular person/number combinations, etc).
+  </ul>
+
+
+<p>Based on the answers to the questions above, create
+examples for your test suite.  Here a typical set of examples would be
+(again, abstracting away from word order, and assuming that agreement
+markers are optional with overt arguments but obligatory with missing
+ones):
+
+<ul>
+  <li>s tverb o
+  <li>s tverb-objagr
+  <li>*s trans-verb
+  <li>tverbs-subjagr o
+  <li>*tverb o
+  <li>tverb-subjagr-objagr
+  <li>*tverb-objagr
+  <li>*tverb-subjagr
+</ul>
+
+<p>If your language has lexically-licensed (or lexically-restricted)
+pro-drop, you should include two sets of examples like the above (one
+with a verb that does allow a dropped object and one with a verb that
+does not).
+
+
+      <h3><a name="agreement">Agreement</a></h3>
+
+<p>Agreement is covariation in form between multiple items
+(typically a head and a dependent) in a sentence.  Sometimes,
+the head doesn't change form,  but the dependent does, depending
+on properties of the head.
+
+<p>Note that we are not concerned here with agreement between
+a pronoun and its antecedent.
+
+<p>Languages vary greatly in how much agreement they display from none
+at all to quite a bit. You can categorize agreement systems along
+two dimensions:
+
+<ol>
+  <li>Which elements are in the agreement relation (subject & verb, object & verb, determiner & noun, adjective & noun are typical)
+  <li>Which features are involved (person, number, case and gender are typical)
+</ol>
+
+<p>Determine whether your language has agreement, and if so, which
+type.  Then construct examples showing both grammatical and ungrammatical
+possibilities.  Remember, the ungrammatical examples should only have one
+thing wrong with them (i.e., if you have both subject-verb and object-verb
+agreement, there's no need to make an example where both the subject and
+the object disagree with the verb).
+
+<p>For a language with determiner-noun agreement in number and case
+subject-verb agreement in person and number, a possible example set is:
+
+<ul>
+  <li>det-sg-nom n-sg-nom verb-3sgsubj det-sg-acc n-sg-acc
+  <li>det-pl-nom n-pl-nom verb-3plsubj det-pl-acc n-pl-acc
+  <li>det-sg-nom n-sg-nom verb-3plsubj det-sg-acc n-sg-acc
+  <li>det-pl-nom n-pl-nom verb-3sgsubj det-pl-acc n-pl-acc
+  <li>*det-sg-acc n-sg-nom verb-3sgsubj det-sg-acc n-sg-acc
+  <li>*det-pl-nom n-sg-nom verb-3sgsubj det-sg-acc n-sg-acc
+  <li>*det-sg-nom n-pl-nom verb-3plsubj det-pl-acc n-pl-acc
+  <li>*det-pl-acc n-pl-nom verb-3plsubj det-pl-acc n-pl-acc
+  <li>*det-sg-nom n-sg-nom verb-3sgsubj det-pl-acc n-sg-acc
+  <li>*det-sg-nom n-sg-nom verb-3sgsubj det-sg-nom n-sg-acc
+  <li>*det-pl-nom n-pl-nom verb-3plsubj det-sg-acc n-pl-acc
+  <li>*det-pl-nom n-pl-nom verb-3plsubj det-pl-nom n-pl-acc
+  <li>pronoun-1sg-nom verb-1sgsubj
+  <li>pronoun-1pl-nom verb-1plsubj
+  <li>pronoun-2sg-nom verb-2sgsubj
+  <li>pronoun-2pl-nom verb-2plsubj
+  <li>*pronoun-1sg-nom verb-2plsubj
+  <li>*pronoun-1pl-nom verb-2sgsubj
+  <li>*pronoun-2sg-nom verb-1plsubj
+  <li>*pronoun-2pl-nom verb-2sgsubj
+</ul>
+
+<p>Notice the inclusion of non-third person examples (using pronouns).
+You could pair e.g., every verb form with every kind of noun it
+doesn't agree with, but that's not strictly necessary.  As long as
+each noun type and each verb form show up in at least one ungrammatical
+examples, most errors should get caught.
+
+      <h3><a name="case">Case</a></h3>
+
+<p>A language has a case system if the nouns vary in form depending
+on the grammatical role they play in a sentence and/or the specific
+head they are a dependent of.  (In some languages, it's not the nouns
+themselves that vary in form, but the dependents of the noun, such
+as determiners or adjectives.  We'll analyze this as the nouns still
+having case and their dependents agreeing with them in case.)
+
+<p>Some languages have no case system. Among languages that do
+have case systems, they can be characterized along the following
+parameters:
+
+<ul>
+  <li>The number of distinct cases
+  <li>Whether or not there are lexical idiosyncrasies in case assignment ("quirky case")
+  <li>Whether the pattern is nominative-accusative, ergative-absolutive, or split-ergative, or one of a number of other possibilities
+  <li>How the case is expressed (affixes on nouns/determiners/adjectives, adpositions)
+</ul>
+      
+<p>Determine if your language has a case system, and if so, where it
+falls on the above parameters.  If your language has a direct-inverse
+system, even though that isn't strictly case, please consider it here.
+
+<p>Create examples showing both grammatical and ungrammatical case
+patterns.  For the purposes of this class, you only need to consider
+the case of subjects and direct objects.  If your language has quirky case, you should consider
+including both verbs that illustrate the major case patterns and verbs
+that have idiosyncratic patterns.  If your language has split-ergativity,
+you should illustrate both sides of the split.
+
+<p>For a nominative-accusative language (with a distinct dative case)
+without quirky case, a typical example set would look like this (assuming
+SVO word order):
+
+<ul>
+  <li>noun-nom intrans-verb
+  <li>*noun-acc intrans-verb
+  <li>*noun-dat intrans-verb
+  <li>noun-nom trans-verb noun-acc
+  <li>*noun-acc trans-verb noun-acc
+  <li>*noun-dat trans-verb noun-acc
+  <li>*noun-nom trans-verb noun-nom
+  <li>*noun-nom trans-verb noun-dat
+</ul>
+
+<p>If your language also has agreement, or obligatory determiners, etc.,
+make sure that the examples have the appropriate form along those dimensions.
+
+<h3><a name="neg">Negation</a></h3>
+
+<p>[In this section only, we're using "grammatical examples" and
+"ungrammatical examples" instead of "positive examples" and "negative
+examples", to avoid collision with the other uses of the term "negative".]
+
+<p>Here we're interested in how your language handles sentential (NB:
+not constituent) negation.  Cross-linguistically, sentential negation
+strategies can be classified according to the number of morphemes
+required for the construction
+(see <a href="http://wals.info/chapter/112">WALS Online Ch. 112</a>).
+If your language marks negation with a single morpheme, then click on
+"simple" at the top of negation page, and you should then be able to
+fill out some more information about your negator morpheme.</p>
+
+<p>For simple negation, you can select from the following types:
+
+<ol>
+  <li>Inflection: An affix (prefix, suffix, infix) expressing negation, which attaches either to auxiliaries only, main verbs only, any (finite) verb.  
+  <li>Negative auxiliary verb: In this negation strategy, the negator morpheme
+is a syntactic head that selects a (V, VP, or an S) complement (according to 
+the properties you specified for auxiliary verbs in your language on the word
+order page.
+  <li>Independent adverb: An adverb that modifies a V, a VP, or an S; and attaches to the left, right, or either side.
+  <li>Selected adverb: An adverb that appears as a selected complement of auxiliaries only, main verbs only, any (finite) verb.
+</ol>
+
+It can be subtle to distinguish between options 3 and 4, and
+chances are the data you'll be able to find won't be sufficient to do
+so.  For option 1, grammatical test suite examples should show the negated
+verb/auxiliary. Ungrammatical examples for your testsuite should show the negation inflection
+on verbs that is not allowed on (non-finite verbs? non-auxiliary verbs?).  For
+option 2, grammatical examples should show the negative auxiliary with its
+proper complement in the proper word order.  Ungrammatical examples should show 
+the negative auxiliary in the wrong position or with the wrong complement
+type.  For 3/4, grammatical examples should show the negative adverb in the
+positions it can appear in; contrasting ungrammatical examples should
+illustrate where it cannot appear.</p>
+
+<p>If your language uses two morphemes together to mark negation, select
+the `bipartite' option on the negation page. For languages with bipartite (sometimes called double) negation, it's often
+the case that one morpheme is more associated with the actual negation function
+and the second morpheme seems to be more resumptive or supporting.  We'll call the two morphemes NEG1 and NEG2, respectively.  If it's not the case that one morpheme is primary, label them NEG1 and NEG2 based on linear order.</p>
+
+<p> A word of caution about determining whether your language has bipartite negation: be sure not to count 'negative concord' or 'negative agreement' items in your counts.  That is, sometimes NPs under the scope of negation show agreement marking (ie, in some Englishes: "I didn't drink no water.").  Only count negative morphemes that are required by the formal construction.  As example, consider Africaans [afr]: 
+
+<table>
+<tr>
+<td>Hulle</td>
+<td>was</td>
+<td>nie</td>
+<td>betrokke</td>
+<td>nie</td>
+</tr>
+<tr>
+<td>they</td>
+<td>were</td>
+<td>NEG1</td>
+<td>involved</td>
+<td>NEG2</td>
+</tr>
+<tr>
+<td colspan="5">
+They were not involved [afr]. (de Angulo and Freeland 1931)
+</td>
+</tr>
+</table>
+</p>
+
+
+<p>After you've determined that you've got bipartite negation, you'll need to specify the individual properties of NEG1 and NEG2.</p>
+
+<p> As with simple negation types, bipartite negation test suites should have grammatical and ungrammatical examples.  Ungrammatical examples should show required dependencies between the two morphemes (and required positions) being violated.</p> 
+
+<h3><a name="yesno">Matrix yes-no questions</a></h3>
+
+<P>How does your language indicate matrix clause (i.e., not embedded)
+yes-no questions?  Possible strategies include word order variations,
+a sentence-initial or sentence-final question particle, a special
+auxiliary, and intonation only.
+
+<p>Your testsuite should include positive examples illustrating all
+of the strategies in your language.  If you have any strategies that
+involve additional lexical material (e.g., a question particle), create
+negative examples with the question particle in the wrong place.
+
+<p>If your language indicates questions with word order variations, go
+back to your negative examples under word order and check whether anything
+marked as ungrammatical there is really grammatical as a question.  This
+is where we begin to see that a finished testsuite should pair strings
+with analyses --- this is done implicitly here in the free translations.
+
+<p>Consider creating examples of negative questions (i.e., sentences
+simultaneously illustrating both negation and yes-no questions).
+
+      <h3><a name="emb">Embedded complement clauses (declarative, interrogative)</a></h3>
+
+<p>Try to find at least one verb that can embed finite declarative
+clauses and at least one verb that can embed finite interrogative
+clauses --- both as complements (rather than subjects).  How are the
+embedded clausees marked? Are there complementizers, either optional
+or obligatory? Is there any special morphology required on the verb?
+How is the embedded clause positioned with respect to the matrix verb
+(i.e. does it show up in object position, necessarily at the end of
+the clause, somewhere else)? Are embedded clauses necessarily
+nominalized? Does the language use complementizers?  Is the word order
+different between matrix and embedded clauses?  Are there different
+complementizers for embedded declaratives v. interrogatives?  Do the
+selecting verbs allow both kinds of clauses (e.g.,
+English <i>know</i>) or just one (e.g., English <i>ask</i>).  Create
+grammatical and ungrammatical exmaples to illustrate any contrasts
+that you find. Restrict your attention to yes-no questions. (That is,
+no <i>wh-</i> questions.)
+
+<P>Note that in this section I am not looking for embedded clauses
+functioning as modifiers (e.g., relative clauses, clauses marked
+by <i>when</i> or
+<i>because</i>, non-finite clauses expressing simultaneous action).
+Instead try to find examples similar to these:
+
+<ul>
+<li>The dog thinks that the cat slept.
+<li>The child asked whether birds sing.
+</ul>
+
+<p>For the purposes of our MT exercise at the end of the class, try
+in particular to find equivalents of <i>think</i> and <i>ask</i> that
+can be used with clausal complements.
+
+      <h3><a name="clmod">Adverbial Clausal Modifiers</a></h3>
+
+<p>This section looks at clauses that serve as modifiers for other clauses.  Examples from English include:
+
+<ul>
+<li>Kim slept <i>while Sandy played</i>.
+<li>Kim laughed <i>because Sandy told a joke</i>.
+</ul>
+
+<p>You'll be looking for the following information about clausal modifier strategies:
+
+<ul>
+<li>What identifies the modifier as a subordinate clause?  (Could be: A free subordinator, special morphology on the verb, both?)
+<li>If you have free subordinators, are they at the edge of the subordinate clause or do they potentially appear somewhere in the middle?
+<li>Is the subordinate clause required to be nominalized?
+<li>Does the modifier attach to the matrix clause at the S level or the VP level?
+<li>Does the matrix clause require any mark to show that it is modified by a clausal modifier?
+<li>Is the subject of the subordinate clause optionally or obligatorily shared with that in the matrix clause?
+</ul>
+
+<p>Focus in the first instance on finding how your language expresses the equivalents of <i>because</i> and <i>while</i> as expressed above. If you can't either or both of those, fill in if possible with other clausal modifiers. As usual, create both positive (grammatical) and negative (ungrammatical) examples, illustrating the properties elicited above.
+
+      <h3><a name="modal">Modals</a></h3>
+
+<p>How does your language express the meaning associated with English
+<i>can</i> in <i>I can eat glass</i>?  The two major possibilities are
+an independent auxiliary like in English or an affix on the main verb.
+Alternatively, you might find only periphrastic means ("It is possible
+for me to eat glass.")  If there's an auxiliary, you might find that
+it's a subject-raising verb (like in English), or that it does argument
+composition: in this case, the auxiliary takes the lexical verb as its
+complement and then adopts all of the verb's arguments (subject and
+complements) as its own.  You can tell this is going on when the
+arguments of the verb are ordered with respect to the auxiliary rather
+than the verb.
+
+      <h3><a name="coord">Coordination</a></h3>
+
+<p>Explore how coordination is marked in your language. Coordination is,
+very informally, the sort of phrasal combination marked by "and" in
+English. In some languages (like English), this is simple: a single
+lexical item can coordinate any kind of phrase. In other languages,
+coordination might be marked by adding an affix, lengthening a vowel,
+or changing to another tense -- the variety of marking strategies is
+surprising. Languages also vary as to how many coordinands must be
+marked: all of them (and A and B and C...), just one (A B and C), or
+none of them (A B C...). Also, some languages have different ways of
+marking coordination for different phrase types.  If this is the
+case, it will be interesting to illustrate at least two different
+strategies.
+
+<p>Extracting this information from your written grammar can be
+challenging. Coordination is described in different sections in
+different grammars: in a separate section of its own, in a section
+that also describes subordination (often titled "Conjuctions"), or
+possibly spread out over the sections that describe each phrase type
+(i.e. nouns, verbs, adjectives, etc). Some grammars provide very
+little information beyond "the word for 'and' is FOO"; some are more
+detailed. Collect what information you can find, especially example
+sentences that have the word "and" in their gloss or
+translation. Consider doing a Google search (or other web search)
+based on the spelling of the morpheme for "and" to get some naturally
+occurring examples to supplement what you can get from your reference
+material. One last thing to be aware of: some languages mark
+coordinated meanings using a word or inflection meaning "with", but
+don't seem to actually form tightly bound coordinated constituents.
+
+      <h3><a name="agrcoord">Agreement in NP Coordination</a></h3>
+
+<p>[Phenomena code: Coordination Agreement/crdagr]
+
+
+<P>New section for 2017, so start early if possible and expect bugs!
+
+<p>In this section, we're interested in what happens to the agreement
+properties (person, number, gender) on NPs or NOMs (N's) coordinated
+with <i>and</i>, where the agreement properties of the conjuncts
+differ.  There are three major patterns:
+
+<ol>
+<li>Feature resolution --- the value of a feature on the mother is some static
+function of the value of the features on the daughters.  For example,
+in English, a coordinated NP is 1st person if any of the conjuncts are 1st person, otherwise 2nd person if any of the conjuncts are 2nd person, otherwise 3rd prson.
+<li>Specific value on the mother independent of the values on the daughters.
+For example, in English, the mother of an NP coordinated with <i>and</i> is always plural.
+<li>Distinguished conjunct agreement --- agreeing elements outside the coordinated NP agreed with one specific conjunct.  This could be the closest conjunct to the agreeing element (e.g. rightmost in subject-verb agreement in an SVO language) or it could be rightmost or leftmost consistently, regardless of where the coordinated NP is situated with respect to the agreeing element.
+</ol>
+
+<p><b>For languages with agreement and <i>and</i>-coordinaton of NOMs or NPs only</b>, collect examples showing how all of the features active in agreement behave when the conjuncts in a coordinated NP (or NOM) differ in those features.
+
+<h3><a name="tma">Tense/aspect</a></h3>
+
+<p>What tense and aspect categories are marked in your language, and how
+are they marked?  
+
+<p>Tense has to do with the time of the event in relation to the
+speech time, and usually involves categories like "past, present,
+future", though not all languages make a three-way distinction, and
+some languages allow more fine-grained distinction.  Aspect has to do
+with the internal temporal structure of the event, and how it is
+viewed or portrayed in the utterance.  Under the heading aspect, you
+might find categories like "progressive, habitual, perfective,
+durative, inceptive" and others.  
+
+<p>Tense and aspect can be expressed by auxiliaries, affixes, particles or
+combinations thereof.
+
+<p>You should collect at least one way of expressing each tense
+category marked in your language, except for "perfect" tenses (e.g.,
+English future perfect <i>Kim will have gone by then.</i>).  If your
+language marks any aspect categories with auxiliaries, affixes, or
+particles, try to collect roughly three different aspects as well.
+Note that when a language doesn't have a grammaticalized means of
+expressing a particular tense or aspect category, it can usually still
+get it across by paraphrasing.  Thus English <i>Kim began to swim.</i>
+doesn't count as inceptive aspect for our purposes.
+
+<p>Ungrammatical examples can be hard to come by in this category,
+but you should be able to construct some by showing illicit combinations
+of auxiliaries + main verb forms, or multiple inconsistent tense
+affixes or particles.
+
+<p><a href="testsuites.html">Back to top</a>
+
+<h3><a name="demo">Demonstratives/definiteness</a></h3>
+
+<p>[Phenomena code: cognitive status/cogst]
+
+<p>Demonstratives and definiteness are two means of indicating the
+cognitive status (or discourse status) of the referent of a noun
+phrase.  Demonstratives are elements like English <i>this</i> and
+<i>that</i> which canonically participate in a system that
+distinguishes degrees of distance from the speaker and can be used to
+draw a hearer's attention to something physically present (cf. <a
+href="http://wals.info/feature/88">Dryer, 2008</a>).  Depending on
+the language, demonstratives can be determiners, adjectives, or affixes.
+
+<p>Determine how demonstratives are marked in your language, and the
+distinctions (especially in terms of distance or related notions) that
+are expressed in the system.  Illustrate the range of possibilities
+with examples.  Ungrammatical examples can be constructed by putting
+the demonstrative in the wrong place in the string (e.g., a prefix
+used as a suffix, etc.)  For present purposes, don't worry about
+demonstrative pronouns, i.e., those that can stand alone without a
+(separate) head noun.
+
+<p>Definitness may be marked as inflection on the noun, through
+determiners, through choice of case particles, or some combination
+(and perhaps indeed other strategies as well). Nominal dependents
+may agree with their head nouns in terms of definiteness. In English, we mark
+definiteness with determiners (<i>the</i> vs. <i>a</i>).
+
+<p>Determine if definiteness is marked in your language, and if so
+how. Construct relevant positive and negative examples illustrating
+these possibilities. If any elements agree in definiteness, include
+examples of non-agreement.
+
+<p><font size=small>Reference: Matthew S.. 2008. Order of Demonstrative and Noun.  In: Haspelmath,
+Martin & Dryer, Matthew S. & Gil, David & Comrie, Bernard (eds.)  The
+World Atlas of Language Structures Online.  Munich: Max Planck Digital
+Library, chapter 88.  Available online at http://wals.info/feature/88
+Accessed on 2009-01-26.</font>
+
+<p><a href="testsuites.html">Back to top</a>
+
+<h3><a name="poss">Possessives</a></h3>
+
+<p>[Phenomena code: possessives/poss]
+
+<p>How does your language mark posession? Try to find out how your language falls in the following dimensions, and then illustrate them with positive and negative examples in your testsuite. 
+
+<ul>
+<li>Is possession marked with inflection on the possessor, on the possessee, both, or by a separate word (`particle') linking the two? 
+
+<li>Is the order of the possessive phrase possessor-first, possessum-first, or free? 
+
+<li>Is the possessor more like a modifier or a specifier (explanation <a href="http://moin.delph-in.net/MatrixDoc/AdnominalPossession">here</a>)?  If you can find evidence that points one way or the other, include that in the testsuite too.
+</ul>
+
+<p>Consider both pronominal possessors and full NP possessors.  
+
+<p>Some languages treat inalienable possession (<i>my hand</i>)
+differently from alienable possession (<i>my book</i>).  If there is a
+difference documented in your materials, include examples of both.
+
+<p><b>Note</b>: We are not interested here in verbal construtions
+(e.g. possessive <i>have</i>), but rather marking of possessors
+within NPs.
+
+
+
+<p><font size=small>Reference: Johanna Nichols, Balthasar Bickel. 2013. Locus of Marking in Possessive Noun Phrases. 
+In: Dryer, Matthew S. & Haspelmath, Martin (eds.) 
+The World Atlas of Language Structures Online. 
+Leipzig: Max Planck Institute for Evolutionary Anthropology. 
+(Available online at http://wals.info/chapter/24, Accessed on 2016-01-15.)
+</font>
+
+<p><a href="testsuites.html">Back to top</a>
+
+      <h3><a name="adj">Attributive adjectives</a></h3>
+
+<p>Does the language have attributive adjectives, i.e., adjectives that attach
+to nominal projections as modifiers? (Note that this section is looking at
+adjectives as nominal modifiers, for adjectives as predicates, see <a href="#copula">Non-verbal Predicates</a> below.)
+
+<p>If so, where do the adjectives appear?  If adjectives are separate
+words within the NP, depending on the language they may appear before
+or after the N, flexibly before or after, or before or after depending
+on the adjective itself.  They may be strictly adjacent to the N or
+potentially separate by other (non-adjective) elements, they may be
+affixes to noun stems, or they may be allowed to appear outside the NP
+elsewhere in the sentence while still functioning as modifiers.
+
+<p>Do the adjectives agree in any features with the nouns they modify?
+(Typical candidates here are number and noun class (e.g. gender or animacy), but there may be other relevant features.)
+
+<p>Create grammatical and ungrammatical examples illustrating all of
+these properties.
+
+<p><a href="testsuites.html">Back to top</a>
+
+      <h3><a name="adv">Adverbs</a></h3>
+
+<p>Adverbs usually constitute a large and diverse class.
+For the purposes of this course, please focus on manner
+adverbs like <i>quickly</i>.  Where can they appear in the sentence?
+Can they attach to V, VP, S?  Do they attach to the left or to the right?
+Create grammatical and ungrammatical examples illustrating the
+placement possibilities.
+
+            <h3><a name="copula">Non-verbal Predicates</a></h3>
+
+<p>This section concerns copular or copulaless clauses.  Can NPs,
+adjectives, or adpositional phrases function as predicates in your
+language?  If so, do they require a copula in some or all cases?  Does
+the form of the copula vary?  Examples from English include:
+
+<ul>
+  <li>NP: The winner is a doctor.
+  <li>Adj: This dog is small.
+  <li>PP: The cat is in the park.
+</ul>
+
+<p>Note that in some languages, the copula is required only in
+non-present tense, or only with NP predicates, etc.  In other languages,
+there is not really a class of adjectives distinct from stative verbs.
+Or there maybe two classes of adjective-like predicates, those that
+pattern with intransitive verbs (or at least appear without the copula)
+and those that require a copula or are otherwise differentiated.
+
+
+<p>Construct relevant positive and negative examples illustrating
+how your language handles non-verbal predicates.
+
+<h3><a name="info">Information Structure</a></h3>
+
+<p>In some languages, this takes the form of a particular
+construction, like clefts in English for marking focus (<i>It was KIM
+who left.</i>) or left-dislocation for marking topics (<i>The book, Kim
+reads it.</i>)  In others, a particular sentence position
+(clause-initial, clause-final, pre-verbal, or post-verbal) is associated with a particular
+information sturtucal status.  A third type of strategy is
+morphological marking, where a particular ending or particle is used
+to mark topic or focus.  Many, if not all languages, also use prosody
+to mark information structure.  Since we are working with textual
+representations, we won't be analyzing prosodic marking. Rather,
+please try to determine if there is any morphosyntactic marking of
+information structure. Please determine (and document in your
+testsuite):
+
+<ul>
+  <li>What morphosyntactic forms convey focus/topic/contrast
+  <li>What semantic/pragmatic contrasts are marked
+  <li>If your language has cleft constructions, and if so what form they take
+  <li>What the unmarked (most common) position is for topic and focus (if any)
+</ul>
+
+<p>Some descriptive grammars don't address information structure.
+For those who are working with field linguists or who can ask native
+speakers, here are some tests:
+
+<ul>
+<li>Focus:  The part of the answer to a WH question that corresponds
+to the WH word is in focus (Lambrecht 1996, Gundel 1998):
+
+<ul>
+<li>Q: Who read this book?
+<li>A: KIM read this book.
+<li>Q: What did Kim read?
+<li>A: Kim read THIS BOOK.
+</ul>
+
+<li>Topic: If X is repeated in the answer to "Tell me about X", then
+X is in topic position (Choi 1999):
+
+<ul>
+<li>A: Tell me about Kim.
+<li>B: Kim is a student. (cf. Japanese Kim-wa/#ga gakusei desu.)
+</ul>
+</ul>
+
+<p>In addition to topic and focus, some languages have distinctive
+marking for contrast (or contrastive topic and/or contrastive focus).
+There are some examples of this from Arabic and Vietnamese in
+<a href="http://cslipublications.stanford.edu/HPSG/2011/song-bender.pdf">Song and Bender 2011</a> (pp.5-6).  If your language has distinctive marking
+for contrast, please include this in your test suite and your write up.
+
+<p>For more information on information structure, please
+see <a href="http://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=2&ved=0CCkQFjAB&url=http%3A%2F%2Famor.cms.hu-berlin.de%2F~h2816i3x%2FPublications%2FFery_Krifka_InformationStructure.pdf&ei=YqEcT8WhNubSiALI7_m9Cg&usg=AFQjCNESOau0xeZFUlhv87EOu7Md0J5j4A">Fery & Krifka 2008</a>.
+
+<p><a href="testsuites.html">Back to top</a>
+
+<h3><a name="wh">Matrix wh questions</a></h3>
+
+<p>We are interested here in utterances where the whole utterance is a
+question, and the question concerns the identity of one (or more) of
+the arguments of the main verb.  In the simplest case, there is a
+single clause and one argument is questioned: <i>Who did the child
+see?</i>  Your tasks are to find out and then document in your
+testsuite:
+
+<ul>
+<li>The shape of the wh words for core arguments.  Do these vary with case, animacy, gender, something else?
+<li>The possible positions of wh words: Do they appear where an ordinary argument would?  Move to the beginning of the clause?  Are both of these possible?
+<li>What happens if the questioned argument belongs to a lower clause (e.g. <i>Who did the observer think the child saw?</i>)?
+<li>Are there any other differences between wh questions and declaratives (or  yes-no questions)?  (For example, English requires subject-auxiliary inversion in the main clause of a matrix wh-question.)
+<li>Are there are any differences between wh questions concerning subject and non-subject arguments? (For example, English does not do subject-auxiliary inversion if the questioned element is the main clause subject.)
+<li>Optional: What happens with multiple wh elements in the same clause (e.g. <i>Who saw what?</i>)
+</ul>
+
+<p>Ungrammatical examples will depend on what constraints you find,
+but may involve wh elements in the wrong position, involve wh elements
+in the wrong form (e.g. case), or hinge on ancillary properties of the
+construction (e.g. lack of inversion where it is required).
+
+<p>You do not need to worry about: embedded wh questions or wh questions
+where the questioned element is an adjunct (<i>how, why, when,
+where</i>).
+
+      <h3><a name="valchange">Valence Changing Lexical Rules</a></h3>
+
+<p>[Phenomena code: Valence Change/valchange]
+
+
+<p>Here we are interested in lexical rules that apply to verbs and result
+in valence alternations. Examples include passive (suppress the erstwhile subject, promote the first complement), applicative (add an additional complement, perhaps interpreted as an instrumental or benefactive argument), and causative (adds subject, demotes erstwhile subject to complement).
+
+<p>For this phenomenon, try to find one valence changing process for your language. It might be morphologically marked (like English passive) or morphologically unmarked (like the English dative alternation).  
+
+<P>We are interested in and your testsuite should illustrate:
+
+<ul>
+<li>Restrictions on what type of verbs can 'undergo' this process.
+<li>Effects on the valence of the verb (e.g. a passivized transitive verb should no longer be able to take an NP complement).
+<li>Effects on the case frame of the verb (e.g. is the added argument instrumental?)
+</ul>
+
+
+
+<p><a href="testsuites.html">Back to top</a>
+
+      <h3><a name="evidentials">Evidentials</a></h3>
+
+<p>[Phenomena code: Evidentials/evid]
+
+<p>Some languages have grammaticized means of marking the information source for a statement. For example, a 'hearsay' evidential indicates that the speaker doesn't have direct knowledge of the truth of the proposition, but was told the information by someone else.
+
+<p>Grammmaticized evidentials typically take the form of affixes on verbs or of auxiliaries, but other forms are possible. 
+
+<p>If your language has evidentials, try to determine what the range of evidential terms is (i.e. the kinds of evidential meanings that are marked).  If a sentence has no overt mark of evidentiality, is that interpreted as underpsecified, or does it have a specific meaning within the evidential system?
+
+<p>Collect examples of each of the evidential markers. Try to determine whether there are constraints on combinations of evidential markers (this is one source of negative examples for this phenomenon) or constraints on where the evidentials may appear.
+
+
+<p><a href="testsuites.html">Back to top</a>
+
+<h2><a name="formatting">Formatting</a></h2>
+
+<p>The test suites should be initially produced as plain text files
+(in ascii or utf-8).  We have a python script that turns the plain
+text into the required format for [incr tsdb()].  In
+order to do this, the formatting of the plain text file has to be
+relatively strict.
+
+
+<p>Your test suite file should consist of a header, containing information
+pertinent to all of the examples, followed by a list of examples.  The header
+should contain the following information:
+
+<p><code>
+Language: &lt;language name&gt;<br>
+Language code: &lt;Ethnologue language code&gt;<br>
+Lines: &lt;orth orth-seg gloss translit translit-seg translat&gt;<sup>1</sup><br>
+Author: &lt;your name&gt;<br>
+Date: April 7, 2006<br>
+Source a: &lt;Reference to grammar/web page&gt;<br>
+Source b: &lt;Reference to grammar/web page&gt;<br>
+<sup>2</sup><br><br>
+
+1. Line names give the type for each tier of the IGT as it appears in 
+your testsuite.  Names are from this list: orth, orth-seg, translit, 
+translit-seg, gloss, translat.  The make_item script checks 
+that the number of lines is consistent across examples and also checks for proper token counts across all *-seg lines that appear.</br>
+2. (as many sources as needed)<br>
+</code>
+
+<p>Each example should consist of the following.  (The { } are optional
+in all lines except Judgment, where they should not be included.).
+Note that the example below shows a 5 line IGT, so all examples in the 
+testsuite are required to have 5 lines and the header info at the top 
+of the file should have <code>Lines: orth translit orth-seg gloss translat</code> or <code>Lines: orth translit translit-seg gloss translat</code>
+
+<p><code>
+#Ex number and optional comment<br>
+Source: {a:page, b:page, author, elicited, attested}<br>
+Vetted: {t, f, s}<br>
+Judgment: {g, u}<br>
+Phenomena: {word order, case, agreement, ...}<br>
+&lt;Example in standard orthography&gt; (one of this and transliteration is required; including both is okay)<br>
+
+&lt;Example in transliteration&gt; (one of this and standard orthography is required; including both is okay)<br>
+&lt;Example with morpheme boundaries noted and morpheme forms regularized&gt;<br>
+&lt;Morpheme-by-morpheme glosses&gt;<br>
+&lt;Free translation&gt;
+</code>
+
+<p>The comment character is '#', and it is good practice to
+number your examples in a comment line above the Source: line.
+For ungrammatical examples, this comment should also indicate
+what is wrong with the example, for your reference and for mine.
+
+<p>The <tt>source</tt> field indicates where the example came from.
+If it came from one of your written sources, you can refer to that
+source with a single letter code.  If there is a page number
+associated with the example, it should follow the letter (with a colon
+in between).  If you made the example up, the source should be <tt>author</tt>.
+If you elicited the example from a native speaker, then the source should
+be <tt>elicited</tt>.  If you found the example in a non-linguistic
+text, the source should be <tt>attested</tt>.
+
+
+<p>The <tt>vetted</tt> field indicates where the judgment on the
+example came from.  <tt>t</tt> means the example has been vetted by a
+native speaker, who gave the judgment indicated.  <tt>f</tt> means it
+has not.  (In this case, the judgment is your best guess based on the
+grammatical materials you have.)  If you are a native speaker, you can
+vet your own examples.  If the example comes from a grammar (which
+indicates a grammaticality judgment for it explicitly), and you
+haven't had it vetted in addition, you should put <tt>s</tt> in this
+field.  This is meant to indicate that we think the example was vetted
+before being included in the grammar, but since we didn't do it, we're
+not sure.  For attested examples, you should use <tt>t</tt> if you
+checked it with a native speaker and <tt>f</tt> if you have not.
+
+
+<p>The <tt>judgment</tt> field indicates the grammaticality judgment
+assigned to the example (either by a native speaker, in a grammar,
+or your best guess).  <tt>g</tt> is for grammatical and <tt>u</tt>
+is for ungrammatical.
+
+<p>The <tt>phenomena</tt> field is a list of phenomena illustrated
+in the example.  We'll have the python script recognize both long and
+short names for each phenomenon, according to the table below.  A single
+example might illustrate multiple phenomena.  <i>However, ungrammatical
+examples should have only one thing wrong with them, and be tagged
+only the phenomenon tag corresponding to that problem.</i>
+
+<br>
+<table border=1>
+<tr><th>Long name</th><th>Short name</th></tr>
+
+
+
+
+<tr><td>Adjectives</td><td>adj</td></tr>
+<tr><td>Adverbs</td><td>adv</td></tr>
+<tr><td>Agreement</td><td>agr</td></tr>
+<tr><td>Argument Optionality</td><td>pro-d</td></tr>
+<tr><td>Case-marking adpositions</td><td>adp</td></tr>
+<tr><td>Case</td><td>c</td></tr>
+<tr><td>Cognitive status</td><td>cogst</td></tr>
+<tr><td>Coordination</td><td>crd</td></tr>
+<tr><td>Coordination Agreement</td><td>crdagr</td></tr>
+<tr><td>Determiners</td><td>det</td></tr>
+<tr><td>Direct-Inverse Marking</td><td>dirinv</td></tr>
+<tr><td>Embedded declaratives</td><td>emb-d</td></tr>
+<tr><td>Embedded questions</td><td>emb-q</td></tr>
+<tr><td>Evidentials</td><td>evid</td></tr>
+<tr><td>Clausal modifiers</td><td>cl-mod</td></tr>
+<tr><td>Imperatives</td><td>imp</td></tr>
+<tr><td>Information structure</td><td>info</td></tr>
+<tr><td>Matrix wh questions</td><td>wh</td></tr>
+<tr><td>Matrix yes-no questions</td><td>q</td></tr>
+<tr><td>Modals</td><td>m</td></tr>
+<tr><td>Negation</td><td>neg</td></tr>
+<tr><td>Non-Verbal Predicates</td><td>cop</td></tr>
+<tr><td>Numeral Classifiers</td><td>numcl</td></tr>
+<tr><td>Possessives</td><td>poss</td></tr>
+<tr><td>Pronouns</td><td>pn</td></tr>
+<tr><td>Serial Verb Constructions</td><td>svc</td></tr>
+<tr><td>Tense Aspect Mood</td><td>tam</td></tr>
+<tr><td>Valence Change</td><td>valchg</td></tr>
+<tr><td>Wh questions</td><td>wh</td></tr>
+<tr><td>Word order</td><td>wo</td></tr>
+
+<tr><td>Corpus (for test corpora sentences)</td><td>corpus</td></tr>
+
+</table>
+
+<p>The standard orthography and transliteration lines give a canonical
+representation of the string.  You should have at least one of these, possibly
+both.  Whatever you do, it should be consistent for the whole file.
+
+<p>The example should also be presented with the morpheme boundaries
+explicit.  This is equivalent to saying that you should have at least
+an <code>orth-seg</code> or <code>translit-seg</code> line in each
+example (and indicated in the file's <code>Lines:</code> header).
+This allows the python script to check the alignment of 
+glosses with each morpheme.  For languages with particularly complex
+morphophonology, you might end up using this line as the example you
+actually parse/generate (to abstract away from the phonological
+rules).  It is for this reason that this line should have
+phonologically regularized forms.  You can indicate which line of your
+testsuite examples is to be the input to your grammar in 
+<code>[incr tsdb()]</code> by using the <code>--map</code> option of 
+<code>make_item</code>.  More on this in the <code>make_item</code> 
+instructions.  In any morpheme segmented (<code>*-seg</code>) line, morpheme 
+boundaries
+should be indicated with hyphens and word boundaries with spaces.  If
+your language has clitics, the boundary between a clitic and its host
+should be marked with an equals sign.  
+
+
+<p>The line labelled <code>gloss</code> is required.  This line contains
+morpheme-by-morpheme glosses in correspondence with the morpheme segmented
+(<code>*-seg</code>) lines.  The tokens on these lines should be
+in a one-to-one correspondence with the morphemes, so if the nth word in
+a <code>*-seg</code> line has two hyphens in it, the nth word in this line 
+has two
+hyphens as well.  Stems should be given English glosses indicating their
+meaning.  For formatting and a good set of grammatical abbreviations to
+use, please follow 
+  the <a href="http://www.eva.mpg.de/lingua/resources/glossing-rules.php">Leipzig
+    glossing rules</a>. When multiple 
+gloss grams are expressed on an unsegmented language form, separate the 
+sub-morpheme glosses with a full stop.
+
+
+<p>The line labelled <code>translat</code> should have the free translation
+of the example.
+
+<p>Here is an example sentence that I just made up from Japanese
+(with only a transliteration and not a standard orthography line for
+the moment, so the testsuite header would have <code>Lines: translit translit-seg gloss translat</code>):
+
+<p><code>
+Source: author<br>
+Vetted: f<br>
+
+Judgment: g<br>
+Phenomena: {case, negation}<br>
+Keeki-wo tabenakatta.<br>
+Keeki-wo tabe-nai-ta<br>
+cake-acc eat-NEG-PRF<br>
+`(Someone) didn't eat cake.'
+</code>
+
+<p>And a couple from French (here the file header would say <code>Lines: orth orth-seg gloss translat</code>):
+
+<p><code>
+Source: author<br>
+
+Vetted: f<br>
+Judgment: g<br>
+Phenomena: {word order}<br>
+J'ai mang&eacute; le g&acirc;teau<br>
+Je-ai mange-&eacute; le g&acirc;teau<br>
+I-have.1sg eat-PRF the.M.SG cake<br>
+
+`I have eaten the cake.'
+</code>
+
+<p><code>
+Source: author<br>
+Vetted: f<br>
+Judgment: u<br>
+Phenomena: {word order}<br>
+J'ai le g&acirc;teau mang&eacute;<br>
+Je-ai le g&acirc;teau mange-&eacute;<br>
+
+I-have.1sg the.M.SG cake eat-PRF<br>
+`I have eaten the cake.'
+</code>
+
+
+<p>(NB: I'm going with the analysis of so-called French "clitics"
+as affixes.)
+
+<p>Here's a long example from Japanese to illustrate.  This is good:
+
+<p><code>
+Source: a<br>
+Vetted: s<br>
+Judgment: g<br>
+Phenomena: {coordination, servial verb}<br>
+
+Ima made takusan honwo yonde kimashita ga, kore kara mo yonde iku tsumori desu.<br>
+Ima made takusan hon-wo yom-te ki-mas-ta ga kore kara mo yom-te ik-u tsumori desu.<br>
+now until many book-ACC read-PTCP come-HON-PRF CONJ here from also read-PTCP go-IPFV intention COP.HON.IPFV<br>
+`Up to now I have read quite a few books and I intend to read from now on, too.'
+</code>
+
+<p>Do <b>NOT</b> do it this way.  This example has way too many lines.  The 
+author has presumably added spurious line breaks to the long example lines, 
+creating a 7 line IGT where we only expect 4.  (I'm only including the IGT lines here to keep folks from looking at this quickly and copying.)
+
+<p><code>
+[BAD BAD BAD]<br>
+Ima made takusan hon-wo yonde kimashita ga,<br>
+
+kore kara mo yonde iku tsumori desu.<br>
+Ima made takusan hon-wo yom-te ki-mas-ta ga<br>
+kore kara mo yom-te ik-u tsumori dseu.<br>
+now until many book-ACC read-PTCP come-HON-PRF CONJ<br>
+here from also read-PTCP go-IPFV intention COP.HON.IPFV<br>
+`Up to now I have read quite a few books and I intend to read from now on, too.'
+</code>
+
+<p>Do <b>NOT</b> do it this way either (same basic problem, breaking up
+the lines within an example):
+
+
+<p><code>
+[BAD BAD BAD]<br>
+Ima made takusan hon-wo yonde kimashita ga,<br>
+Ima made takusan hon-wo yom-te ki-mas-ta ga<br>
+now until many book-ACC read-PTCP come-HON-PRF CONJ<br>
+kore kara mo yonde iku tsumori desu.<br>
+kore kara mo yom-te ik-u tsumori dseu.<br>
+here from also read-PTCP go-IPFV intention COP.HON.IPFV<br>
+`Up to now I have read quite a few books and I intend to read from now on, too.'
+</code>
+
+
+<p>Finally, note that while you can add as many blank lines as you like between
+IGT examples, blank lines should not appear within an example.
+
+
+<p><a href="testsuites.html">Back to top</a>
+<p><a href="index.html">Back to course page</a>
+
+<hr>
+<address>ebender at u dot washington dot edu</address>
+<!-- hhmts start --> Last modified: 1/6/15 <!-- hhmts end -->
+</body> </html>
