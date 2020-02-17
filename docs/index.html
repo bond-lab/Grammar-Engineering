@@ -1,0 +1,216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"><html xmlns:xhtml="http://www.w3.org/1999/xhtml"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>HG7021: Computational Grammars</title>
+<!-- <link rel="Stylesheet" href="http://www.ling.helsinki.fi/util/css/ykiel.css" type="text/css" media="all"> -->
+</head>
+<body>
+
+
+<h1>HG7021: Computational Grammars</h1>
+
+<p>Instructor <a href="http://www3.ntu.edu.sg/home/fcbond/">Francis <b>Bond</b></a>. 2020,
+  2014, 2012.
+<p>HSSK MR3 Monday 14:30-18:30 (except 13 Apr in MR6).
+
+
+<p>In this course we implement a computational grammar of a language (one each).  
+You must have a laptop, preferably running Linux, or install  
+<a href='http://depts.washington.edu/uwcl/twiki/bin/view.cgi/Main/KnoppixLKB'>Ubuntu+LKB</a> 
+as a virtual machine.  
+
+
+<h3>Course Outline</h3>
+
+
+<table border>
+<tr bgcolor="#999999">
+<th>Week</th><th>Topic</th><th>Lab</th><th>Reading</th></tr>
+
+<tr><td>1</td>
+<td><a href="pdf/intro.pdf">Overview, Introduction</a><br>
+<!-- <a href="tfs.pdf">HPSG, Computational Grammars</a> <br> -->
+</td>
+<td>Installing the LKB and dependencies</td>
+<td>Sag, Wasow and Bender (2003) Ch 1-2</td>
+<td></td></tr>
+
+<tr><td>2</td>
+<td><a href="pdf/tfs.pdf">Typed Feature Structures and Unification</a></td>
+<td><a href="lab1.html">Getting to know the LKB and the Grammar Matrix; Choose language</a></td>
+<td>Copestake (2002) Ch 1-3</td></tr>
+
+<tr><td>3</td>
+<td><a href="pdf/testsuites.pdf">Testsuites, [incr tsdb()]</a></td>
+<td><a href="lab2.html">Testsuites/customization I: Word order, person/number/gender, pronouns, case, the rest of the NP, basic lexicon (full form)</a></td>
+<td>Copestake (2002) Ch 4, 5
+<br>(<a href="pdf/profiling.pdf">Oepen & Flickinger 1998)</a></td></tr>
+
+<tr><td>4</td>
+<td><a href="pdf/matrix.pdf">The Grammar Matrix: Motivations, technical details</a></td>
+<td><a href="lab3.html">Testsuites/customization II: 
+  Tense/aspect,
+  agreement,
+  other required affixes,
+  negation,
+  argument optionality,
+  demonstratives,
+</a></td>
+<td><a href="http://faculty.washington.edu/ebender/papers/gee03.pdf">Bender, Flickinger & Oepen (2002)</a></td></tr>
+
+<tr><td>5</td>
+<td><a href="pdf/mrs.pdf">Minimal Recursion Semantics</a></td>
+<td><a href="lab4.html">Testsuites/customization III:
+  Matrix yes-no questions,
+  coordination,
+  modification,
+  non-verbal predicates,
+  embedded clauses,
+  information structure</a></td>
+<td><a href="http://lingo.stanford.edu/sag/papers/copestake.pdf">Copestake, Flickinger, Pollard and Sag (2005)</a></td></tr>
+
+
+<tr><td>5+</td>
+<td><a href="../HG4041/pdf/lec-03-val.pdf">Valence</a> and 
+<a href="../HG4041/pdf/lec-04-semantics.pdf">Semantic Composition</a> in HPSG</td>
+<td>Revision</td>
+<td>Sag, Wasow and Bender (2003) ch 4-5</td></tr>
+
+
+<tr><td>6</td>
+<td><a href="pdf/mod.pdf">Modification, Discourse Status, Argument Optionality; Precision grammars and corpus data</a></td>
+<td><a href="lab5.html">Modification, demonstratives, argument optionality</a></td>
+<td>Borthen and Haugereid (2005)
+<br>(<a href="http://faculty.washington.edu/ebender/papers/beauty_beast_final.pdf">Baldwin et al (2005)</a>)</td></tr>
+
+<tr><td>7</td>
+<td><a href="pdf/composition.pdf">Composition and Decomposition: Demonstrative pronouns and multi-word expressions</a></td>
+<td><a href="lab5a.html">Breaking words down and building phrases up</a></td>
+<td><a href="http://web.mysites.ntu.edu.sg/fcbond/open/pubs/2002-cicling-mwe.pdf">Sag et al. (2002)</a></td></tr>
+
+
+
+<tr><td>8</td>
+<td><a href="pdf/sf.pdf">Clause types, illocutionary force</a></td>
+<td><a href="lab6.html">Polar questions, embedded clauses, non-verbal predicates</a></td>
+<td>Sag, Wasow and Bender (2003) Ch 5</td>
+</tr>
+
+<tr><td>9</td>
+<td><a href="pdf/neg.pdf">Negation, Raising, Control, Argument Composition</a></td>
+<td><a href="lab7.html"><i>I can eat glass.  It doesn't hurt me.</i></a></td>
+<td>Sag, Wasow and Bender (2003) Ch 12</td></tr>
+
+
+<tr><td>10</td>
+<td><a href="pdf/ambiguity.pdf">Dealing with Ambiguity</a></td>
+<td><a href="lab8.html">Treebanking and Parse ranking</a></td>
+<td><a href = "http://web.mysites.ntu.edu.sg/fcbond/open/pubs/2004-IJC-hoistic.pdf">Oepen, 
+    Flickinger and Bond (2004)</a></td></tr>
+
+<tr><td>11</td>
+<td><a href="pdf/mt.pdf">Deep Semantic Transfer: The LOGON MT architecture</a>
+<a href="pdf/vpm.pdf">Information Structure and VPM</a></td>
+<td><a href="lab9.html">Grammar clean up; Transfer rules</a></td>
+<td><a href="http://www.springerlink.com/content/0251717278721jm9/">Bond et al. 2011</a></td></tr>
+<tr><td>12</td>
+<td>No Slides</td>
+<td><a href="lab10.html">Classifiers</a></td></tr>
+
+</table>
+
+
+
+
+<h3>Textbooks and Tools</h3>
+<ul>
+  <li>Copestake,  Ann. (2002) 
+    <a href="http://csli-publications.stanford.edu/site/1575862603.shtml">Implementing
+      Typed Feature Structures</a>, CLSI Publications
+    <li>Sag, Wasow and Bender (2003) <a href='http://cslipublications.stanford.edu/site/1575864002.shtml'>Syntactic Theory: A Formal Introduction</a> 2nd ed. CSLI  Publications (<a href='http://press.uchicago.edu/ucp/books/book/distributed/S/bo3633025.html'>ebook</a>)
+<li><a href='http://moin.delph-in.net/GrammarEngineeringFaq'>Grammar Engineering FAQ</a> This is a wiki, you are encouraged to extend it.
+<li><a href='http://moin.delph-in.net/GrammarEngineeringGlossary'>Grammar Engineering Glossary</a> This is a wiki, you are encouraged to extend it.
+<li><a href='http://moin.delph-in.net/FrontPage'>Deep Linguistic Processing with HPSG Initiative (DELPH-IN) Wiki</a>
+<li><a href='../hg4041/'>HG4041: Theories of Grammar (HPSG)</a>
+</ul>
+
+
+</ul>
+<h4>Readings</h4>
+<ul>
+  <li>Baldwin, Timothy, Emily M. Bender, Dan Flickinger, Ara Kim and Stephan Oepen (2004). 
+    <a href="http://faculty.washington.edu/ebender/papers/beauty_beast_final.pdf">Road-testing 
+      the English Resource Grammar over the British National Corpus</a>. Proceedings of LREC 2004, Lisbon, Portugal 
+  <li>Bender, Emily M., Dan Flickinger and Stephan Oepen (2002) 
+    <a href="http://faculty.washington.edu/ebender/papers/gee03.pdf">The Grammar Matrix: 
+      An Open-Source Starter-Kit for the Rapid Development of 
+      Cross-Linguistically Consistent Broad-Coverage Precision Grammars</a> 
+    Carroll, John, Nelleke Oostdijk, and Richard Sutcliffe, eds. 
+    Proceedings of the Workshop on Grammar Engineering and Evaluation at 
+    the 19th International Conference on Computational Linguistics. Taipei, Taiwan. pp. 8-14. 
+  <li>Emily M. Bender, Scott Drellishak, Antske Fokkens, Michael Wayne Goodman Daniel P. Mills, 
+    Laurie Poulson and Safiyyah Saleem (2010) 
+    <a href="http://aclweb.org/anthology-new/P/P10/P10-4001.pdf">Grammar Prototyping and Testing 
+      with the LinGO Grammar Matrix Customization System</a> 
+    Proceedings of the ACL 2010 System Demonstrations. pp.1-6. 
+  <li>Francis Bond, Stephan Oepen, Eric Nichols, Dan Flickinger, Erik Velldal and Petter Haugereid (2011)
+      <a href="http://www.springerlink.com/content/0251717278721jm9/">Deep Open-Source Machine Translation</a>
+	in <i>Machine Translation</i>, <b>25(2)</b>, pages 87--105.
+  <li>Borthen and Haugereid (2005) Representing referential properties of nominals 
+    <i>Research on Language and Computation</I> 3(2):221-246
+  <li>Copestake, Flickinger, Pollard and Sag
+  (2005) <a href="http://lingo.stanford.edu/sag/papers/copestake.pdf">Minimal
+  Recursion Semantics</a>
+  <li>Stephan Oepen and Dan  Flickinger (1998)
+    <a href='pdf/profiling.pdf'>Towards Systematic Grammar Profiling:
+    Test Suite Technology Ten Years after.</a> <i>Journal of Computer
+    Speech and Language</i> <b>12</b>:411-435.
+  <li>Stephan Oepen, Dan  Flickinger and Francis Bond (2004)
+    <a href = "http://web.mysites.ntu.edu.sg/fcbond/open/pubs/2004-IJC-hoistic.pdf">Towards 
+      Holistic Grammar Engineering and Testing --- Grafting Treebank Maintenance into the Grammar Revision Cycle</a>
+    In <i><a href="http://www-tsujii.is.s.u-tokyo.ac.jp/bsa/">Beyond
+	Shallow Analyses --- Formalisms and Statistical Modelling for Deep
+	Analysis (Workshop at IJCNLP-2004</a>)</i>, Hainan Island.
+<li>Sag, Ivan A., Timothy Baldwin, Francis Bond, Ann Copestake and Dan Flickinger
+    (2002) <a href="http://web.mysites.ntu.edu.sg/fcbond/open/pubs/2002-cicling-mwe.pdf">Multiword Expressions: A Pain
+    in the Neck for NLP</a>.  
+    In Alexander Gelbuk, editor, <i>Computational Linguistics and
+    Intelligent Text Processing: Third International Conference:
+    CICLing-2002</i> 1-15, Springer-Verlag, Hiedelberg/Berlin.  
+</dl>
+</ul> 
+
+<h3>Assessment</h4>
+<ul>
+  <li> <b>20%</b> Testsuite (with internal documentation). 
+    <ul>
+      <li>See the <a href='testsuites.html'>testsuite specifications</a> for
+	instructions.  
+      <li>Your test suite should have around 60 entries, at
+	least half of which should be ungrammatical.
+    </ul>
+  <li> <b>40%</b> Grammar 
+    <ul>
+      <li> the grammar should be tarred and gzipped into a single file
+      <li> it should be working (I should be able to load and test it)
+      <li> it should contain a  skeleton created from the testsuite
+    </ul>
+  <li> <b>40%</b> Documentation of Grammar up to 20 pages following
+    the <a href='http://teamsites.ntu.edu.sg/HSS/LMS/Shared%20Documents/Guidelines%20to%20Submitting%20Written%20Work%20for%20the%20Division%20of%20Linguistics%20and%20Multilingual%20Studies.pdf'>LMS guidelines</a>
+    <ul>
+      <li> Describe briefly the phenomena covered by the grammar
+      <li> Point out where the grammar fails to model the language
+      <li> Suggest ways the grammar should be extended
+    </ul>
+</ul>
+
+<h3>Acknowledgment</h4>
+<p>Course materials borrow heavily
+from <a href="http://courses.washington.edu/ling567/">Linguistics 567:
+Knowledge Engineering for NLP</a> at the University of Washington.
+Thanks to
+<a href="http://faculty.washington.edu/ebender/index.html">Emily Bender</a> for
+letting us use them.
+
+
+
+</body></html>

@@ -1,0 +1,306 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>Computational Grammars: Lab 2</title>
+</head>
+
+<body>
+<h1>Lab 2</h1>
+
+<h2><a name="overview">Overview</a></h2>
+
+<p>The goal of this lab is to make a start on the test suite
+that will be your development target, on the one hand, and to
+customize a first version of your grammar start on the other.
+I've selected phenomena to cover in this lab with an eye to
+starting with those that are essential to creating a working
+grammar.  You'll probably want to work on these two subtasks
+in parallel, though they are described separately in the instructions
+below.
+
+<p><a href="lab2.html">Back to top</a>
+
+<!-- <h2>Preliminaries</h2> -->
+
+
+<!-- <h3><a name="svn">Version control</a></h3> -->
+
+<!-- <p>In order to support collaborative work on the grammars, -->
+<!-- but for lots of other reasons, you are asked to use version -->
+<!-- control for your work in this class.  If both partners are -->
+<!-- comfortable with some other version control system, you may -->
+<!-- use it.  Otherwise, please use svn.  (NB: The repository should -->
+<!-- be created only once --- not once by each partner --- but -->
+<!-- checked out by both partners.) -->
+
+<!-- <ul> -->
+<!--   <li>Read David's <a href="http://depts.washington.edu/uwcl/twiki/bin/view.cgi/Main/LemurHomePage">wiki pages</a> on subversion (svn). -->
+<!--   <li>Request an acccount on lemur, our svn server, -->
+<!-- from linghelp-at-u (David Brodbeck). -->
+<!--   <li>Decide on a project name (e.g., the name of your language) -->
+<!--   and create a directory of that name on  your local computer. -->
+<!--   <li>You'll put your test suite and choices files in the directory for now. -->
+<!-- (We'll put the grammars themselves under version control once we're done downloading them.  Until then, it'll just be annoying, and all the information is in the choices files anyway.) -->
+<!--   <li>From the directory above your project directory, invoke the following command: -->
+
+<!--   <pre> -->
+<!-- svn import project-name svn://lemur.ling.washington.edu/shared/project-name -->
+<!-- </pre> -->
+
+<!--   Where "project-name" should be the name of your directory (two instances). -->
+<!--   <li>Move your old version of that directory out of the way: -->
+
+<!--   <pre> -->
+<!-- mv project-name project-name-old -->
+<!-- </pre> -->
+
+<!--   <li>Check out a working copy from svn: -->
+
+<!--   <pre> -->
+<!-- svn checkout svn://lemur.ling.washington.edu/shared/project-name -->
+<!-- </pre> -->
+
+<!--   <li>Check that it's the same as what you had: -->
+
+<!--   <pre>diff -r project-name-old project-name</pre> -->
+
+<!--   <li>If so, delete the version that's not under svn: -->
+
+<!--   <pre>rm -r project-name-old</pre> -->
+
+<!--   <li>As you make changes to your test suite, commit them to the svn repository: -->
+
+<!--   <pre>svn commit</pre> -->
+
+<!--   <li>Before working on the test suite or choices file, run -->
+
+<!--   <pre>svn update</pre> -->
+
+<!--   to grab any changes your partner made. -->
+  
+<!--   <li>Added bonus: If you are working on separate machines (e.g., if you want to work in the Treehouse, say, to get my help in debugging something during my office hours), you can use svn to keep the locations in sync. -->
+<!--  </ul>  -->
+
+<!-- <p><a href="lab2.html">Back to top</a> -->
+
+
+<h2>Test Suite</h2>
+
+<p>The first task is to create positive and negative example sentences
+illustrating the following phenomena, to the extent that they
+are relevant for your language:
+
+<ul>
+  <li><a href="testsuites.html#wordorder">word order</a>
+  <li><a href="testsuites.html#pronouns">pronouns</a> (includes person/number/gender)
+  <li><a href="testsuites.html#case">case</a>
+  <li><a href="testsuites.html#restNP">the rest of the NP</a>
+</ul>
+
+<p>Before you start, read the <a
+href="testsuites.html#preliminaries">general instructions for
+testsuites</a> and the <a href="testsuites.html#formatting">formatting
+instructions.</a>
+
+<p><a href="lab2.html">Back to top</a>
+
+
+<h2>Starter grammar</h2>
+
+<p>The second task is to create a starter grammar by filling out
+the required sections of the <a href="http://www.delph-in.net/matrix/customize/matrix.cgi">Grammar Matrix customization questionnaire</a>.  The goal
+here is to get as much coverage as you can over your test suite using
+only the customization system (no hand-editing of tdl files yet). In
+particular, you'll need to address these sections:
+
+<ul>
+  <li>General information
+  <li>Word order
+  <li>Number
+  <li>Person
+  <li>Gender (if applicable)
+  <li>Case
+  <li>Direct-inverse (if appropriate)
+  <li>Lexicon
+</ul>
+
+<p>In the word order section,
+you can skip the auxiliaries by saying "no" on that question for now.
+When we get to auxiliaries, you may of course revise this answer.
+
+<p>In the lexicon section, you should define lexical types for transitive
+and intransitive verbs and nouns.  If appropriate, you should define
+determiners and case-marking adpositions.
+
+<p>If you have case and/or agreement, you'll need to define morpheme
+slots and morphemes for verbs and nouns as appropriate.  In many
+languages, the agreement morphemes on verbs also mark, say tense.
+We'll ignore this for now, but return to it soon.  If you want to define
+other affixes without giving them morphosyntactic content, you can.
+
+<h2>Make sure you can parse individual sentences</h2>
+
+<p>Once you have created  your starter grammar (or each time you
+create one, as you should iterate through grammar creation and
+testing a few times as you refine your choices), try it out on a
+couple of sentences interactively to see if it works:
+
+<ol>
+  <Li>Load the grammar into the LKB.
+  <li>Using the parse dialog box (or 'C-c p' in emacs  to get the parse
+  command inserted at your prompt), enter a sentence to parse.
+  <li>Examine the results.  If it does parse, check out the semantics (pop-up menu on the little trees).  If it doesn't look at the parse chart to see why not.
+  <li>Problems with lexical rules and lexical entries often become apparent here, too: If the LKB can't find an analysis for one of your words, it will say so, and (obviously) fail to parse the sentence.
+</ol>
+
+<p>Note that the questionnaire has a section for test sentences.  If
+you use this, then the parse dialog will be pre-filled with your test sentences.
+
+<p><a href="lab2.html">Back to top</a>
+
+<h2><a href='http://moin.delph-in.net/ItsdbProfile'>[incr tsdb()] profile</a></h2>
+
+<p>The final step for this lab is to use the [incr tsdb()] grammar
+profiling system to test the performance of your starter grammar over
+your test suite, and then examine the results.  (You may find in doing
+so that you want to refine certain aspects of your starter grammar.
+You can do this by uploading the file "choices" which comes with your
+grammar into the customization system and then tweaking from there.)
+
+<h3>Create a test suite skeleton</h3>
+
+<ol>
+<li>Create a directory called <tt>tsdb</tt> inside your grammar
+directory.
+
+<li>Inside <tt>tsdb</tt>, create two subdirectories: <tt>home</tt> (for
+test suite instances) and <tt>skeletons</tt> (for skeletons).
+
+<li>Save a copy of <a href="Index.lisp">Index.lisp</a> in
+<tt>tsdb/skeletons</tt>
+
+<li>Save a copy of <a href="http://svn.emmtee.net/trunk/lingo/lkb/src/tsdb/skeletons/english/Relations">Relations</a> in
+<tt>tsdb/skeletons</tt>.
+
+<li>Make a subdirectory called <tt>lab2</tt> inside
+<tt>tsdb/skeletons</tt> for your test suite.  (If you choose a different
+name for this subdirectory, you must edit <tt>Index.lisp</tt> accordingly.)
+
+<li>Download the perl script <a href="make_item.pl">make_item.pl</a>
+and run it on your test suite:
+
+<p><pre> perl make_item.pl testsuite.txt</pre>
+
+<li>(If the perl script doesn't like the formatting of your test suite,
+edit the test suite appropriately and/or complain about the perl
+script.)
+
+<li>Copy the <tt>.item</tt> file which is output by <tt>make_item.pl</tt>
+to <tt>tsdb/skeletons/lab2/item</tt>.
+
+<li>Copy <tt>tsdb/skeletons/Relations</tt> to <tt>tsdb/skeletons/lab2/relations</tt> (notice the change from R to r).
+
+<li>The final directory structure should look like this:
+<pre>
+grammar/data/testsuite
+grammar/data/make_item.pl
+grammar/data/testsuite.item
+grammar/tsdb/skeletons/Index.lisp            (lists the testsuites)
+grammar/tsdb/skeletons/Relations             (master copy of the database schema)
+grammar/tsdb/skeletons/lab2/item             (copy of ../../data/testsuite.item)
+grammar/tsdb/skeletons/lab2/relations        (copy of ../Relations)
+grammar/tsdb/home                            (directory to store test profiles)
+</pre>
+</ol>
+
+<h3>Create and run an initial test suite instance</h3>
+
+<h4>Using ace and PyDelphin</h4>
+<ol>
+  <li>Make an empty profile
+  <li><a href='http://moin.delph-in.net/AceUse'>Compile your grammar with ace</a>
+  <li><a href=<'http://sweaglesw.org/linguistics/libtsdb/art.html'>Parse the profile with art</a>
+  <li>Explore the results with PyDelphin
+</ol>
+
+<h4>Using the lkb and tsdb</h4>
+<li>Start the lkb
+<li>Load your starter grammar.  (The script file is in your-grammar-dir/lkb/script.)
+<li>Start [incr tsdb()] (within emacs, that's M-x itsdb)
+<li>In the [incr tsdb()] podium, select Options|Database Root
+and input the path to <tt>tsdb/home</tt>.
+<li>In the [incr tsdb()] podium, select Options|Skeleton Root
+and input the path to <tt>tsdb/skeletons</tt>.
+<li>Optional: For future use, you can set these variables
+ahead of time in a file called <tt>.tsdbrc</tt> in your home directory.
+It should contain these lines, with path names edited appropriately:
+
+<pre>
+(tsdb:tsdb  :skeleton  "path-to-tsdb/home")
+(tsdb:tsdb  :skeleton  "path-to-tsdb/skeletons")
+</pre>
+
+<li>In the [incr tsdb()] podium, select File|Create.  You should
+see your test suite in the menu there.  Select it, and get a test suite
+instance. Post to GoPost if this doesn't work.
+<li>Make sure your grammr is loaded into the LKB.
+<li>Once you have a test suite instance, select it (by clicking on it),
+then do Process|All Items.
+<li>Explore the results, with functions such as Browse|Results and Analyze|Competence.
+<li>Be sure to save (i.e., not overwrite or delete) this test suite
+instance, as you'll be asked to turn it in.
+</ol>
+
+<p><a href="lab2.html">Back to top</a>
+
+<h2>Write up</h2>
+
+
+<p>Your write up should be a plain text file (not .doc, .rtf or .pdf)
+  or latex which includes the following:
+
+<ol>
+  <li>Documentation the choices you made in the customization
+  system, illustrated with examples from your test suite. Here's <a href="write-up-sample.html">an example</a> of what this should look like.
+  <li>Descriptions of any properties of your language illustrated
+  in your test suite but not covered by your starter grammar and/or
+  the customization system.
+  <li>Documentation the coverage of your grammar over the testsuite.
+    This should include both summary numbers, which you can get by using the Analyze | Coverage and Analyze | Overgeneration options in [incr tsdb()], and discussion of specific examples.
+  If there are examples that thare parsed incorrectly (unanalyzed
+  grammatical examples, analyzed ungrammatical examples, or grammatical
+  examples assigned surprising parses), reflect on why that might be.
+  <li>Finally, if there are any places where the customization system
+  seems unable to cope with the properties of your language (within the
+  phenomena addressed in this lab), describe them here.
+</ol>
+
+<p><a href="lab2.html">Back to top</a>
+
+<h2><a name="submit">Submit your assignment</a></h2>
+
+<ul>
+  <li>Be sure your write up and the text-file version of your test suite are
+  included in your grammar directory (under <code>doc</code> and <code>data</code> respectively)
+  <li>Likewise, make sure to include your most current tsdb profile in the grammar directory (ideally inside tsdb/home/).
+  <li>Commit them to <a href='https://github.com/bond-lab/Grammar-Engineering'>https://github.com/bond-lab/Grammar-Engineering</a>
+</ul>
+
+<p><a href="lab2.html">Back to top</a>
+<p><a href="index.html">Back to course page</a>
+
+<hr>
+
+<address><a href='mailto:bond@ieee.org'>bond@ieee.org</a></address>
+
+<p>Course materials borrow heavily
+from <a href="http://courses.washington.edu/ling567/">Linguistics 567:
+Knowledge Engineering for NLP</a> at the University of Washington.
+Thanks to
+<a href="http://faculty.washington.edu/ebender/index.html">Emily Bender</a> for
+letting us use them.
+
+
+
+</body> 
+
+</html>
