@@ -217,9 +217,15 @@ grammar/tsdb/home                            (directory to store test profiles)
 <h4>Using ace and PyDelphin</h4>
 <ol>
   <li>Make an empty profile
-  <li><a href='http://moin.delph-in.net/AceUse'>Compile your grammar with ace</a>
-  <li><a href=<'http://sweaglesw.org/linguistics/libtsdb/art.html'>Parse the profile with art</a>
-  <li>Explore the results with PyDelphin
+    <br><code>mkprof -s tsdb/skeletons/matrix trees/matrix.01</code>
+  <li><a href='http://moin.delph-in.net/AceUse'>Compile your grammar
+      with ace</a>
+    <br><code>ace -G eng.dat -g ace/config.td</code>
+  <li><a href=<'http://sweaglesw.org/linguistics/libtsdb/art.html'>Parse
+	 the profile with art</a>
+	 <br><code>art -a "ace -g eng.dat -n 5" trees/matrix.01/</code>
+<li>Explore the results with PyDelphin
+  <br>???
 </ol>
 
 <h4>Using the lkb and tsdb</h4>
