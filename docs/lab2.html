@@ -1,5 +1,8 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <html> <head>
+    <style>
+      kbd { font-weight: bold; color: #808; }
+    </style>
 <title>Computational Grammars: Lab 2</title>
 </head>
 
@@ -214,7 +217,7 @@ grammar/tsdb/home                            (directory to store test profiles)
 
 <h3>Create and run an initial test suite instance</h3>
 
-<h4>Using ace and PyDelphin</h4>
+<h4>Using ace and art</h4>
 <ol>
   <li>Make an empty profile
     <br><code>mkprof -s tsdb/skeletons/matrix trees/matrix.01</code>
@@ -224,9 +227,74 @@ grammar/tsdb/home                            (directory to store test profiles)
   <li><a href=<'http://sweaglesw.org/linguistics/libtsdb/art.html'>Parse
 	 the profile with art</a>
 	 <br><code>art -a "ace -g eng.dat -n 5" trees/matrix.01/</code>
-<li>Explore the results with PyDelphin
-  <br>???
 </ol>
+
+<h4>Using PyDelphin</h4>
+
+<p><a href="https://github.com/delph-in/pydelphin">PyDelphin</a> is a reimplementation of many DELPH-IN formats and technologies. It is generally <a href="https://pydelphin.readthedocs.io/">well-documented</a>, tested, and more user-friendly than the traditional software. You can write code using PyDelphin's Python API, but you can also perform many tasks using the <kbd>delphin</kbd> command which becomes available when you install PyDelphin (see below).</p>
+
+<p>Note that you will need Python 3.6 or higher.</p>
+
+  <ol>
+    <li>First, create and activate a <a href="https://packaging.python.org/tutorials/installing-packages/#creating-virtual-environments">virtual environment</a>
+      <pre>
+	$ <kbd>python3 -m venv env</kbd>
+	$ <kbd>source env/bin/activate</kbd>
+	(env) $
+      </pre>
+    </li>
+    <li>Install PyDelphin and ensure it's installed
+      <pre>
+	(env) $ <kbd>pip install pydelphin</kbd>
+	(env) $ <kbd>pip install delphin.highlight</kbd>  # if you want colored MRSs
+	(env) $ <kbd>delphin -V</kbd>
+        <samp>delphin 1.2.1</samp>
+      </pre>
+    </li>
+    <li>Now you can use it to create an empty profile (as before, now using PyDelphin):
+      <pre>
+	(env) $ <kbd>delphin mkprof -s tsdb/skeletons/matrix trees/matrix.01</kbd>
+	<samp>[...]</samp>
+      </pre>
+    </li>
+    <li>And parse the profile with ACE (as before, now using PyDelphin):
+      <pre>
+	(env) $ <kbd>delphin process -g eng.dat trees/matrix.01</kbd>
+	<samp>NOTE: parsed 107 / 107 sentences, avg 4738k, time 3.03249s</samp>
+      </pre>
+    </li>
+    <li>The <kbd>delphin select</kbd> command is used to execute <a href="http://moin.delph-in.net/TsqlRfc">TSQL queries</a> on a profile.
+      Some useful field names for searching are:
+      <ul>
+	<li><code>i-id</code> item identifiers</li>
+	<li><code>i-input</code> input sentences</li>
+	<li><code>i-wf</code> "well-formedness" conditions (0 = ungrammatical, 1 = grammatical)</li>
+	<li><code>i-length</code> number of words in input</li>
+	<li><code>readings</code> how many parses the grammar found for an input</li>
+	<li><code>mrs</code> the mrs result of a parse</li>
+      </ul>
+
+      <pre>
+	(env) $ <kbd>delphin select 'i-id i-input where i-wf = 0' trees/matrix.01</kbd>  # display ungrammatical items
+	<samp>[...]</samp>
+	(env) $ <kbd>delphin select 'i-id i-input where i-wf = 1' trees/matrix.01</kbd>  # display grammatical items
+	<samp>[...]</samp>
+	(env) $ <kbd>delphin select 'i-id i-input where i-wf = 0 and readings > 0' trees/matrix.01</kbd>  # display ungrammatical items that parsed (overgeneration)
+	<samp>[...]</samp>
+	(env) $ <kbd>delphin select 'i-id i-input where i-wf = 1 and readings = 0' trees/matrix.01</kbd>  # display grammatical items that did not parse (undergeneration)
+	<samp>[...]</samp>
+      </pre>
+    </li>
+    <li>The <kbd>delphin compare</kbd> command can compare two versions of a profile (assumes the existence of two profiles; below I use <code>gold/matrix.01</code>).
+      <pre>
+	(env) $ <kbd>delphin compare trees/matrix.01 gold/matrix.01</kbd>  # display ungrammatical items
+	<samp>10    <0, 1, 0>
+        20    <1, 0, 2>
+	[...]
+	</samp>
+      </pre>
+    </li>
+  </ol>
 
 <h4>Using the lkb and tsdb</h4>
 <li>Start the lkb
