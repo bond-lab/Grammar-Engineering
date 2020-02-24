@@ -142,6 +142,30 @@ as a virtual machine.
   <li>git
 </ul>
 
+<h4>The Grammar Engineering Cycle</h4>
+<ol>
+  <li>Create/improve/degrade! a grammar
+    <ul>
+      <li>Add sentences to test the change
+	<br>to a functional test suite (or the inline documentation)
+      <li>Check they parse ok (or fail to parse for negative
+	sentences)
+      <li>Document the changes (in grammar and paper/thesis/assignment/book)
+    </ul>
+  <li>Regression test: Parse the functional test suite and a general test suite 
+  <li>If there was an improvement, commit it
+    <br>else back to step 1
+  <li>Treebank the new profiles (maybe after several improvements)
+    <br>The update function should make this cheap
+  <li>Identify and analyse your next phenomenon
+    <ul>
+      <li>Look if there are existing solutions
+	<br> in other grammars
+	<br> in the literature
+    </ul>
+  <li>back to step 1
+</ol>
+
 <h4>Readings</h4>
 <ul>
   <li>Baldwin, Timothy, Emily M. Bender, Dan Flickinger, Ara Kim and Stephan Oepen (2004). 
