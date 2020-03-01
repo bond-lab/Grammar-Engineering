@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"><html xmlns:xhtml="http://www.w3.org/1999/xhtml"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>HG7021: Computational Grammars</title>
-<!-- <link rel="Stylesheet" href="http://www.ling.helsinki.fi/util/css/ykiel.css" type="text/css" media="all"> -->
+ <link rel="Stylesheet" href="style.css" type="text/css" media="all">
 </head>
 <body>
 
@@ -14,9 +14,9 @@
 
 
 <p>In this course we implement a computational grammar of a language (one each).  
-You must have a laptop, preferably running Linux, or install  
-<a href='http://depts.washington.edu/uwcl/twiki/bin/view.cgi/Main/KnoppixLKB'>Ubuntu+LKB</a> 
-as a virtual machine.  
+You must have a laptop, preferably running Linux, or install a vertual
+  machine running linux (I am most familiar with Ubuntu).
+
 
 
 <h3>Course Outline</h3>
@@ -35,7 +35,7 @@ as a virtual machine.
 <td></td></tr>
 
 <tr><td>2</td>
-<td><a href="pdf/tfs.pdf">Typed Feature Structures and Unification</a></td>
+<td><a href="pdf/matrix.pdf">The Grammar Matrix: Motivations, technical details</a></td>
 <td><a href="lab1.html">Getting to know the LKB and the Grammar Matrix; Choose language</a></td>
 <td>Copestake (2002) Ch 1-3</td></tr>
 
@@ -46,7 +46,7 @@ as a virtual machine.
 <br>(<a href="pdf/profiling.pdf">Oepen & Flickinger 1998)</a></td></tr>
 
 <tr><td>4</td>
-<td><a href="pdf/matrix.pdf">The Grammar Matrix: Motivations, technical details</a></td>
+<td><a href="pdf/tfs.pdf">Typed Feature Structures and Unification</a></td>
 <td><a href="lab3.html">Testsuites/customization II: 
   Tense/aspect,
   agreement,
@@ -69,50 +69,54 @@ as a virtual machine.
 <td><a href="http://lingo.stanford.edu/sag/papers/copestake.pdf">Copestake, Flickinger, Pollard and Sag (2005)</a></td></tr>
 
 
-<tr><td>5+</td>
-<td><a href="../HG4041/pdf/lec-03-val.pdf">Valence</a> and 
-<a href="../HG4041/pdf/lec-04-semantics.pdf">Semantic Composition</a> in HPSG</td>
+<tr><td>6</td>
+<td><a href="http://compling.hss.ntu.edu.sg/courses/hg4041/pdf/lec-03-val.pdf">Valence</a> and 
+<a href="http://compling.hss.ntu.edu.sg/courses/hg4041/pdf/lec-04-semantics.pdf">Semantic Composition</a>
+in HPSG; <a href='pdf/early-lec.pdf'>Chart Parsing</a>
+</td>
 <td>Revision</td>
 <td>Sag, Wasow and Bender (2003) ch 4-5</td></tr>
 
 
-<tr><td>6</td>
+<tr><td>7</td>
 <td><a href="pdf/mod.pdf">Modification, Discourse Status, Argument Optionality; Precision grammars and corpus data</a></td>
 <td><a href="lab5.html">Modification, demonstratives, argument optionality</a></td>
 <td>Borthen and Haugereid (2005)
 <br>(<a href="http://faculty.washington.edu/ebender/papers/beauty_beast_final.pdf">Baldwin et al (2005)</a>)</td></tr>
 
-<tr><td>7</td>
+<tr><td>9</td>
 <td><a href="pdf/composition.pdf">Composition and Decomposition: Demonstrative pronouns and multi-word expressions</a></td>
 <td><a href="lab5a.html">Breaking words down and building phrases up</a></td>
 <td><a href="http://web.mysites.ntu.edu.sg/fcbond/open/pubs/2002-cicling-mwe.pdf">Sag et al. (2002)</a></td></tr>
 
 
 
-<tr><td>8</td>
+<tr><td>9</td>
 <td><a href="pdf/sf.pdf">Clause types, illocutionary force</a></td>
 <td><a href="lab6.html">Polar questions, embedded clauses, non-verbal predicates</a></td>
 <td>Sag, Wasow and Bender (2003) Ch 5</td>
 </tr>
 
-<tr><td>9</td>
+<tr><td>10</td>
 <td><a href="pdf/neg.pdf">Negation, Raising, Control, Argument Composition</a></td>
 <td><a href="lab7.html"><i>I can eat glass.  It doesn't hurt me.</i></a></td>
 <td>Sag, Wasow and Bender (2003) Ch 12</td></tr>
 
 
-<tr><td>10</td>
-<td><a href="pdf/ambiguity.pdf">Dealing with Ambiguity</a></td>
+<tr><td>11</td>
+  <td>No slides
+    <!-- <a href="pdf/ambiguity.pdf">Dealing with Ambiguity</a> -->
+  </td>
 <td><a href="lab8.html">Treebanking and Parse ranking</a></td>
 <td><a href = "http://web.mysites.ntu.edu.sg/fcbond/open/pubs/2004-IJC-hoistic.pdf">Oepen, 
     Flickinger and Bond (2004)</a></td></tr>
 
-<tr><td>11</td>
+<tr><td>12</td>
 <td><a href="pdf/mt.pdf">Deep Semantic Transfer: The LOGON MT architecture</a>
 <a href="pdf/vpm.pdf">Information Structure and VPM</a></td>
 <td><a href="lab9.html">Grammar clean up; Transfer rules</a></td>
 <td><a href="http://www.springerlink.com/content/0251717278721jm9/">Bond et al. 2011</a></td></tr>
-<tr><td>12</td>
+<tr><td>13</td>
 <td>No Slides</td>
 <td><a href="lab10.html">Classifiers</a></td></tr>
 
@@ -130,17 +134,24 @@ as a virtual machine.
   <li><a href='http://moin.delph-in.net/GrammarEngineeringFaq'>Grammar Engineering FAQ</a> This is a wiki, you are encouraged to extend it.
   <li><a href='http://moin.delph-in.net/GrammarEngineeringGlossary'>Grammar Engineering Glossary</a> This is a wiki, you are encouraged to extend it.
   <li><a href='http://moin.delph-in.net/FrontPage'>Deep Linguistic Processing with HPSG Initiative (DELPH-IN) Wiki</a>
-  <li><a href='../hg4041/'>HG4041: Theories of Grammar (HPSG)</a>
+  <li><a href='http://compling.hss.ntu.edu.sg/courses/hg4041/'>HG4041:
+      Theories of Grammar (HPSG)</a>
+<li><a href="http://matrix.delph-in.net/language-collage">Language
+    CoLLAGE</a>: A collection of Matrix-derived grammars from Ling 567
 </ul>
 <h4>Tools</h4>
 <ul>
-  <li>LKB
-  <li>ACE
-  <li>PyDelphin
-  <li><a href='http://matrix.ling.washington.edu/customize/matrix.cgi'>The Matrix</a>
-  <li>ltdb
+  <li><a href="http://moin.delph-in.net/LkbTop">LKB</a>
+    <ul>
+      <li><a href="http://moin.delph-in.net/LkbMode">List of keyboard shortcuts</a> for LKB interaction in emacs.
+    </ul>
+  <li><a href="http://moin.delph-in.net/AceTop">ACE</a>
+  <li><a href='https://pydelphin.readthedocs.io/en/latest/'>PyDelphin</a>
+  <li><a href='http://matrix.ling.washington.edu/customize/matrix.cgi'>the Matrix</a>
+  <li><a href='http://moin.delph-in.net/LkbLtdbltdb'>ltdb</a> (Linguistic Type Database)
   <li>git
 </ul>
+
 
 <h4>The Grammar Engineering Cycle</h4>
 <ol>
@@ -241,7 +252,12 @@ Knowledge Engineering for NLP</a> at the University of Washington.
 Thanks to
 <a href="http://faculty.washington.edu/ebender/index.html">Emily Bender</a> for
 letting us use them.
+<p>Chart parsing slides by Ewan Kline, from the University of
+  Edinburgh's <a href='https://www.inf.ed.ac.uk/teaching/courses/icl/lectures.html'>Introduction
+  to Computational Linguistics</a> (2006/07)
 
-
-
+  <address>
+    <p>These slides are hosted on github
+    at <a href='https://github.com/bond-lab/Grammar-Engineering'>https://github.com/bond-lab/Grammar-Engineering</a>.
+  </address>
 </body></html>
