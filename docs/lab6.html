@@ -1,0 +1,528 @@
+<html><head><title>Computational Grammars: Lab 6</title></head>
+	
+<body><hr>
+
+<h1>Lab 6</h1>
+
+<h2>Preliminaries</h2>
+
+
+<a name="req"><h3>Requirements for this assignment</h2></a>
+
+<ul>
+  <li><a href="#baseline">0.</a> Make sure you have a baseline test suite corresponding
+  to your lab 5 grammar.
+  <li><a href="#q">1.</a> Check that matrix polar questions are working, and fix them if necessary.
+  <li><a href="#emb">2.</a> Add sentential complment verbs.
+  <li><a href="#mrs1">3.</a> Make sure the MRSs are correct.
+  <li><a href="#cop">4.</a> Get sentences with NP, (locative) PP, and AP predicates parsing.
+  <ul>
+  <li>... in present tense as well as other tense/aspects.
+  <li>... in matrix as well as embedded clauses.
+    </ul>
+  <li><a href="#mrs">5.</a> Make sure that the MRSs are correct.
+  <li>6. Make sure that your grammar can still generate, and debug if necessary.
+  <li>7. Test your grammar using [incr tsdb()].
+[incr tsdb()] should be part of your test-development
+cycle.  In addition, you'll need to run a final test suite instance
+for this lab to submit along with your baseline.
+</ul>
+
+<hr>
+
+<h2><a name="baseline">Run a baseline test suite</a></h2>
+
+<p>Before making any changes to your grammar for this lab,
+run a baseline test suite instance.  If you decide to add 
+items to your test suite for the material covered here, consider
+doing so before modifying your grammar so that your baseline can
+include those examples.  (Alternatively, if you add examples
+in the course of working on your grammar and want to make the
+snapshot later, you can do so using the grammar you turned
+in for Lab 5.)
+
+<hr>
+<h2><a name="q">Matrix yes-no questions</a></h2>
+
+<P>The semantics for declarative and interrogative clauses will
+be the same except for the value of the feature <tt>SF</tt> (sentential
+force) on the event index of the main predicate.  
+
+<P>The customization script may have provided the right kind
+of semantics for matrix yes-no questions already. Try parsing
+an example from your test suite.  If it parses, examine the MRS.
+Is the value of <tt>SF</tt> on the INDEX of the clause <i>ques</i>?
+(Or in the case of intonation questions only, do you get <i>prop-or-ques</i>?)
+
+<p>If your yes-no question doesn't parse, or if it does but not
+with the right semantics, contact me, and we will work out what
+needs to be done.  
+
+<hr>
+<h2><a name="emb">Embedded clauses</a></h2>
+
+<h2>Clause embedding verbs</h2>
+
+<p>We will be using clausal complements as our example of embedded
+clauses.  To do so, we need to create clause-embedding verbs.  First,
+find examples of verbs that can embed propositions and verbs that can
+embed questions.  If you also find verbs that are happy to embed
+either, we can make use of them.  For inspiration, you can look <a
+href="http://depts.washington.edu/uwcl/twiki/bin/view.cgi/Main/EngPTBVerbs">here</a>
+or <a
+href="http://depts.washington.edu/uwcl/twiki/bin/view.cgi/Main/EspDecVerbs">here</a>.
+
+<ul> <li>Create another subtype of <tt>verb-lex</tt> (or
+<tt>main-verb-lex</tt>) which inherits from
+<tt>clausal-second-arg-trans-lex-item</tt> (the type for verbs like
+<i>think</i>, <i>ask</i>, and <i>know</i>).
+
+  <li>Constrain the
+<tt>CAT</tt> value of the complement appropriately (the feature
+specifications of S, CP or either depending on what's going on with
+your embedded clauses).  The <tt>CONT.HOOK.INDEX.SF</tt> should also
+be constrained to <i>prop-or-ques</i>.
+
+  <li>Create two subtypes, one
+which constrains the <tt>CONT.HOOK.INDEX.SF</tt> to <i>prop</i> and
+one which constrains it to <i>ques</i>.
+
+  <li>Create lexical entries
+for verbs inheriting from one or the other subtypes (or the supertype)
+as appropriate.  </ul>
+
+<p>If your matrix and embedded clauses look the same, you should be
+able to test this immediately.  If not, you'll have to wait until
+you've implemented the syntax for your embedded clauses.
+
+<h3>Complementizers</h3>
+
+<p>Some languages mark embedded clauses (declaractive, interrogative
+or both) with complementizers (e.g., <i>that</i> and <i>whether</i> in
+English).  To implement this, you'll need to do the following.  (If
+your language also marks matrix questions with a question particle,
+you have some of the following in your grammar already.)
+
+<ul>
+  <li>Create a type <i>complementizer-lex-item</i> which inherits
+from <i>raise-sem-lex-item</i> and <i>basic-one-arg</i>.  It should
+identify the one thing on the <tt>ARG-ST</tt> with the sole item of
+its <tt>COMPS</tt> list and otherwise have empty valence features.
+It's <tt>HEAD</tt> value should be <i>comp</i>.
+
+  <li>If you have both interrogative and declarative complementizers,
+make subtypes for each, constraining the <tt>CONT.HOOK.INDEX.SF</tt>
+on each of them to <i>question</i> and <i>proposition</i> respectively.
+
+  <li>If you have just one kind of comlementizer, you can put the <tt>SF</tt>
+constraint on <i>complementizer-lex-item</i> directly.
+
+  <li>Create lexical entries for your complementizers.  These do not
+need any <tt>KEYREL</tt> information.
+</ul>
+
+<p>Test your embedded clauses.  Do they parse as expected?  Can you
+still generate?
+
+<p>(Note: Many of you have semantically empty lex entries in your
+grammar, which will tend to make the generator unhappy, unless
+you add trigger rules.  I'll try to add info about creating trigger
+rules by Monday or so.)
+
+<h3>Other strategies</h3>
+
+<p>Other possible syntactic differences between main and subordinate
+clauses include:
+
+<ol>
+<li>Differences in word order (the general strategy here will be
+to add more head-subj and head-comp variants, but to constrain some
+of them to be <tt>[MC +]</tt> and/or <tt>[MC -]</tt>).
+<li>Different verb forms (the general strategy here will be lexical
+rules which produce the forms of the embedded verbs and give them
+a distinctive <tt>HEAD.FORM</tt> value that the embedding verbs
+and/or complementizers can select for).
+</ol>
+
+<p>Consult with me to work out an analysis for whatever your language
+is doing in this case.
+
+<h3>The feature MC</h3>
+
+<p>If your matrix and embedded clauses have different syntactic properties
+(e.g., presence v.\ absence of complementizers), you'll need to constrain
+things so that the embedded clause syntax only appears in embedded clauses
+and vice versa for matrix clause syntax.   There are three resources
+for doing so:
+
+<ul>
+<li>The root condition
+<li>The selecting context for the embedded clauses (i.e., the embedded
+verb)
+<li>The feature <tt>MC</tt> (inside <tt>CAT</tt>)
+</ul>
+
+<p>If the difference is strictly S v. CP, you don't need the feature
+<tt>MC</tt>.  Otherwise, you probably will need all three: The root
+condition will require <tt>[MC +]</tt>, the embedding verb will
+require <tt>[MC -]</tt>, and the constructions/lexical rules/etc which
+create the embedded and matrix clauses themselves should set
+appropriate values for <tt>MC</tt>.
+
+<p>Be sure your test suite contains negative examples illustrating 
+matrix clause syntax in embedded clauses and vice versa.
+
+<a name="mrs1"><h3>Check your MRSs</h3></a>
+
+<p>Here are some examples to give you an idea of what
+we're looking for.  (This is the "indexed MRS" view.)
+
+<p><small>(NB 2/17/12: These are somewhat out of date, because the
+LKB displays the GTOP not the LTOP for the whole MRS.
+If you look at the feature structure rather than the 
+extracted MRS, you should see that the LTOP matches the LBL
+of the matrix verb's relation.)</small>
+
+<p><i>I know that you sleep.</i>
+
+<p>Note the qeq linking the ARG2 position
+of _know_v_rel (h18) to the LBL of _sleep_v_rel (h14),
+and the SF value of e15 (PROP).
+
+<pre>
+&lt;h1, e2:PRESENT:PROP-OR-QUES,
+{ h3:_pronoun_n_rel(x4:IN-FOC:FIRST:SG),
+h5:exist_q_rel(x4, h6, h7),
+h1:_know_v_rel(e2, x4, h8),
+h9:_pronoun_n_rel(x10:IN-FOC:SECOND),
+h11:exist_q_rel(x10, h12, h13),
+h14:_sleep_v_rel(e15:PRESENT:PROP, x10) }
+{h6 qeq h3
+h8 qeq h14
+h12 qeq h9} &gt;
+</pre>
+
+<p><i>I ask whether you sleep.</i>
+
+<p>Note the qeq linking the ARG2 position
+of _ask_v_rel (h18) to the LBL of _sleep_v_rel (h14),
+and the SF value of e15 (QUES).
+
+<pre>
+&lt;h1, e2:PRESENT:PROP-OR-QUES,
+{ h3:_pronoun_n_rel(x4:IN-FOC:FIRST:SG),
+h5:exist_q_rel(x4, h6, h7),
+h1:_ask_v_rel(e2, x4, h8),
+h9:_pronoun_n_rel(x10:IN-FOC:SECOND),
+h11:exist_q_rel(x10, h12, h13),
+h14:_sleep_v_rel(e15:PRESENT:QUES, x10) }
+{h6 qeq h3
+h8 qeq h14
+h12 qeq h9} &gt;
+</pre>
+
+
+<hr>
+<a name="cop"><h2>Non-verbal predicates</h2></a>
+
+<h3>Background</h3>
+
+<p>The goal of this lab is to extend the grammars to cover sentences
+where the main (semantic) predicate is not a verb, i.e., NP, PP, and
+AP predicates.  In some languages (including English) such predicates
+require the "support" of a particular bleached verb (the copula, or
+perhaps a verb of location).  In others, they can serve as predicates
+on their own.  In still other languages, we find a mix:  The copula
+(or other verb) is required for certain types of predicates or in certain
+tenses but not others.  Or the copula (or other verb) is optional:
+possible but not required.
+
+<P>It's also possible that in some languages the copula is optional
+in matrix clauses but required in embedded clauses.  I haven't found
+an example like this yet, but I'd be curious to know about it if
+you find one.
+
+<hr>
+<h3>Adpositions</h3>
+
+<p>Some of your grammars have adpositions already, but few, if any,
+have semantically contentful adpositions.  You'll need to define these
+for this lab.  The matrix provides a type
+basic-int-mod-adposition-lex, which should have most of the
+information required.  Define a subtype with appropriate constraints
+on the MOD and VAL values, and try it out to see what else you might
+need to add.
+
+<hr>
+<h3>Copula (AP or PP predicates)</h3>
+
+<P>We analyze copulas as semantically empty auxiliaries.  You
+may already have a type very similar to this. The copula is likely
+to have different requirements on its complement than other auxiliary
+verbs, so you'll probably need to create subtypes, or for each.
+The tdl for a copula should look something like this:
+
+<pre>
+copula-verb-lex := verb-lex-supertype & trans-first-arg-raising-lex-item-2 &
+  [ SYNSEM.LOCAL [ CAT.VAL [ SUBJ < #subj >,
+                             COMPS < #comps >,
+                             SPR < >,
+                             SPEC < > ],
+                   CONT.HOOK.XARG #xarg ],
+    ARG-ST < #subj &
+             [ LOCAL [ CONT.HOOK.INDEX #xarg,
+                       CAT [ VAL [ SPR < >,
+                                   COMPS < > ],
+                             HEAD noun ] ] ],
+             #comps &
+             [ LOCAL.CAT [ VAL [ COMPS < > ],
+                           HEAD +jp ] ] > ].
+</pre>
+
+<p>You'll also need to create <tt>verb-lex-supertype</tt> which 
+inherits from some of the types that your <tt>verb-lex</tt> type
+does, but not all of them.  In particular, you want to get
+the types that give it access to whatever verbal morphology
+is relevant, as well as constraining it to be [HEAD verb].
+
+<p>The constraint <tt>[HEAD +jp]</tt> on the complement specifies that
+the complement should be (headed by) an adjective or an adposition.
+Depending on where copulas are required in your language, you might
+want to change this.  If you need to give adjectives or adpositions
+non-empty SUBJ lists (e.g., because they can be stand-alone predicates
+in some cases; see below), then you'll also want to constrain the
+COMPS's SUBJ to be < [ ] > (aka <tt>cons</tt>) to make sure that the subject
+isn't realized twice.
+
+<p>Note that the copula verb uses the XARG to do the linking (the
+relevant constraint is declared on the supertype
+trans-first-arg-raising-lex-item in matrix.tdl).  This means that the
+adjectives and adpositions will need to link their ARG1 to their XARG.
+This may already be the case, but you should double check.
+<hr>
+
+<h3>Copula (NP predicates)</h3>
+
+<P>We will follow the ERG in positing a different copula
+for use with NP predicates.  This is because we don't want
+to give every noun a semantic argument position for a potential
+subject.  The copula verb for NP predicates will instead introduce
+an elementary predication linking its subject and complement.
+
+<P>This means that in many languages, this copula might  just
+be an ordinary transitive verb.  It's not in English, because it
+also has auxiliary properties.  If the NP-predicate-supporting-copula
+in your language differs in its behavior from (other) transitive
+verbs, post to GoPost.
+
+<p>The PRED value for this verb should be "_be_v_id_rel".
+
+<hr>
+<h3>Locative verbs</h3>
+
+In some languages, PP predicates appear with a locative verb that
+is not quite semantically bleached, but means something like "be-located".
+In this case, it seems at least arguably incorrect to have the
+verb not introduce any predicate of its own.  Instead, it will
+be an example of trans-first-arg-raising-lex-item-1:
+
+<pre>
+locative-verb-lex := verb-lex & trans-first-arg-raising-lex-item-1 &
+  [ SYNSEM.LOCAL [ CAT.VAL [ SUBJ < #subj >,
+                             COMPS < #comps >,
+                             SPR < >,
+                             SPEC < > ],
+                   CONT.HOOK.XARG #xarg ],
+    ARG-ST < #subj &
+             [ LOCAL [ CONT.HOOK.INDEX #xarg,
+                       CAT [ VAL [ SPR < >,
+                                   COMPS < > ],
+                             HEAD noun ] ] ],
+             #comps &
+             [ LOCAL.CAT [ VAL [ COMPS < > ],
+                           HEAD adp ] ] > ].
+</pre>
+
+
+<P>Note that there are many share constraints between this
+and copula-verb-lex.  If you have both, please make a supertype
+for the shared constraints.
+
+<P>The lexical entry for the locative verb can introduce
+"_be+located_v_rel" as its LKEYS.KEYREL.PRED.
+<hr>
+
+<h2>APs and PPs as stand-alone predicates</h2>
+
+<p>If your language allows APs and PPs as stand-alone predicates,
+the basic strategy is to modify the selecting contexts for
+sentences (initial symbol, clause embedding verbs) to generalize
+the requirements on HEAD.  This needs to be done slightly
+differently depending on how tense/aspect are marked in these
+clauses.
+
+<p>Note that some languages don't have adjectives at all,
+just a class of stative intransitive verbs.  For present
+purposes, the definitive test is what happens when these
+elements modify nouns.  If they appear to enter the same
+construction as relative clauses headed by transitive verbs
+(and non-stative intransitives), then they're just verbs.
+However, for the purposes of the MT exercise, it will be helpful
+to have their PRED values end in _a_rel, rather than _v_rel.
+
+
+<h3>Non-empty SUBJ values</h3>
+
+<p>[Updated 2/6/12]
+
+<p>The first step is to get from the attributive entries
+for As or Ps (or both) to predicative uses.  It may be possible
+to use one and the same lexical entry in both uses.  To
+enable predicative uses, your As or Ps (or both) need to have
+non-empty SUBJ lists.  The sole element of the SUBJ list should
+be an NP or PP as appropriate (with appropriate constraints
+on its CASE value), and share its INDEX with the XARG and
+ARG1 of the A/P.  (This index sharing is the same as with
+the MOD value.)
+
+<p>Finally, if some but not all As or Ps can serve as predicates,
+you can handle this by declaring a new feature, PRD, on the type
+head.  Make the attributive-only As/Ps [PRD -], and any
+predicative-only ones [PRD +]. Then edit the root condition
+to require [PRD +]. This can also be useful if you have different
+inflection for predicative v.\ attributive uses of adjectives.
+
+<pre>
+head :+ [ PRD bool ].
+</pre>
+
+
+<h3>Unrestricted tense/aspect</h3>
+
+<p>If an AP or PP stand-alone predicate has underspecified tense and aspect
+(i.e., can be used in any tense/aspect context) or if it actually
+takes tense/aspect markers directly, then you can allow for
+AP or PP predicates by redefining the selecting contexts.  In particular:
+
+<ul>
+  <li>Change the HEAD value on the root condition to allow adjectives
+  and adpositions (+vj, +vp, or +vjp).
+  <li>Change the HEAD value on the clausal complement position of clause-embedding verbs (as above).
+  </ul>
+
+<p>Note that even if it is possible to use a copula for, e.g., past
+  tense AP/PP predicate sentences, you might still have unrestricted
+  tense/aspect on the copulaless counterparts of these sentences.  The
+  key question is whether the copulaless sentences are necessarily
+  interpreted as having a particular tense/aspect value.  If so, see
+  the next section.
+  
+<h3>Restricted to (e.g.) present tense sentences</h3>
+
+If APs or PPs without a copula are interpreted as having some specific
+  tense/aspect value (e.g., present tense) then these sentences need
+  to have their TENSE value constrained.  I see several ways of doing
+  this. Though none jumps out yet as ideal (especially at a
+  cross-linguistic level), the third one is probably the best of the
+  bunch. If you need one or more elaborated, please post to GoPost:
+
+  <ol>
+    <li>The selecting contexts are bifurcated allowing [HEAD verb] constituents (with any tense/aspect value) and [HEAD adp] or [HEAD adj] or [HEAD +jp] constituents with only a particular tense/aspect value. This would be reasonably easy for the root condition (you can have more than one, just define them in roots.tdl and then reference them in the definition of *start-symbol* in lkb/globals.lsp).  It's a bit clunkier in the case of clause-embedding verbs, which would need two entries each.
+    <li>There is a non-branching rule that turns a PP/AP headed constituent into something that looks like an S ([HEAD verb, SUBJ < >, COMPS < >]), and along the way fills in the tense information.
+    <li>You write lexical rules to create predicative and attributive
+    forms of As/Ps from uninflected base forms (even if there is no
+    overt morphology involved).  One rule gives PRD + forms which have
+    the specific TENSE value required.  The other makes PRD -
+    forms. In this case, if the copula can combine with APs/PPs, it
+    would actually take the PRD - ones, so it can fill in different
+    tense information.
+ </ol>
+  
+
+<hr>
+  
+<h2>NPs as stand-alone predicates</h2>
+
+<p>Finally, we come to the case of NPs used as predicates without any
+    supporting verb.  As with NPs used as the complement of a copula,
+    we need to do something to get an extra predication in.  Here, I
+    think the best solution is a non-branching non-headed phrase
+    structure rule which takes an NP daughter and produces a VP
+    mother.  It should introduce the "_be_v_id_rel" relation through
+    the C-CONT.RELS, linking the C-CONT.INDEX to the ARG0 of this
+    relation.  If NPs as stand-alone predicates necessarily get
+    present tense interpretation, this rule can also fill in that
+    information.
+
+    <p>If you also need a non-branching rule for tense-restricted PP or AP predicates, you might consider doing those the same way (VP over PP/AP), and sharing many constraints between the two rules.  Note, however, that the PP/AP rule would have an empty C-CONT.RELS list.
+    
+<hr>
+<a name="mrs"><h3>Check your MRSs</h3></a>
+
+<p>Here are some sample MRSs to give you a sense of what we're looking
+    for.  Note that yours might differ in detail, because of e.g., different tense values or the use of a locative verb.
+
+
+    <p><i>The child is happy.</i>
+    <pre>
+&lt;h1,e2:PRESENT:PROP-OR-QUES,
+{h3:exist_q_rel(x4:uniq+fam+act:THIRD:SG, h7, h6),
+h5:_child_n_rel(x4),
+h8:_happy_a_rel(e2,x4)}
+{h7 qeq h3} &gt;
+</pre>
+
+    <p><i>The child is in the park.</i>
+    <pre>
+&lt;h1,e2:PRESENT:PROP-OR-QUES,
+{h3:exist_q_rel(x4:uniq+fam+act:THIRD:SG, h7, h6),
+h5:_child_n_rel(x4),
+h8:_in_p_rel(e2,x4,x9),
+h10:exist_q_rel(x9:uniq+fam+act:THIRD:SG, h12, h11),
+h13:_park_n_rel(x9)}
+{h7 qeq h3
+h12 qeq h13} &gt;
+</pre>
+
+<p><i>The child is the winner.</i>
+    <pre>
+&lt;h1,e2:PRESENT:PROP-OR-QUES,
+{h3:exist_q_rel(x4:uniq+fam+act:THIRD:SG, h7, h6),
+h5:_child_n_rel(x4),
+h8:_be_v_id_rel(e2,x4,x9),
+h10:exist_q_rel(x9:uniq+fam+act:THIRD:SG, h12, h11),
+h13:_winner_n_rel(x9)}
+{h7 qeq h3
+h12 qeq h13} &gt;
+</pre>
+
+    <h2>Test your grammar</h2>
+
+<ul>
+<li>Use your test suite to check the syntactic coverage of your grammar.
+<li>Examine the semantic representations you assign to each of
+the clause types.
+<li>Check for overgeneration (syntactic forms associated with 
+one clause type showing up in other clause types, multiple parses
+for single sentences with spurious clause type assignments or
+lack of clausal semantics).
+<li>Make sure your grammar still generates.
+</ul>
+
+
+
+<hr>
+<a href="index.html">Back to main course page</a>
+<address><a href = 'http://www3.ntu.edu.sg/home/fcbond/'>Francis Bond</a></address>
+<p>Course materials borrow heavily
+from <a href="http://courses.washington.edu/ling567/">Linguistics 567:
+Knowledge Engineering for NLP</a> at the University of Washington.
+Thanks to
+<a href="http://faculty.washington.edu/ebender/index.html">Emily Bender</a> for
+letting us use them.
+
+<!-- hhmts start --> Last modified: 2/3/2012 <!-- hhmts end -->
+
+
+
+</body></html>

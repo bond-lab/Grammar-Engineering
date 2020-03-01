@@ -1,0 +1,539 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>Computational Grammars: Lab 5</title>
+</head>
+
+<body>
+<h1>Lab 5</h1>
+
+<h2>Preliminaries</h2>
+
+<p>These instructions might get edited a bit over the next
+couple of days.  I'll try to flag changes.
+
+<p>As usual, check the <a href="#writeup">write up instructions</a> first.
+
+
+<a name="req"><h3>Requirements for this assignment</h2></a>
+
+<ul>
+  <li>0. Make sure you have a baseline test suite corresponding
+  to your lab 4 grammar.
+  <li><a href="#adjadv">1.</a> Add adjectival and adverbial modifiers.
+  <li><a href="#adjagr">2.</a> If your language has agreement between
+  adjectives and head nouns, implement the appropriate lexical rules
+  for adjectives to model this.
+  <li><a href="#cogst">3.</a> Add demontratives and markers of definiteness (if any).
+  <li><a href="#pro-d">4.</a> Refine the rules allowing for optional arguments (argument drop) to reflect the discourse constraints on when arguments can be dropped.
+  <li>5. If there's anything simple that you've been waiting for tdl editing to fix, optionally fix it now.  (Keyword here is simple1)
+  <li><a href="#corpus">6.</a> Collect a small test corpus and create a testsuite file for it.
+  <li>7. Test your grammar using [incr tsdb()].
+[incr tsdb()] should be part of your test-development
+cycle.  In addition, you'll need to run a final test suite instance
+for this lab to submit along with your basline.
+<li><a href="#write">8.</a> Write up the phenomena you have analyzed.
+</ul>
+
+<hr>
+
+<a name="adjadv"><h2>Modification</h2></a>
+
+<h3>Head-modifier rules</h3>
+
+<p>The Matrix distinguishes scopal from intersective modification.
+We're going to pretend that everything is intersective and
+just not worry about the scopal guys for now (aside from negative
+adverbs, if you got one from the customization system).
+
+<ul>
+<li>Create an instance of <i>head-adj-int-phrase</i>, an
+instance of <i>adj-head-int-phrase</i>, or both, depending on
+whether you need only prehead modifiers, only posthead modifiers,
+or both.  (You may already have some of these, depending on
+what you said about negation in the customization system.)  To
+  do this, add the following to <tt>rules.tdl</tt>:
+
+  <pre>
+head-adj-int := head-adj-int-phrase.
+adj-head-int := adj-head-int-phrase.
+</pre>
+  
+<li>Try parsing a sentence without a modifier, and examine
+the parse chart.  Did the head-adj phrase fire?  If so, 
+Constrain your non-adj/adv subtypes of head.  You can do
+  this by adding the following to your <tt>my_language.tdl</tt>.
+
+  <pre>
++nvcdmo :+ [ MOD < > ].
+</pre>
+
+  <p>That adds the constraint <tt>[MOD < > ]</tt> to the
+  type <i>+nvcdmo</i>, which is the supertype of all the head
+  types other than <i>adj</i> and <i>adv</i>. (Notes: You might already have this constraint or a functionally equivalent one if your customized grammar
+includes adverbial negation.  Constraining <i>+nvcdmo</i> isn't necessarily
+the best way to do this, as you might want to allow nouny or verby things to be modifiers.  The alternative is to constrain the relevant lexeme types to have empty MOD values.)
+
+<li>Try parsing the misbehaving sentence again.
+</ul>
+
+<h3>Adjectives</h3>
+
+<ul>
+<li>Create a type <i>adjective-lex</i> which inherits from
+<i>basic-adjective-lex</i>. The following type works for English
+assuming that:
+
+<ol>
+<li>We're not worried about predicative adjectives or adjectives
+taking complements for now.
+<li>English has both pre-head and post-head modifiers, (head-adj and adj-head), but simple adjectives
+are (almost) always prehead (hence the value of POSTHEAD).
+<li>We're only dealing with intersective adjectives (as stipulated).
+</ol>
+
+<pre>
+adjective-lex := basic-adjective-lex & intersective-mod-lex &
+	      norm-ltop-lex-item &
+  [ SYNSEM [ LOCAL [ CAT [ HEAD.MOD < [ LOCAL.CAT [ HEAD noun,
+                                                    VAL.SPR cons ]]>,
+			   VAL [ SPR < >,
+				 SUBJ < >,
+				 COMPS < >,
+				 SPEC < > ],
+			   POSTHEAD - ]]]].
+</pre>
+
+<li>If adjectives display agreement in your language, you'll
+be adding that information to the MOD value in agreement below.
+For now, leave it underspecified (this will cause your grammar
+to overgenerate).
+<li>Create one or more adjective instances.
+<li>Parse sentences with your adjectives, and examine the MRSs.
+Are the adjective relations being predicated of the right indices?
+</ul>
+
+<h3>Adverbs</h3>
+
+<ul>
+  <li>Create one or more types for adverbs.  The following type
+      definition inherits from appropriately-defined Matrix supertypes,
+      and constrains the modified constituent to be verbal.
+
+<pre>
+adverb-lex := basic-adverb-lex & intersective-mod-lex &
+  [ SYNSEM [ LOCAL [ CAT [ HEAD.MOD < [ LOCAL.CAT.HEAD verb ]>,
+			   VAL [ SPR < >,
+				 SUBJ < >,
+				 COMPS < >,
+				 SPEC < > ]]]]].
+</pre>
+
+  <li>Try parsing a sentence with an adverb and then generating
+      to see where else the adverb can show up.  If you language allows
+      multiple attachment sites for the adverb, admire the results.
+      If it doesn't, or doesn't allow *that* many, constrain them further.
+  <li>In order to constrain the possible attachment sites
+      for adverbs, you may need to constrain the value of POSTHEAD,
+      or the value of SPR inside MOD or the value of LIGHT inside MOD. (<tt>[LIGHT +]</tt> picks out lexical Vs, including both transitive and intransitive ones.)
+<li>Parse sentences with your adverbs, and examing the MRSs.
+Are the adverb relations being predicated of the right indices?
+</ul>
+
+
+<a name="adjagr"><h3>Adjective Agreement</h3></a>
+
+<p>To model adjective agreement, you'll probably want
+to write lexical rules that inflect the adjectives and
+constrain the features inside the MOD value so that each
+inflected adjective can only modify the right kind of nouns.
+
+
+<p>Below is some general information on writing lexical rules.
+Please also refer to the lexical rules emitted by the
+customization system.  Adjective agreement lexical rules
+should be of the "add only" type.  Note that if you have an
+apparently uninflected form, you'll need to make sure it
+goes through a constant lexical rule (no spelling change)
+which fills in the relevant feature values.
+
+<a name="lexrules"><h3>Lexical rules</h3></a>
+
+<ul> 
+<li>Pick a supertype for your rule:
+
+<ul>
+<li>Determine whether your lexical rule needs to change SYNSEM
+information, or just add to it.  (Examples: If the input has a
+non-empty SPR list and the output has an empty SPR list, that's
+changing information.  If the input has no value
+specified for CASE and the output is [CASE nom], that's just adding
+information.)
+
+<li>Determine whether your lexical rule creates fully inflected
+forms, or whether there's more inflection you'd like to stack
+on top of it.  
+
+<li>Rules creating fully inflected forms and only adding
+information to SYNSEM can inherit from <i>infl-ltow-rule</i>
+  <font color="red">and <i>add-only-no-ccont-rule</i><small>[Updated 2/3/10]</small></font>.
+  
+
+<li>Rules creating not-yet fully inflected forms and only adding
+    information should inherit
+from <i>infl-add-only-no-ccont-ltol-rule</i>.
+
+<li>If your rule needs to change the SYNSEM value, determine
+    which part of SYNSEM is changing (e.g., VAL only, HEAD only,
+    CAT only) and choose an appropriate type out of the types
+    called <i>infl-***-change-only-ltol-rule</i>.  Unless you're
+	adding any relations, your rule should also inherit from
+	<i>no-ccont-lex-rule</i>.  <b>I expect most lexical
+rules created for this lab to be of the add-only variety, rather
+than changing information.</b>
+</ul>
+
+<li>Define a rule type in <tt>my_language.tdl</tt> which contains
+all of the information about your rule except the spelling changes.
+The value of DTR should be specific enough to constrain the
+rule to only applying to the right type of inputs.  The value of
+SYNSEM should include the primary information contributed by the
+rule (e.g., the constraints on MOD reflected in the agreement morphology).
+If you aren't using one of the "add only" types, then you need to
+be sure that the rest of the SYNSEM value is sufficiently constrained.
+Here's an example from English (where
+the value of SYNSEM ends up being very specific since all the
+information from the daughter is also in the mother):
+
+<pre>
+3sg_verb-lex-rule := infl-ltow-rule &
+  [ SYNSEM.LOCAL.CAT.VAL.SUBJ < [ LOCAL.CONT.HOOK.INDEX.PNG [ PER third,
+							      NUM sg ]] >,
+    DTR verb-lex ].
+</pre>
+
+<li>If you have multiple rules applying to the same form, constrain
+the innermost (rightmost prefix or leftmost suffix) to take (some
+subtype of) <i>lex-item</i> as its DTR.  The next one to apply to
+should take the first rule as its DTR, etc. If multiple rules can
+appear in one slot, define a supertype for them which can be the DTR
+of the next rule type out.
+
+<li>Define an instance of the rule type in <tt>irules.tdl</tt>.  This
+instance should give the spelling change subrules on a line beginning
+with <tt>%prefix</tt> or <tt>%suffix</tt>.  Assuming you're working
+from regularized morphophonology, these should be simple concatenation,
+of the form (* pref) or (* suff).
+
+<li>A slightly more complicated example from English (without
+regularized morphophonology) follows.  After <tt>%suffix</tt> there is 
+a list of pairs in which the first member matches the input form
+and the second member describes the output form.  * matches the empty
+string.  ! signals a letter-set.  More specific subrules to the
+right.
+
+<pre>
+3sg_verb :=
+%suffix (!s !ss) (!ss !ssses) (ss sses)
+3sg_verb-lex-rule.
+</pre>
+
+And here's the letter set that's used:
+
+<pre>
+%(letter-set (!s abcedfghijklmnopqrtuvwxyz))
+</pre>
+
+<li>Make sure that your lexical entries give the stem
+instead of the inflected word (i.e., so that your lexical rule
+can do the work). Be sure that the lexical type says
+<tt>[INFLECTED -]</tt> if the rule is obligatory.  (And note
+that lexical rules for agreement usually are.)
+
+
+<li>Test your grammar.  Does the lexical rule apply to the
+words it should apply to?  Does it apply to words it shouldn't apply to?
+</ul>
+
+<hr>
+
+<h2><a name="cogst">Demonstratives and definiteness</a></h2>
+
+<h3>The basics</h3>
+
+<p>We are modeling the cognitive status attributed to discourse
+referents by particular referring expressions through a pair of
+features <tt>COG-ST</tt> and <tt>SPECI</tt> on <i>ref-ind</i> (the
+value of <tt>INDEX</tt> for nouns).  Here is our first-pass guess
+at the cognitive status associated with various types of <b>overt</b>
+expressions (for dropped arguments, see below):
+
+<table border=1>
+<tr><th>Marker</th><th>COG-ST value</th><th>SPECI value</th></tr>
+<tr><td>Personal pronoun</td><td>activ-or-more</td><td>+</td></tr>
+<tr><td>Demonstrative article/adjective</td><td>activ+fam</td><td>&nbsp;</td></tr>
+<tr><td>Definite article/inflection</td><td>uniq+fam+act</td><td>&nbsp;</td></tr>
+<tr><td>Indefinite article/inflection</td><td>type-id</td><td>&nbsp;</td></tr>
+</table>
+
+<p>If you have any overt personal pronouns, constrain their INDEX values
+to be <tt>[COG-ST activ-or-more, SPECI + ]</tt>.  
+
+<p>If you have any determiners which mark definitness, have them
+constrain the <tt>COG-ST</tt> of their <tt>SPEC</tt> appropriately.
+For demonstrative determiners, see below.
+
+<p>If you have any nominal inflections associated with discourse
+status, implement lexical rules which add them and constrain the
+<tt>COG-ST</tt> value appropriately.
+
+<p>Note that in some cases an unmarked form is underspecified,
+where in others it stands in contrast to a marked form.  You should
+figure out which is the case for any unmarked forms in your language
+(e.g., bare NPs in a language with determiners, unmarked nouns
+in a language with definiteness markers), and constrain the unmarked
+forms appropriately.  For bare NPs, the place to do this is the bare
+NP rule (note that you might have to create separate bare NP rules
+for pronouns v. common nouns in this case).  For definiteness affixes,
+you'll want a constant-lex-rule that constrains <tt>COG-ST</tt>, and
+that is parallel to the inflecting-lex-rule that adds the affix for
+the overtly marked case.
+
+<p>Some languages have agreement for definiteness on adjectives.
+In this case, you'll want to add lexical rules for adjectives that
+constrain the <tt>COG-ST</tt> of the item on their <tt>MOD</tt> list.
+
+<h3>Demonstratives</h3>
+
+<p>All demonstratives (determiners, adjectives and pronouns [not
+on the todo list this year]) will share a set of relations
+which express the proximity to hearer and speaker.  We will arrange
+these relations into a hierarchy so that languages with just a one- or
+two-way distinction can be more easily mapped to languages with a two-
+or three-way distinction.  In order to do this, we're using
+<b>types</b> for these PRED values rather than strings.  Note the
+absence of quotation marks.  We will treat the demonstrative relations
+as adjectival relations, no matter how they are introduced (via
+pronouns, determiners, or quantifiers).
+
+
+<p>There are (at least) two different types of three-way distinctions.
+Here are two of them.  Let me know if your language isn't modeled by either.
+
+<pre>
+demonstrative_a_rel := predsort.
+proximal+dem_a_rel := demonstrative_a_rel. ; close to speaker
+distal+dem_a_rel := demonstrative_a_rel.   ; away from speaker
+remote+dem_a_rel := distal+dem_a_rel.      ; away from speaker and hearer
+hearer+dem_a_rel := distal+dem_a_rel.      ; near hearer
+</pre>
+
+<pre>
+demonstrative_a_rel := predsort.
+proximal+dem_a_rel := demonstrative_a_rel. ; close to speaker
+distal+dem_a_rel := demonstrative_a_rel.   ; away from speaker
+mid+dem_a_rel := distal+dem_a_rel.         ; away, but not very far away
+far+dem_a_rel := distal+dem_a_rel.         ; very far away
+</pre>
+
+<h3>Demonstrative adjectives</h3>
+
+<p>Demonstrative adjectives come out as the easy case in this system.
+They are just like regular adjectives, except that in addition to 
+introducing a relation whose <tt>PRED</tt> value is one of the subtypes of
+<i>demonstrative_a_rel</i> defined above, they also constrain the <tt>INDEX.COG-ST</tt> of their <tt>MOD</tt> value to be <i>activ+fam</i>.
+
+<h3>Demonstrative determiners</h3>
+
+<p>Demonstrative determiners introduce
+two relations.  This time, they are introducing the quantifier relation
+(Let's say <tt>"exist_q_rel"</tt>) and the demonstrative relation.  
+This analysis entails changes to the Matrix core, as 
+<i>basic-determiner-lex</i> assumes just one relation being contributed.
+Accordingly, we are going to by-pass the current version of <i>basic-determiner-lex</i> and define instead <i>determiner-lex-supertype</i> as follows:
+
+<pre>
+determiner-lex-supertype := norm-hook-lex-item & basic-zero-arg &
+  [ SYNSEM [ LOCAL [ CAT [ HEAD det,
+			   VAL[ SPEC.FIRST.LOCAL.CONT.HOOK [ INDEX #ind,
+				  			     LTOP #larg ],
+                                SPR < >,
+                                SUBJ < >,
+                                COMPS < >]],
+		     CONT.HCONS < ! qeq &
+				 [ HARG #harg,
+				   LARG #larg ] ! > ], 
+	     LKEYS.KEYREL quant-relation &
+		   [ ARG0 #ind,
+		     RSTR #harg ] ] ].
+</pre>
+
+<p>This type should have two subtypes (assuming you have demonstrative
+determiners as well as others in your language --- otherwise, just incorporate
+the constraints for demonstrative determiners into the type above).  
+
+<ol>
+<li>The subtype for ordinary (non-demonstrative) determiners should add
+the constraint that the RELS list has exactly one thing on it, by
+adding the supertype <i>single-rel-lex-item</i>.
+
+<li>The subtype for demonstrative determiners should specify a RELS
+list with two things on it: the first should have the
+<i>"exist_q_rel"</i> for its <tt>PRED</tt> value. (It's already
+constrained to be a <i>quant-relation</i> because the type
+<i>norm-hook-lex-item</i> inherited by <i>determiner-lex-supertype</i>
+identifies the first element of the <tt>RELS</tt> list with the
+<tt>LKEYS.KEYREL</tt>.)  The second one should be identified with
+<tt>LKEYS.ALTKEYREL</tt> and should be an <i>arg1-ev-relation</i> (the
+type we use for the relations of intransitive adjectives).
+The <tt>HOOK.INDEX.COG-ST</tt> inside the <tt>SPEC</tt> value should
+be constrained to <tt>activ+fam</tt>.  Finally, the <tt>LBL</tt> and <tt>ARG1</tt> of
+the <i>arg1-ev-relation</i> should be identified with the
+<tt>SPEC..HOOK.LTOP</tt> and <tt>SPEC..HOOK.INDEX</tt> of the determiner, respectively.  (This will result in the
+demonstrative adjective relation sharing its handle with the N' the
+determiner attaches to.)
+</ol>
+
+<p>Make sure your ordinary determiners in the lexicon inherit
+from the first subtype, and that your demonstrative determiners inherit
+from the second subtype.  Demonstrative determiner lexical entries
+should constrain their <tt>LKEYS.ALTKEYREL.PRED</tt> to be an appropriate
+subtype of <i>demonstrative_a_rel</i>.
+
+<hr>
+
+<h2><a name="pro-d">Optional arguments</a></h2>
+
+<p>The customization system now includes an argument optionality
+library which we believe to be fairly thorough, regarding the syntax
+of optional arguments.  The goal of this part of this lab (this year!)
+therefore is to (a) fix up anything that is not quite right in the
+syntax and (b) try to model the semantics, and in particular, the
+cognitive status associated with different kinds of dropped
+arguments. Regarding (a), if the analysis provided by the
+customization system isn't quite working, email me and we'll discuss
+how to fix it with tdl editing.
+
+<p>Regarding (b), you need to do the following:
+
+<ul>
+  <li>Determine the cognitive status of the different types of
+  dropped arguments in your language.  For example, dropped subjects
+  might always be the equivalent of unstressed pronouns, i.e.,
+  <tt>[COG-ST in-foc]</tt>, while objects might be
+  <tt>[COG-ST activ-or-more]</tt> (like the dropped argument of
+  <i>told</i> in <i>I already told you!</i>) and others might be
+  <tt>[COG-ST type-id]</tt> (like the dropped argument of <i>eat</i>
+  in <i>Did you already eat?</i>).  Languages with object markers
+  might forgo the object markers in the case of <tt>[COG-ST
+  type-id]</tt> arguments.  In addition, the <tt>COG-ST</tt> of the
+  dropped argument might depend on the verb.
+  <li>Edit the lexical rules and lexical entries involved in licensing
+  dropped arguments to provide the <tt>COG-ST</tt> value. Since the same argument might be overtly realized in most cases, rather than constraining the <tt>COG-ST</tt> directly, use the feature <tt>OPT-CS</tt> instead.  This feature takes the same range of values as <tt>COG-ST</tt>, and the phrase structure rules that discharge the optional arguments check it for the value of put in <tt>COG-ST</tt>.
+  <li>Test examples and examine the MRS to see if the expected <tt>COG-ST</tt> values are appearing.
+</ul>
+
+<p>Note that the Matrix currently assumings that dropped subjects are always
+<tt>[COG-ST in-foc]</tt>.  This may not be true, especially in various
+impersonal constructions.  If it's not true for your language, please let
+me know.
+
+<hr>
+<a name="corpus"><h2>Test corpus</h2></a>
+
+<p>In order to get a sense of the coverage of our grammars over
+naturally occurring text, we are going to collect small test corpora.
+Minimally, these should consist of 10-20 sentences from running
+text. They could be larger, however, that is not recommended unless:
+
+<ul>
+<li>Your language has a simple enough morphophonology that your
+grammar is directly targeting surface forms.
+<li>You have easy access to large digitized texts (i.e., you don't have
+to type something in by hand).
+<li>1,000 sentences is the maximum practical size for any single
+[incr tsdb()] skeleton.  You could of course split your test corpus
+over multiple skeletons, but I'd be surprised if anyone got close
+to 1,000 sentences!
+</ul>
+
+<p>Note also that our grammars won't cover anything without lexicon.
+If you have access to a digitized lexical resource that you can import
+lexical items from, you can address this to a certain extent.  Otherwise,
+you'll want to limit your test corpus to a size that you are willing
+to hand-enter vocabulary for.  (If you have access to a Toolbox lexicon
+for your language, contact me about importing via the customization
+system.)
+
+<p>For Lab 5, your task is to locate your test corpus (10-20 sentences
+will be sufficient, more if you want) and format it for [incr tsdb()].
+If you have IGT to work with in the first place, it may be convenient
+to use the make_item.pl script to create the test corpus skeleton.  (Note
+that you want this to be separate from your regular test suite skeleton.)
+Otherwise, you can use [incr tsdb()]'s own import tool (File | Import | Test items) which expects a plain text file with one item per line.  The result
+of that command is a testsuite profile from which you'll need to copy
+the item (and relations) file to create a testsuite skeleton.
+
+<p>Check list:
+
+<ul>
+<li>tsdb/skeletons directory should include two subdirectories: one for the test corpus, and one for the test suite.
+<li>tsdb/skeletons/Index.lisp should include two lines: one for your test corpus and one for your test suite.
+<li>When the Skeletons Root is pointed at your tsdb/skeletons directory, File | Create should show two possibilities (test suite and test corpus).
+<li>The items in your test corpus should be in the format (standard orthography or transliteration, morpheme segmented or not) that your grammar expects.
+</ul>
+
+<hr>
+<a name="write"><h2>Write up your analyses</h2></a>
+
+<p>For each of the following phenomena, please include
+the following your write up:
+
+<ol>
+  <li>A descriptive statement of the facts of your language.
+  <li>Illustrative IGT examples from your testsuite.
+  <li>A statement of how you implemented the phenomenon, in terms of types you added/modified and particular tdl constraints.  That is, I want to see actual tdl snippets with prose descriptions around them.
+  <li>If the analysis is not (fully) working, a description of the problems
+  you are encountering.
+</ol>
+
+<ul>
+  <li>Adjectival and adverbial modifiers.
+  <li>Agreement between adjectives and head nouns.  (If your language doesn't have this, then just say so.)
+  <li>Demonstratives and markers of definiteness.
+  <li>Argument optionality.
+  <li>Anything else you fixed.
+</ul>
+
+<p>In addition, your write up should include a statement of the current
+coverage of your grammar over your test suite (using numbers you can
+get from Analyze | Coverage and Analyze | Overgeneration in [incr tsdb()])
+and a comparison between your baseline test suite run and your final
+one for this lab (see Compare | Competence).
+
+<P>Finally please briefly describe your test corpus, including: where
+you collected it, how many sentences it contains, and what format
+(transliterated, etc) it is in.
+
+<hr>
+
+<h2><a name="submit">Submit your assignment</a></h2>
+
+<ul>
+  <li>Create a tarball of your grammar, your tsdb directory, and your
+ write up.
+     <p>tar czf yourname.tgz yourgrammar
+  <li>Email the tarball to <a href="mailto:bond@ieee.org?subject=[HG7021] lab3">bond@ieee.org</a>.
+
+</ul>
+
+
+<hr>
+<p>Course materials borrow heavily
+from <a href="http://courses.washington.edu/ling567/">Linguistics 567:
+Knowledge Engineering for NLP</a> at the University of Washington.
+Thanks to
+<a href="http://faculty.washington.edu/ebender/index.html">Emily Bender</a> for
+letting us use them.
+
+</body> </html>
+

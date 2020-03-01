@@ -1,0 +1,301 @@
+<html><head><title>Computational Grammars: MT</title></head>
+	
+<body><hr>
+
+<h1>Computational Grammars: MT</h1>
+
+<h3>Running the translation system</h3>
+
+<p>The first step is to get the tranlsation system running
+from your language to English (xxx2eng).  Here are step-by-step
+instructions:
+
+<ol>
+<li>Download the <a href="eng.tgz">English</a> grammar.  Unpack it
+them with <tt>tar xzf eng.tgz</tt>.  Or use the ERG (more fun).
+<li>Set up your grammar:
+<ul>
+  <li>Edit the file <tt>lkb/globals.lsp</tt> to add the following line,
+    with "iso" replaced by the three-letter iso code for your language:
+<pre>
+(setf *translate-grid* '(:iso :eng :frr))
+</pre>
+
+  <li>Edit the file <tt>lkb/globals.lsp</tt> in the English and Frisian
+    grammars so that the line for *translate-grid* now looks like
+    the appropriate one of the lines below (again replacing "iso" with the
+    code for your language).
+    
+<pre>
+(setf *translate-grid* '(:eng :frr :iso))
+(setf *translate-grid* '(:frr :eng :iso))
+</pre>
+
+  <li>Edit the file <tt>lkb/mrsglobals.lsp</tt> in your grammar to add the following line:
+<pre>
+(setf *show-lnk-p* nil)
+</pre>
+</ol>
+<li>Start two separate emacsen.  Put one on the left of your
+screen (this will be the "source" emacs).  Put one on the right
+of your screen ("target" emacs).
+<li>Start the LKB in each.  Make sure the "source" LKB Top menu
+is on the left of the screen and the "target" one is on the right.
+<li>Load the your grammar into the "source" LKB.
+<li>Load the English grammar into the "target" LKB.
+<li>In the "target" LKB, select Options | Expand menu.
+<li>In the "target" LKB, select Generate | Start server.
+<li>In the "source" emacs/lkb parse the equivalent of the English
+sentence <i>Dogs sleep.</i>
+<li>From the pop-up menu on the tree that comes up, select "Rephrase."
+You should see a transfer output window and then the English grammar should output "Dogs sleep." in a realizations window.
+<li>Observe what happens: Do you get generation outputs?  Some
+error in the emacs buffer in the "target" emacs?
+<li>If you get an error, you'll need to compare the MRSs to to see
+what the difference is.  I expect that for <i>Dogs sleep</i> you won't
+need any transfer rules (depending on what you called your
+predicates), and thus any errors should be addressed through
+harmonization (aka cleaning up your MRS) and/or work on your semi.vpm
+file.
+</ol>
+
+<h3>Comparing MRSs</h3>
+
+<p>To compare the MRSs, you can look at the MRS from the English
+grammar directly, but this can be a bit misleading, since you really
+want to look at the input to the generator (i.e., the transfer
+output).  To do this, you can select "Generate | Display Input MRS" or
+"Generate | Display Internal MRS" from the "target" LKB Top menu.
+
+<ol>
+<li>Generate | Display Internal MRS
+<li>Parse the expected output
+<li>Choose Indexed MRS from the pop-up menu
+</ol>
+
+<p>There are a number of things that could be wrong:
+
+<ol>
+<li>Missing RELS or HCONS (broken diff-list append).
+<li>Misspelled PRED values (look carefully at the underscores).
+<li>Misspelled/differently spelled feature values (e.g. <i>sing</i>
+instead of <i>sg</i>). 
+<li>Misspelled/differently spelled feature <b>names</b> (e.g., PERS
+instead of PER).
+  <li>Incompatible variable properties (features and values).
+</ol>
+
+<h2><a name="vpm">Variable property mapping</h2>
+
+<p>You may have noticed that you get many variants on generation if
+you start with a form that is underspecified for e.g., aspect or
+evidentiality.  We can get a handle on this by using variable property
+mapping to supply default values in the unmarked case (either in
+monolingual generation or in the MT scenario).  The basic strategy is
+to take any underspecified values in variable properties and translate
+them, via vpm, to something that conflicts with any more specific
+values your grammar can produce.
+
+<p>The file semi.vpm provides a mapping between grammar-external
+features of indices (referential indices and events) and their values,
+and grammar-internal ones.  For background on VPM, see the
+<a href="http://wiki.delph-in.net/moin/RmrsVpm">DELPH-IN wiki</a>.
+As soon as you start using a VPM file, then only variable properties
+(features on indices) that are handled in the file are actually
+preserved.
+
+<ol>
+<li>You should already have a semi.vpm file provided by
+the customization system.  Open it up and see which variable
+properties are there, and then look in your grammar to
+see what is missing. In general, we'd expect to see all
+of the features of the types <tt>event</tt> and <tt>ref-ind</tt>
+represented in a mature semi.vpm file.
+<li>You need to tell the lkb to load the semi.vpm file by uncommenting
+the following line in <tt>lkb/script</tt>:
+
+<pre>
+(mt:read-vpm (lkb-pathname (parent-directory) "semi.vpm") :semi)
+</pre>
+
+<li>This line needs to be moved higher in the script file,
+specifically, it needs to be <b>before</b> the code block that loads
+the trigger rules.
+
+<li>You'll also need to add this lines to <tt>lkb/mrsglobals.lsp</tt>:
+
+<pre>
+(setf *variable-type-mapping* :semi)
+</pre>
+
+  <li>If your grammar uses a PERNUM feature, you'll need to map
+  separate PER and NUM features from the external (right-hand side) of
+  the VPM to a single PRENUM feature on the internal (left-hand side).
+  See the example under "Properties: An Example" on the <a
+  href="http://wiki.delph-in.net/moin/RmrsVpm">DELPH-IN wiki</a> page.
+      <li>If your grammar encodes aspectual distinctions, you'll need
+  to add an ASPECT section, modeled on tense. This should allow you
+  to create and use specific a default value of ASPECT.
+<li>If you have any other features you have added on indices, you
+will need to provide VPM entries for them as well.
+  <li>If your language has aspect marked in some sentences but other forms that are just underspecified for aspect, you'll want to have the default aspect be "no-aspect".  Define this as a subtype of aspect in your grammar, but don't have anything other than the semi.vpm mention it otherwise.
+<li>You can do a similar trick for other kinds of generation ambiguity
+relating to variable properties.
+</ol>
+
+<p>Test your semi.vpm file by parsing and then generating.  You
+should see fewer strings coming out. 
+
+<hr>
+<h2><a name="mt">First MT</h2>
+
+  
+<h3>Preliminaries</h3>
+
+
+<p>This week, we'll be using the LOGON MT set up, which doesn't
+respect ICONS.  I hope to also try the ACE set up, which does.
+(But you'll still need the LOGON/LKB version in order to debug
+transfer, I believe.)
+
+<h3>Running the translation system</h3>
+
+<p>The first step is to get the translation system running
+for English to Frisian (eng2frr).  Here are step-by-step
+instructions:
+
+<h3>Update semi.vpm, if necessary</h3>
+
+<p>The file semi.vpm provides a mapping between grammar-external
+features of indices (referential indices and events) and their values,
+and grammar-internal ones.  For background on VPM, see the
+<a href="http://wiki.delph-in.net/moin/RmrsVpm">DELPH-IN wiki</a>.
+
+<ol>
+  <li>If your grammar uses a PERNUM feature, you'll need to map
+  separate PER and NUM features from the external (right-hand side) of
+  the VPM to a single PRENUM feature on the internal (left-hand side).
+  See the example under "Properties: An Example" on the <a
+  href="http://wiki.delph-in.net/moin/RmrsVpm">DELPH-IN wiki</a> page.  (There is also a an example in the semi.vpm file in the eng grammar.)
+  <li>If your grammar encodes aspectual distinctions, you'll need
+  to add an ASPECT section, modeled on tense. This should allow you
+  to specific a default value of ASPECT as well.  <!--- Note that the English
+  and Frisian grammars don't encode tense or aspect, so this is strictly
+  for the MT demo.  --->
+  <li>If your language has aspect marked in some sentences but other forms that are just underspecified for aspect, you'll want to have the default aspect be "no-aspect".  Define this as a subtype of aspect in your grammar, but don't have anything other than the semi.vpm mention it otherwise.  In the semi.vpm file, at hte bottom of your section on aspect, add:
+
+<pre>
+* >> no-aspect
+no-aspect << [e]
+</pre>
+</ol>
+  
+<h3>Create a transfer grammar</h3>
+
+<p>Once you have <i>Dogs sleep</i> translating, it's time to try
+a broader range of the MMT sentences.
+
+<p>Note that you will be modifying the English and Italian grammars
+for this part of the lab.  You will need to add 
+<tt>mt-mrs.tdl</tt>, <tt>mtr.tdl</tt> and <tt>acm.tdl</tt>.  Of
+those, <tt>acm.tdl</tt> should be the most interesting. You'll
+want to edit the file <tt>acm.mtr</tt> to create instances of the
+transfer rules that you need for your grammar.  It will be simplest to
+edit this file in one grammar (say the English one) and create a
+symbolic link to it in the other grammar, so that you have one
+transfer grammar for your language.
+
+<ol>
+<li>Try translating all of the MMT sentences from English to your
+language and Italian to your language.
+<li>For each one that doesn't go through, compare the input MRS
+to the MRS your expected output is giving.
+<li>Do any harmonization that is warranted.
+<li>For the remaining differences, look to see if one of the existing
+transfer rule types in <tt>acm.tdl</tt> will do the trick.  If so,
+create an instance of that transfer rule type in <tt>acm.mtr</tt>, e.g.,:
+
+<pre>
+pro-drop := pronoun-delete-mtr.
+</pre>
+
+<li>If you need a different transfer rule, ask Petter or I about what
+you need, and we'll work out how to formulate it.
+<li>Reload the "source" grammar and try translating again.
+<li>Rinse and repeat.
+</ol>
+</ul>
+
+<h3>Running the translation system</h3>
+
+<p>If you would like to try translating with ACE instead
+(included in Ubuntu+LKB 17, 64-bit version), you can try out
+<a href="ace-MT.txt">these instructions</a>, compiled by
+Sanghoun Song.
+
+<h3>Attempt to translate into your language</h3>
+
+<h3>Comparing MRSs</h3>
+
+<p>To compare the MRSs, you can look at the MRS from the English
+grammar directly, but this can be a bit misleading, since you really
+want to look at the input to the generator (i.e., the transfer
+output).  To do this, you can select "Generate | Display Input MRS" or
+"Generate | Display Internal MRS" from the "target" LKB Top menu.
+
+<ol>
+<li>Generate | Display Internal MRS
+<li>Parse the expected output
+<li>Choose Indexed MRS from the pop-up menu
+</ol>
+
+<p>There are a number of things that could be wrong:
+
+<ol>
+<li>Missing RELS or HCONS (broken diff-list append).
+<li>Misspelled PRED values (look carefully at the underscores).
+<li>Misspelled/differently spelled feature values (e.g. <i>sing</i>
+instead of <i>sg</i>). 
+<li>Misspelled/differently spelled feature <b>names</b> (e.g., PERS
+instead of PER).
+  <li>Incompatible variable properties (features and values).
+</ol>
+
+<h3>Update semi.vpm, if necessary</h3>
+
+<p>The file semi.vpm provides a mapping between grammar-external
+features of indices (referential indices and events) and their values,
+and grammar-internal ones.  For background on VPM, see the
+<a href="http://wiki.delph-in.net/moin/RmrsVpm">DELPH-IN wiki</a>.
+
+<ol>
+  <li>If your grammar uses a PERNUM feature, you'll need to map
+  separate PER and NUM features from the external (right-hand side) of
+  the VPM to a single PRENUM feature on the internal (left-hand side).
+  See the example under "Properties: An Example" on the <a
+  href="http://wiki.delph-in.net/moin/RmrsVpm">DELPH-IN wiki</a> page.  (There is also a an example in the semi.vpm file in the eng grammar.)
+  <li>If your grammar encodes aspectual distinctions, you'll need
+  to add an ASPECT section, modeled on tense. This should allow you
+  to specific a default value of ASPECT as well.  Note that the English
+  and Frisian grammars don't encode tense or aspect, so this is strictly
+  for the MT demo.  
+  <li>If your language has aspect marked in some sentences but other forms that are just underspecified for aspect, you'll want to have the default aspect be "no-aspect".  Define this as a subtype of aspect in your grammar, but don't have anything other than the semi.vpm mention it otherwise.
+</ol>
+
+
+
+<!-- <p><a href="lab2.html">Back to top</a> -->
+<p><a href="index.html">Back to course page</a>
+
+<hr>
+
+<address><a href='mailto:bond@ieee.org'>bond@ieee.org</a></address>
+
+<p>Course materials borrow heavily
+from <a href="http://courses.washington.edu/ling567/">Linguistics 567:
+Knowledge Engineering for NLP</a> at the University of Washington.
+Thanks to
+<a href="http://faculty.washington.edu/ebender/index.html">Emily Bender</a> for
+letting us use them.
+
+</body></html>

@@ -1,0 +1,535 @@
+<html><head><title>Computational Grammars: Lab 7</title></head>
+	
+<body><hr>
+
+<h1>Lab 7</h1>
+
+<h2>Preliminaries</h2>
+
+<p>These instructions might get edited a bit over the next
+couple of days.  I'll try to flag changes.
+
+<p>As usual, check the <a href="#write">write up instructions</a> first.
+
+<a name="req"><h3>Requirements for this assignment</h2></a>
+
+<ul>
+  <li><a href="#baseline">0.</a> Make sure you have a baseline test suite corresponding
+  to your lab 6 grammar.
+  <li><a href="#can">1.</a> Add the equivalent of <i>can</i> "able to". 
+  <li><a href="#neg">2.</a> Check that negation is working, and fix it if necessary.
+  <li><a href="#mrs">3.</a> Make sure your MRSs for <i>I can eat glass.  It doesn't hurt me.</i> are right.
+  <li>4.</a>Make sure your grammar can still generate, and debug as necessary.
+  <li><a href="#clean">5.</a> Fix at least one (more) thing about your grammar.
+  <li>6. Test your grammar using [incr tsdb()].
+[incr tsdb()] should be part of your test-development
+cycle.  In addition, you'll need to run a final test suite instance
+for this lab to submit along with your baseline.
+<!-- #<li><a href="#write">7.</a> Write up the phenomena you have analyzed. -->
+</ul>
+
+<hr>
+
+<h2><a name="baseline">Run a baseline test suite</a></h2>
+
+<p>Before making any changes to your grammar for this lab,
+run a baseline test suite instance.  If you decide to add 
+items to your test suite for the material covered here, consider
+doing so before modifying your grammar so that your baseline can
+include those examples.  (Alternatively, if you add examples
+in the course of working on your grammar and want to make the
+snapshot later, you can do so using the grammar you turned
+in for Lab 6.)
+
+<hr>
+<h2>Background</h2>
+
+<p>The goal of this lab is to be able to parse the two
+sentences <i>I can eat glass.  It doesn't hurt me.</i>,
+assign them appropriate semantics, and generate back.  You have already
+done some of the work: from previous labs, your grammar
+should already handle pronouns, case (if applicable), and
+transitive verbs.  Negation may already be working from
+the customization system and/or previous work you've done.
+You may need to add some vocabulary
+and possibly some verb forms.
+In addition, depending on how the sentences translate
+in your language, you might need to consider a new valence pattern
+for verbs and a new type of nouns (mass nouns).
+
+
+<a name="mrs"><h3>Semantic representations</h3></a>
+
+<p>Your semantic representations for the two sentences should look
+approximately like this, modulo the relations showing up in a different
+order, the variables (e's, x's, and h's) showing up with different
+numbers, the SEMSORT information showing up in different places.
+Also, if your language tends to use prodrop rather than overt pronouns,
+you might end up without any representation of the pronouns in these sentences.
+Finally, if you need a complex predicate in place of, say, "hurt",
+then you'll also have some differences.
+<ul>
+<a name="glass"><li>I can eat glass.</a>
+
+<pre>
+&lt;h1,e2:SEMSORT,
+{h3:pronoun_n_rel(x4:SEMSORT:+:FIRST:SG),
+h5:exist_q_rel(x4, h7, h6),
+h1:_can_v_rel(e2:SEMSORT:TENSE:ASPECT:MOOD, h8),
+h9:_eat_v_rel(e10:SEMSORT:TENSE:ASPECT:MOOD, x4, x11:SEMSORT:BOOL:THIRD:SG)
+h12:_glass_n_rel(x11),
+h13:exist_q_rel(x11,h15,h14)}
+{h8 qeq h9,
+h6 qeq h3,
+h14 qeq h12} >
+</pre>
+
+<p>Things to note about this representation: <i>_can_v_rel</i>
+is a one-place relation (i.e., we're treating <i>can</i> as a raising
+    verb), whose ARG1 is qeq (equal modulo quantifiers) to the handle
+of the <i>_eat_v_rel</i> as its argument.  The <i>_eat_v_rel</i> is a
+two-place relation taking <b>x4</b> (the index from the first-person
+pronoun) and <b>x12</b> (the ARG0 of <i>_glass_n_rel</i>) as its
+arguments.
+
+<a name="hurt"><li>It doesn't hurt me.</a>
+
+<pre>
+&lt;h1,e2:SEMSORT,
+{h3:pronoun_n_rel(x4:SEMSORT:+:THIRD:SG),
+h5:exist_q_rel(x4, h7, h6),
+h1:_neg_r_rel(u9:SEMSORT, h8),
+h10:_hurt_v_rel(e2:SEMSORT:TENSE:ASPECT:MOOD, x4, x11:SEMSORT:+:FIRST:SG),
+h12:pronoun_n_rel(x11),
+h13:exist_q_rel(x11, h15, h14)},
+{h6 qeq h3,
+h8 qeq h10,
+h14 qeq h12} >
+</pre>
+
+<p>Things to note about this representation: The <i>_neg_r_rel</i>
+takes a handle as its argument, which is related through a <i>qeq</i>
+to the handle of the <i>_hurt_v_rel</i>.  The handle of
+<i>_neg_r_rel</i> is itself in turn the local top handle of the
+clause.  These <i>qeq</i>s allow quantifiers to scope above or below
+<i>_neg_r_rel</i> so that <i>I can't eat some cheese</i> can either
+mean 'There is some cheese that I can't eat', or 'I can't eat just
+some cheese (I end up eating more)'.  
+
+</ul>
+<hr>
+
+<a name="can"><h2>Modals</h2></a>
+
+<h3><i>can</i> as an auxiliary verb</h3>
+
+<p>Use this version if in your language the morpheme expressing
+the same notion as <i>can</i> is a separate word which takes a
+VP complement and a subject.
+
+<ul>
+<li>Define a new verb type which inherits from your <i>verb-lex</i>
+    and <i>trans-first-arg-raising-lex-item-1</i> (and take a look at
+the definition of this type in <tt>matrix.tdl</tt> so you
+know what they're doing).  If you already have auxiliaries from
+  the customization system, see if you have a type like this already.
+  (Note that this is the type for semantically contentful/elementary predication contributing auxiliaries.  If the rest of you auxiliaries are of the semantically empty type, you'll need to create a new type.)
+
+<ul>
+<li>In addition to inheriting
+from these types, your new type should put appropriate constraints
+on the values of ARG-ST and the valence features.
+  <li>If your auxiliary can be the input to any of your lexical rules, make sure that it has the right supertypes (xxx-rule-dtr) to serve as the input to right rules.
+<li>Make sure that it constrains the part of speech of each
+argument.
+</ul>
+
+<li>Define a lexical entry (with PRED value <tt>"_can_v_rel"</tt>
+which inherits from your new type.
+
+<li>Create the appropriate form of the verb meaning <i>eat</i>, if necessary.
+This can be done either directly as a lexical entry, or via a lexical rule.
+
+<li>If you needed an additional form of <i>eat</i>, ensure that only that form of <i>eat</i> can appear as the
+complement of <i>can</i> (and add whatever items you use to test
+this to your master testsuite), and that the new form of <i>eat</i>
+can or can't appear in matrix clauses (as appropriate).
+
+<ul>
+<li>In English, this involves defining a feature <tt>FORM</tt> on 
+<i>verb</i> (subtype of <i>head</i>), somewhat similar to 
+CASE on <i>noun</i>.  You may have a <tt>FORM</tt> feature and some
+  appropriate types already from the customization system.
+</ul>
+
+<li>Parse your translation of <i>I can eat glass</i>, and examine
+the chart for extra edges.  Are they legitimate, or spurious?
+If they're spurious, try to rule them out (and then rerun your
+master testsuite to see if they were, in fact, spurious :-).
+
+<li>Parse your translation of  <i>I can eat glass</i> and
+see if you get the <a href="#glass">right semantics</a>. Debug
+as necessary.
+</ul>
+
+<h3><i>can</i> as a bound morpheme</h3>
+
+<p>Use this version if the morpheme expressing the same meaning as
+<i>can</i> in your language attaches morphologically to the main verb
+of the sentence.
+
+<ul>
+<a name="potential"><li>The first step is to decide which
+    lexical rule type is appropriate.  Look at the section
+    of <tt>matrix.tdl</tt> titled "Lexical Rules" and see if
+    any of the xxx-only-xxx-rule types are appropriate.
+    If not, construct an appropriate one out of the next level
+    of supertypes.  Unless you have concomittant changes
+    to the valence features (such as the <tt>CASE</tt> value required
+    on one of the arguments), something like the following is probably
+  appropriate:
+
+    <pre>
+    infl-add-ccont-ltow-rule := same-non-local-lex-rule &
+                                same-cat-lex-rule &
+                                same-ctxt-lex-rule &
+                                same-agr-lex-rule &
+                                inflecting-lex-rule &
+                                nocoord.
+    </pre>
+
+
+  <li>You'll also need to add lexeme-to-lexeme-rule or lexeme-to-word-rule, depending on how this rule fits into your morphology.
+
+    <li>Your subtype for this particular rule will now need to
+constrain all three features within its <tt>C-CONT</tt>: <tt>RELS,
+HCONS</tt> and <tt>HOOK</tt>.  (The <tt>C-CONT.HOOK.XARG</tt> can be
+identified with the <tt>HOOK.XARG</tt> of the daughter.):
+
+<ul>
+<li>The lexical rule's <tt>C-CONT.RELS</tt> is a diff list containing a single relation
+of type <i>arg1-ev-relation</i>.  The <tt>PRED</tt> value of that relation
+should be <tt>"_can_v_rel"</tt>, the <tt>LBL</tt> should be identified
+with the <tt>C-CONT.HOOK.LTOP</tt>, the <tt>ARG0</tt> with the <tt>C-CONT.HOOK.INDEX</tt>.
+<li>The lexical rule's <tt>C-CONT.HCONS</tt> is a diff list containing
+one <i>qeq</i>.  The <tt>HARG</tt> of the <i>qeq</i> should be identified
+with the <tt>ARG1</tt> of the <i>arg1-ev-relation</i> and its <tt>LARG</tt>
+with the daugther's <tt>LTOP</tt>.
+</ul>
+
+<li>In order to get the affix in the right place in a chain
+of affixes, constrain the DTR value so that the possible inputs
+to the rule are the class of affixes that can occur just inside
+this one.  If further affixes attach afterwards, add the appropriate
+xxx-rule-dtr supertype to the rule type.
+
+<li>Add an instance for your lexical rule to <tt>irules.tdl</tt>,
+with the appropriate spelling change information.
+
+<li>If appropriate, make sure that your rule applies only to verbs, and
+test this. 
+
+<li>Parse your translation of  <i>I can eat glass</i> and
+see if you get the <a href="#glass">right semantics</a>. Debug
+as necessary.
+</ul>
+<hr>
+
+<a name="neg"><h2>Negation</h2></a>
+
+<h3>Two-part negation</h3>
+
+<p>Use this version if your language expresses negation with
+both an affix on the verb and an adverb (e.g., French <i>ne ... pas</i>).
+If both elements are arguably affixes, you probably just want
+to write a pair of lexical rules, i.e., take the "Negation as a
+verbal affix" route, but write two rules and make sure you
+can require that they both apply or neither apply.
+
+<ul>
+<li>The strategy here is going to be add the affix with a lexical rule
+similar to the one above, but to have it change the COMPS value and
+not add any semantics. The COMPS list will be the same as the input's
+COMPS list, with the addition of a negative adverb.  
+
+<li>We're assuming that the second part of the negation has
+an independent life as a negative adverb for constituent (i.e.,
+not sentential) negation.  This seems to work for French at first
+glance, I'd be curious about other languages.  That adverb will
+have to have constraints on its MOD value that keep it from 
+modifying finite verbs (which would give sentential negation).
+However, if you don't have any head-modifier rules in your grammar,
+you don't need to worry about that yet.
+
+<li>The negative adverb needs some kind of distinguished value (a
+feature inside <tt>HEAD</tt>, and in particular,
+<tt>HEAD.KEYS.KEY</tt> might be a good candidate) so that the rule
+won't license verbs just picking up any adverb as a complement.
+
+<li>The inflected verb will "hand" its <tt>LTOP</tt> value to the negative
+particle, and adopt the negative particle's <tt>LTOP</tt> value as its
+own.  Regular semantic composition should take care of the rest.
+
+<li>Again, you'll need to look at the lexrule types and pick an
+    appropriate supertype.  Since we're changing both <tt>VAL.COMPS</tt>
+    and <tt>CONT.HOOK</tt>, you might need to create your own supertype.
+    Talk to me :).
+
+<li>Test your grammar: Try parsing your translation
+of <i>It doesn't hurt me.</i> and see if you're getting
+the <a href="#hurt">right semantics</a>.  Test sentences
+with each of the two parts of the negation independently,
+and verify that they don't parse.  Try putting the two
+part negation on a non-verb, and verify that it doesn't
+parse.  
+Debug as necessary.
+
+</ul>
+
+
+<h3>Negation: markers on either end</h3>
+
+<p>This option is for languages that mark negation with particles on
+either end of the clause or VP (or alternatively, with intonation or
+[in signed languages] non-manual signs which extend the length of the
+clause/constituent and are represented in transcription with markers
+on either end).  
+
+<p>If the two markers show up immediately adjacent to the verb
+(rather than VP or S), consider whether it might be more appropriate
+to treat them as inflection.
+
+<p>The first thing is to consider whether there is any evidence for
+attaching the markers one at a time.  In these instructions I focus on
+the case where there is not, so please contact me if you think the
+markers should attach one at a time in your language.  Rather than
+attach one of these markers before the other, the most
+straight-forward thing appears to be to create a ternary rule.  I've
+added some types supporting ternary rules to the matrix (included in
+the patch provided last week).
+
+<p>We're going to take a construction-y approach to analysis, creating
+a phrase structure rule which calls for specific elements in two
+of the three daughters and does the right thing in the semantics itself.
+Specifically, do the following:
+
+<ul>
+<li>Create a lexical type which encodes the constraints in common to
+the left and right markers. If the same elements have some other
+function in the grammar, write the constraints accordingly.  If they
+don't, make the lexical type a subtype of <i>norm-zero-arg</i> and
+make sure its valence lists, <tt>MOD</tt> value, <tt>RELS</tt> and
+<tt>HCONS</tt> lists are all empty.  You should also give it a distinctive
+<tt>HEAD</tt> value (lest it show up as the argument of something else).
+For example, in the ASL case, there should probably be a new subtype
+of head for non-manual markers:
+
+<pre>
+nmm := head.
+</pre>
+
+<li>Create subtypes of your lexical type for the left-hand and
+right-hand elements.  These subtypes don't need additional constraints,
+just contrasting names.
+
+<li>Create lexical entries of each of the subtypes, with the
+appropriate <tt>STEM</tt> value.  These elements don't need any
+<tt>KEYREL</tt> information.
+
+<li>Create a type <i>negation-phrase</i> which inherits from
+<i>ternary-head-middle-phrase</i>.  This
+supertype will make sure that the 
+<tt>HEAD</tt> and <tt>VAL</tt> values come from the
+head daughter (the middle daughter).  
+
+<li>You may need to specify the
+value of other features inside <tt>CAT</tt> on the mother, either 
+copying them from the head daughter or otherwise specifying them appropriately.
+If you do need to, you'll be able to tell because your grammar will be
+over-generating.
+
+<li>To get the construction to contribute the right semantics, you'll
+need to constrain its <tt>C-CONT</tt> value.  In particular:
+
+<ul>
+<li>The <tt>C-CONT.RELS</tt> is a diff list containing a single relation
+of type <i>arg1-ev-relation</i>.  The <tt>PRED</tt> value of that relation
+should be <tt>"_neg_r_rel"</tt>, the <tt>LBL</tt> should be identified
+with the <tt>C-CONT.HOOK.LTOP</tt>, the <tt>ARG0</tt> with the <tt>C-CONT.HOOK.INDEX</tt>.
+<li><tt>C-CONT.HCONS</tt> is a diff list containing
+one <i>qeq</i>.  The <tt>HARG</tt> of the <i>qeq</i> should be identified
+with the <tt>ARG1</tt> of the <i>arg1-ev-relation</i> and its <tt>LARG</tt>
+with the head daugther's <tt>LTOP</tt>.
+<li>The <tt>C-CONT.HOOK.XARG</tt> should be identified with the head
+daughter's <tt>HOOK.XARG</tt>.
+</ul>
+
+<li>Constrain the first and third elements of the ARGS list of
+<i>negation-phrase</i> to be the lexical types of your left and
+right markers, respectively.
+
+<li>Create an instance of <i>negation-phrase</i> in
+<tt>rules.tdl</tt> and test it!  Make sure you get the <a href="#hurt">the right
+semantics</a>
+</ul>
+
+
+<h3>Negation as an adverb modifier</h3>
+
+<P><font color="purple">If your language uses an adverbial strategy,
+the customization script probably did the right thing.  This is included
+just in case.</font>
+
+<p>Use this version if your language expresses sentential negation
+via an adverb which modifies the V, VP or S. 
+
+<p><font size=2>(Note:
+English has two forms of sentential negation "contracted", which
+is actually an affix on the verb, cf. Zwicky and Pullum 1983,
+and the full-form adverb.  This adverb is not actually treated
+syntactically as a modifier in sentential negation, but rather
+selected by auxiliary verbs, including the <i>do</i> of do-support.
+For the details of this analysis, see Sag, Wasow and Bender 2003
+chapter 13 and Kim and Sag 1995.  I would be surprised if another
+language being treated in this class had a system very similar to
+the English one, as it seems like a pretty quirky part of English
+grammar.  Further, it's a subtle matter to establish what is actually
+going on in English, and I don't think anyone would have time in
+one week to show the same about another language.)</font>
+
+<ul>
+<li>Determine where your negative adverb attaches: to V, VP or
+S and whether it attaches to the left or to the right of the node
+it attaches to.
+<li>For testing purposes, develop a set of sentences contrasting
+the correct attachment with the incorrect attachments.
+<li>Negative adverbs are scopal modifiers, so even though we did 
+adverbs in the previous lab, you'll need to add some machinery:
+
+<ul>
+<li>Define an instance of <i>adj-head-scop-phrase</i> and/or
+<i>head-adj-scop-phrase</i> in <tt>rules.tdl</tt>.  (These types
+are fairly fully specified, which means you'll most likely not need to
+put anything in <tt>esperanto.tdl</tt>.) Which one
+you pick depends on whether your negative adverb is prehead
+or posthead (or either).  Look at the type definitions in <tt>matrix.tdl</tt>
+to decide which is appropriate. 
+
+<li>Create a subtype of <i>basic-scopal-adverb-lex</i>.  That type
+    (through its supertypes) does much of the work for you. You will
+    need to constrain is <tt>VAL</tt> and <tt>MOD..CAT</tt> values.  The
+    matrix type also leaves <tt>ARG-ST</tt> underconstrained.  For
+    consistency, if your adverb takes no arguments (and I'd be a bit
+    surprised if the negative element did), <tt>ARG-ST</tt> should be
+    constrained to be empty as well.
+
+<li>Create a lexical entry which inherits from <i>scopal-adverb-lex</i>
+and introduces a relation with the PRED value <tt>'neg_r_rel</tt>.
+</ul>
+
+<li>Test your grammar.  Does the adverb show up only where it's
+supposed to?  Do you get the <a href="#hurt">right semantics</a> for
+<i>It doesn't hurt me.</i>?  Debug as necessary.  </ul>
+
+
+<h3>Negation as a verbal affix</h3>
+
+<P><font color="purple">If your language uses an adverbial strategy,
+the customization script probably did the right thing.  This is included
+just in case.</font>
+
+<p>Use this version if your language expresses sentential negation
+by adding a morpheme to the main verb.
+
+<ul>
+<li>The lexical rule for a negative verb will add a semantic
+relation in much the same way as the potential form (for
+<i>can</i> as verbal inflection) described <a href="#potential">above</a>,
+so follow the directions there about selecting a supertype for
+    the rule.
+
+<li>This time, the C-CONT RELS and HCONS lists, will each have
+one item on them:
+
+<pre>
+RELS < ! adv-relation &
+         [ PRED '_neg_r_rel,
+           ARG1 #harg ] ! >
+
+HCONS < ! qeq &
+         [ HARG #harg,
+	   LARG #larg ] !>
+</pre>
+
+<li>In addition, the <tt>C-CONT.HOOK.LTOP</tt> should be identified with
+the <tt>LBL</tt> of the <i>adv-relation</i> and the <tt>C-CONT.HOOK.INDEX</tt> with
+    the <tt>ARG0</tt>.
+
+<li>Add an instance for your lexical rule to <tt>irules.tdl</tt>,
+with the appropriate spelling change information.
+
+<li>Constrain your lexical rule to apply only to verbs, and
+test this. 
+
+<li>If you have other verbal inflection in your language, determine
+which lexical rule has to go first, and constrain the rules to only
+apply in that order.  Make up nonsense forms with the affixes attached
+the other way around, and make sure that they don't parse.  If your
+other affixes attach to the other end of the verb, you'll want to
+constrain the order anyway, or you will end up getting double parses.
+    
+<li>Parse your translation of  <i>It doesn't hurt me</i> and
+see if you get the <a href="#hurt">right semantics</a>.
+Debug as necessary.
+</ul>
+
+<hr>
+<h2><a name="clean">Grammar clean up</a></h2>
+
+<p>This section asks you to find something about your grammar which
+needs fixing, and fix it (with help from me).  This could be something
+that isn't quite working right from previous labs, or something that
+is important in your language but doesn't look like it will be
+otherwise covered in the class.
+
+
+<hr>
+<a name="write"><h2>For your final documentation: Write up your analyses</h2></a>
+
+<p>For each of the following phenomena, please include
+the following in your write up:
+
+<ol>
+  <li>A descriptive statement of the facts of your language.
+  <li>Illustrative IGT examples from your testsuite.
+  <li>A statement of how you implemented the phenomenon (in terms of types you added/modified and particular tdl constraints).
+  <li>If the analysis is not (fully) working, a description of the problems
+  you are encountering.
+  <li>A statement of whether or not you can generate from examples illustrating the phenomenon.
+</ol>
+
+<ul>
+  <li>"Can" (modals)
+  <li>Negation
+  <li>Whatever you fixed about your grammar.
+</ul>
+
+<p>In addition, your write up should include a statement of the current
+coverage of your grammar over your test suite (using numbers you can
+get from Analyze | Coverage and Analyze | Overgeneration in [incr tsdb()])
+and a comparison between your baseline test suite run and your final
+one for this lab (see Compare | Competence).
+
+
+<hr>
+<hr>
+<a href="index.html">Back to main course page</a>
+<address><a href = 'http://www3.ntu.edu.sg/home/fcbond/'>Francis Bond</a></address>
+<p>Course materials borrow heavily
+from <a href="http://courses.washington.edu/ling567/">Linguistics 567:
+Knowledge Engineering for NLP</a> at the University of Washington.
+Thanks to
+<a href="http://faculty.washington.edu/ebender/index.html">Emily Bender</a> for
+letting us use them.
+
+</body></html>

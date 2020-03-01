@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>Computational Grammars: Lab 1</title>
+</head>
+
+<body>
+<h1>Lab 1</h1>
+
+
+<p><b>NB</b> The lab assignments will typically include write up
+instructions at the end.  Before you start, read the whole assignment
+once, including the write-up instructions, so you know what to keep
+track of along the way.
+
+<h2>Choose your language and stake your claim</h2>
+
+<ul>
+  <li>Choose the language you would like to work on this
+  quarter. 
+  <li>Find reference materials for the language that are available.
+</ul>
+
+<h2>Grammar Customization: Get a small grammar for English</h2>
+  
+  <ul>
+    <li>Download our <a href="567-English-choices">choices file</a>
+    <li>Visit the <a href="http://www.delph-in.net/matrix/customize/matrix.cgi">LinGO Grammar Matrix customization page</a>.
+    <li>Click on "Browse" next to "Upload choices file..." and upload the choices file you downloaded.
+    <li>Click on all of the subpages (starting with "General
+    Information" and "Word order") to see which options have been
+    selected in this choices file, and what other options are
+    available.
+    <li>Click on "create grammar" and download the .tgz or .zip file.
+    <li>There is also a local copy here: <a href='eng.tgz'>eng.tgz</a>
+</ul>
+    
+<h2>LKB: Getting started</h2>
+
+<ul>
+  <li>Install Linux
+  (preferably <a href='http://www.ubuntu.com/download/ubuntu/download'>Ubuntu
+  LTS</a>) on your laptop (either as a virtual machine, dual boot or
+  sole OS).
+  Then, <a href="http://wiki.delph-in.net/moin/LogonInstallation">install
+  LOGON</a>.
+  <li>Run emacs
+  <li>Type <tt>M-x lkb</tt> (<tt>M-x logon</tt> on older systems) to run the LKB
+
+  <li>Unzip the grammar you downloaded (<tt>tar xzf 567_english.tar.gz</tt>)
+  <li>Load the starter grammar in the LKB:
+
+      <ul>
+	<li>Select "Load Complete Grammar" from the LKB Top menu
+	<li>Navigate to the file called <tt>script</tt> inside the directory <tt>567_english/lkb</tt>
+	<p>Alternatively, type <tt>C-c g</tt> in emacs 
+           and enter the path name in the command that pops up.
+      </ul>
+
+  <li>Try parsing:
+
+      <ul>
+	<li>Select "Parse | Parse input..." from the LKB Top menu and parse the sentence that appears in the dialogue.
+
+	<p>You can also parse sentences by typing C-c p in emacs and then entering the sentence you wish to parse in the command that pops up.
+	<li>Right click on the small tree that comes up to see a menu of futher things to explore.
+	<li>Select "simple MRS" from this menu to see the semantic representation associated with the sentence.
+	<li>Select "generate" to use the grammar to generate from that semantic representation.
+</ul>
+	
+<li>Examine the file <tt>lexicon.tdl</tt> in the starter grammar, and try making up sentences to parse based on the vocabulary there.
+<li>Find four different sentences that do parse.  Record these in your write up.
+<li>Find two strings, using the vocabulary in lexicon.tdl, that don't parse. Record these in your write up. 
+</ul>
+
+<h2>Try interactive unification</h2>
+
+<p>These instructions assume you are using the LUI interface, which
+I believe is on by default.  If they don't make sense, try invoking
+(lui-initialize) at the LKB prompt.
+
+<ul>
+  <li>Ask the LKB to parse each of the strings you found that it doesn't parse.
+  <li>In the LKB Top menu, choose "Parse | Show parse chart".
+  <li>Examine the parse chart to find the first point of failure in parsing.  Which constituents should combine, if only some constraint weren't blocking them?
+  <li>In the LKB Top menu, choose "View | Grammar Rule" and select the rule that you think should (modulo that constraint) combine the constituents.
+  <li>Click on "phr-synsem" (value of SYNSEM) to collapse that sub-structure.
+  <li>Choose the constituent from the parse chart that you believe should be the left-hand daughter and drag it onto the first element of the ARGS list in the rule.  You should get a new window, labeled "unification result".
+  <li>Shrink "phr-synsem" in the "unification result" window, and then choose the constituent you believe should be the right-hand daughter and drag it onto the second element of the ARGS list in the rule.
+  <li>You should get a new window labeled "unification failure", with the point of failure highlighted in red.
+  <li>Look in the grammar files to see where the constraints that led to that unificaiton failure are encoded, and record this information in your write up.
+  <li>Do the same for the other non-parsing string you found.
+</ul>
+
+<h2>Chain of identities</h2>
+
+<p>In the MRS assigned by this grammar to <i>A cat chased me</i>, the ARG0 value the <b>_cat_n_rel</b> is associated with the ARG1 value of the <b>_chase_v_rel</b> (that is, the cat is doing the chasing).  In this part of the assignment, you will trace the chain of identities that connects these two.
+
+<ul>
+  <li>Parse the sentence, and click on the small tree to get the larger tree.
+  <li>Click on the N node above <i>cat</i> to get the feature structure associated with that node.
+  <li>Explore the feature structure, to locate the feature INDEX and see what it is identified with.  (You may find it useful to shrink down certain substructures, and to use the pop-up menus on the identity tags.)
+  <li>Do the same with the second N node above <i>cat</i> (representing the singular noun lexical rule), the NP node, the S node, the VP node, and the two V nodes.
+  <li>Now look through the .tdl files to find the types which encode the constraints responsible for the chain of identities.  You'll want to start with the leaf types, but you'll need to look through supertypes, too.  This can be done by using grep or the search functionality in emacs (C-s).  The supertypes in a type definition are after the ":=".  To find where a type is defined, search for the type name followed by ":=".
+</ul>
+  
+<p>Note that in addition to exploring the supertypes by searching through the .tdl files, you can also look at them through the LKB.  For example, think of the constraint that you expect the lexical entry for "cat" to be contributing.  Then:
+
+<ul>
+<li> From the LKB Top menu, choose "View | Lex entry"
+<li> Enter "cat" (the identifier for that lexical entry)
+<li> Right click on the type at the top left of the tfs that pops up (commoun-noun-lex) (LUI directions ... in the non-LUI GUI it's a left  click)
+<li> Choose "view type definition"---this should give a non-LUI window, showing the type definition, without inherited constraints.
+<li> If you don't see the constraint you're looking for, explore the parent type(s) in the same fashion.
+</ul>
+
+
+<h2>Write up</h2>
+
+<p>Please submit write-ups as plain text files.  (In future labs,
+that will help me run example sentences through your grammar.  It also
+helps me reply to questions in your write up, by copying the questions
+into my grading rubric.)
+
+<p>Your write up should include:
+
+<ol>
+  <li>The four sentences you found that parse.
+  <li>The two (or more) strings you found that didn't parse.
+  <li>The names of the rules you used in interactive unification to see why they didn't parse.
+  <li>The tdl snippets that lead to the conflicting constraints for each non-parsing string, along with a prose description of what they do.
+  <li>A description of the chain of identities linking the ARG0 of <b>_cat_n_rel</b> to the ARG1 of <b>_chase_v_rel</b> in <i>A cat chased me</i>.  Each link in the chain should say which instance is involved (e.g., lexical entry for <i>cat</i>), which supertype it inherits the constraint from, and show the tdl for the constraint.  In addition, you should indicate which identity tag is enforcing the constraint. Your description should take the form of a numbered list.
+
+<p>I find 13 links in this chain, counting the two constraints given
+in the example below as just one, since they come from the same type.
+To help you out, and to give you a sense of the format I'm expecting,
+here's one of them.  (I picked this one because it is possibly the most obscure.)
+
+<pre>
+5. The head-spec phrase structure rule inherits the following
+constraints from basic-head-spec-phrase:
+
+    HEAD-DTR [ SYNSEM [ LOCAL [ CONT.HOOK #hdhook ],
+    NON-HEAD-DTR.SYNSEM 
+	 [ LOCAL [ CAT [ VAL [ SPEC < [ LOCAL [ CONT.HOOK #hdhook ] > ] ],
+                   CONT.HOOK #hook ] ],
+    C-CONT [ HOOK #hook ] ].
+
+identifying the C-CONT.HOOK of the rule with the HOOK of the non-head
+daughter via #hook, and identifying the CONT.HOOK of the head daughter
+with the CONT.HOOK value inside the non-head daughter's SPEC via #hdhook.
+</pre>
+  
+  
+  <li>At least three questions that this lab caused you to wonder about.
+      (Please indicate if you've figured out the answers, or if you would still like to see them addressed.)
+  <li>If you were unable to complete any part of the assignment, a
+description of the problems you encountered and what you think might
+be going on.  (You can earn partial credit for any part of the
+assignment you couldn't get working by describing it in this section.)
+</ol>
+
+<h2>Submit your assignment</h2>
+
+<ul>
+  <li>For this assignment, you only need to submit your write up.  
+  <li>Please email it to <a href="mailto:bond@ieee.org?[HG7021] lab 1">bond@ieee.org</a>
+</ul>
+
+<hr>
+
+<address><a href='mailto:bond@ieee.org'>bond@ieee.org</a></address>
+
+<p>Course materials borrow heavily
+from <a href="http://courses.washington.edu/ling567/">Linguistics 567:
+Knowledge Engineering for NLP</a> at the University of Washington.
+Thanks to
+<a href="http://faculty.washington.edu/ebender/index.html">Emily Bender</a> for
+letting us use them.
+
+
+</body> </html>

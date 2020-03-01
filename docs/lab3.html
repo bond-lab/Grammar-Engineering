@@ -1,0 +1,210 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>Computational Grammars: Lab 3</title>
+</head>
+
+<body>
+<h1>Lab 3</h1>
+
+
+<h2><a name="overview">Overview</a></h2>
+
+<p>The goal of this lab is to continue development of your test suite
+on the one hand, and to refine your starter grammar on the other.  We
+will be extending both to cover additional phenomena, but you may wish
+to revisit some of the sentences/choices from Lab 2.  Again, you'll
+want to work on these two subtasks in parallel, though they are
+described separately in the instructions below.
+
+<p><a href="lab3.html">Back to top</a>
+
+  
+  
+<h2>Test Suite</h2>
+
+<p>The first task is to create positive and negative example sentences
+illustrating the following phenomena, to the extent that they
+are relevant for your language:
+
+<ul>
+  <li><a href="testsuites.html#tma">tense/aspect</a>
+  <li><a href="testsuites.html#agreement">agreement</a>
+  <li><a href="testsuites.html#neg">negation</a>
+  <li><a href="testsuites.html#opt">argument optionality</a>
+  <li><a href="testsuites.html#demo">demonstratives/definiteness</a>
+</ul>
+
+<p>Before you start, read the <a
+href="testsuites.html#preliminaries">general instructions for
+testsuites</a> and the <a href="testsuites.html#formatting">formatting
+instructions.</a>
+
+<p><a href="lab3.html">Back to top</a>
+
+
+<h2>Starter grammar</h2>
+
+<p>The second task is to update your starter grammar by filling out
+the required sections of the <a href="http://www.delph-in.net/matrix/customize/matrix.cgi">Grammar Matrix customization questionnaire</a>.  The goal
+here is to get as much coverage as you can over your test suite using
+only the customization system (no hand-editing of tdl files yet).  In
+particular, you'll need to address these sections:
+
+<ul>
+  <li>Tense and aspect
+  <li>Word order (if you need to add auxiliaries)
+  <li>Argument optionality
+  <li>Sentential negation
+  <li>Lexicon: 
+<ul>
+  <li>Rules for agreement affixes
+  <li>Rules for tense/aspect markers
+  <li>Rules for any other affixes that are required so you get fully inflected forms
+  <li>Addition of auxiliaries if necessary
+</ul>
+</ul>
+
+<p>Begin by uploading your choices file from lab 2, and modify from
+there.  Ask lots of questions!
+
+<p>NB: The sentential negation section is under development and
+might have more than their usual share of bugs.  So start early so we have
+a chance to work that out.
+
+<p>I will try to get feedback on lab2 to you quickly.  Please read
+that feedback for any other suggestions on how to improve your choices file.
+
+<p><a href="lab3.html">Back to top</a>
+
+<h2>Make sure you can parse individual sentences</h2>
+
+<p>Once you have created  your starter grammar (or each time you
+create one, as you should iterate through grammar creation and
+testing a few times as you refine your choices), try it out on a
+couple of sentences interactively to see if it works:
+
+<ol>
+  <Li>Load the grammar into the LKB.
+  <li>Using the parse dialog box (or 'C-c p' in emacs  to get the parse
+  command inserted at your prompt), enter a sentence to parse.
+  <li>Examine the results.  If it does parse, check out the semantics (pop-up menu on the little trees).  If it doesn't look at the parse chart to see why not.
+  <li>Problems with lexical rules and lexical entries often become apparent here, too: If the LKB can't find an analysis for one of your words, it will say so, and (obviously) fail to parse the sentence.
+</ol>
+
+<p>Note that the questionnaire has a section for test sentences.  If
+you use this, then the parse dialog will be pre-filled with your test sentences.
+
+<p><a href="lab3.html">Back to top</a>
+
+
+<h2>[incr tsdb()] profile</h2>
+
+<p>The final step for this lab is to use the [incr tsdb()] grammar
+profiling system to test the performance of your starter grammar over
+your test suite, and then examine the results.  (You may find in doing
+so that you want to refine certain aspects of your starter grammar.
+You can do this by uploading the file "choices" which comes with your
+grammar into the customization system and then tweaking from there.)
+
+<h3>Create a test suite skeleton</h3>
+
+<ul>
+<li>From last week, you sould already have a <tt>tsdb</tt> directory
+with subdirectories <tt>skeletons</tt> and <tt>home</tt>.  
+<li>The <tt>skeletons</tt> subdirectory should have files <tt>Relations</tt>
+and <tt>Index.lisp</tt>.
+<li>Use <a href="make_item.pl"><tt>make_item.pl</tt></a> to create
+a new <tt>item</tt> file from your current testsuite.
+<li>You can replace <tt>skeletons/lab2/item</tt> with this new file,
+or create a new subdirectory in <tt>skeletons</tt> called <tt>lab3</tt>.
+In that case, you'll need to copy <tt>skeletons/Relations</tt> to
+<tt>skeletons/lab3/relations</tt>, put your new <tt>item</tt> in
+<tt>skeletons/lab3/</tt>, and edit <tt>Index.lisp</tt> to add a line
+for the <tt>lab3</tt> skeleton.
+</ul>
+
+<h3>Create and run an initial test suite instance</h3>
+
+<ol>
+<li>Start the lkb
+<li>Load your starter grammar.  (The script file is in matrix/lkb/script.)
+<li>Start [incr tsdb()] (within emacs, that's M-x itsdb)
+<li>In the [incr tsdb()] podium, select Options > Database Root
+and input the path to <tt>tsdb/home</tt>.
+<li>In the [incr tsdb()] podium, select Options > Skeleton Root
+and input the path to <tt>tsdb/skeletons</tt>.
+<li>Optional: For future use, you can set these variables
+ahead of time in a file called <tt>.tsdbrc</tt> in your home directory.
+It should contain these lines, with path names edited appropriately:
+
+<pre>
+(in-package :tsdb)
+(setf *tsdb-home* "path-to-tsdb/home")
+(setf *tsdb-skeleton-directory* "path-to-tsdb/skeletons")
+</pre>
+
+<li>In the [incr tsdb()] podium, select File > Create.  You should
+see your test suite in the menu there.  Select it, and get a test suite
+instance. Post to GoPost if this doesn't work.
+<li>Make sure your grammr is loaded into the LKB.
+<li>Once you have a test suite instance, select it (by clicking on it),
+then do Process > All Items.
+<li>Explore the results, with functions such as Browse > Results and Analyze > Competence.
+<li>Be sure to save (i.e., not overwrite or delete) this test suite
+instance, as you'll be asked to turn it in.
+</ol>
+
+<p><a href="lab3.html">Back to top</a>
+
+<h2>Write up</h2>
+
+<p>Your write up should include the following:
+
+<ol>
+  <li>Documentation the new or revised choices you made in the customization
+  system, illustrated with examples from your test suite.  (Diff your lab2 and lab3 choices files to make sure you've caught all the changes.) Here's <a href="write-up-sample.html">an example</a> of what this should look like.
+  <li>Descriptions of any properties of your language illustrated
+  in your test suite but not covered by your starter grammar and/or
+  the customization system.
+  <li>Documentation the coverage of your grammar over the testsuite.
+  If there are examples that thare parsed incorrectly (unanalyzed
+  grammatical examples, analyzed ungrammatical examples, or grammatical
+  examples assigned surprising parses), reflect on why that might be.
+  <li>Finally, if there are any places where the customization system
+  seems unable to cope with the properties of your language (within the
+  phenomena addressed in this lab), describe them here.
+</ol>
+
+<p><a href="lab3.html">Back to top</a>
+
+<h2><a name="submit">Submit your assignment</a></h2>
+
+<ul>
+  <li>Be sure your write up and the text-file version of your test suite are
+  included in your grammar directory.
+  <li>Likewise, make sure to include your most current tsdb profile in the grammar directory (ideally inside tsdb/home/).
+  <li>Create a tarball:
+
+  <pre>
+      tar czf yourname.tgz yourgrammar
+    </pre>
+
+  <li>Email the tarball to <a href="mailto:bond@ieee.org?subject=[HG7021] lab3">bond@ieee.org</a>.  
+</ul>
+
+<p><a href="lab3.html">Back to top</a>
+<p><a href="index.html">Back to course page</a>
+
+<hr>
+
+<address><a href='mailto:bond@ieee.org'>bond@ieee.org</a></address>
+
+<p>Course materials borrow heavily
+from <a href="http://courses.washington.edu/ling567/">Linguistics 567:
+Knowledge Engineering for NLP</a> at the University of Washington.
+Thanks to
+<a href="http://faculty.washington.edu/ebender/index.html">Emily Bender</a> for
+letting us use them.
+
+
+</body> </html>
