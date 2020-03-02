@@ -188,19 +188,41 @@ test suite instances) and <tt>skeletons</tt> (for skeletons).
 <tt>tsdb/skeletons</tt> for your test suite.  (If you choose a different
 name for this subdirectory, you must edit <tt>Index.lisp</tt> accordingly.)
 
-<li>Download the perl script <a href="make_item.pl">make_item.pl</a>
-and run it on your test suite:
+<li>Download the python script <a href="make_item">make_item</a>
+and run it on your test suite (you may have to make it executable):
 
-<p><pre> perl make_item.pl testsuite.txt</pre>
+<p><pre>./make_item testsuite.txt</pre>
 
-<li>(If the perl script doesn't like the formatting of your test suite,
-edit the test suite appropriately and/or complain about the perl
-script.)
+<p><b>Notes on make_item</b>:
 
-<li>Copy the <tt>.item</tt> file which is output by <tt>make_item.pl</tt>
-to <tt>tsdb/skeletons/lab2/item</tt>.
+<ul>
+<li>This script is going to be pretty picky about the format
+of your test suite.  If you have questions, please post to Canvas (10 minute rule!).
 
-<li>Copy <tt>tsdb/skeletons/Relations</tt> to <tt>tsdb/skeletons/lab2/relations</tt> (notice the change from R to r).
+<li>It requires python3.
+
+<li>If the above command is successful, <code>testsuite.txt.item</code>
+would be created in the working directory.  If the testsuite contains errors, it's possible that a lot of output will appear on stderr.  It maybe useful to redirect this into a file that you can use to go through
+and correct the errors one at a time.  For example:
+
+<p><code>./make_item testsuite.txt item 2>errs</code>
+
+<p>The command just above attempts to create 'item' in the working directory, and stderr messages are redirected to the file 'errs'.
+
+<p><code>make_item</code> contains a default mapping from testsuite line types into particular fields of the <code>[incr_tsdb()]</code> item file.  The default mapping puts 'orth' into 'i-input', the field which the is the input to the grammar.  If your grammar targets a different testsuite line, override the default mapping with the <code>-m</code>/<code>--map</code> option.
+
+<p><code>./make_item --map orth-seg i-input testsuite.txt item</code>
+
+<p>The invocation above maps the <code>orth-seg</code> line into the input field.
+
+<p>You can run <code>make_item</code> with <code>-h</code>/<code>--help</code> to see a summary of the options.
+
+</ul>
+
+<li>Copy the <code>testsuite.txt.item</code> file which is output by <code>make_item</code>
+to <code>tsdb/skeletons/lab2/item</code>.
+
+<li>Copy <code>tsdb/skeletons/Relations</code> to <code>tsdb/skeletons/lab2/relations</code> (notice the change from R to r).
 
 <li>The final directory structure should look like this:
 <pre>
@@ -352,12 +374,31 @@ instance, as you'll be asked to turn it in.
 
 <h2><a name="submit">Submit your assignment</a></h2>
 
-<ul>
+<p>Please use git as version control for your work in this class, and
+  upload the grammars to    
+
+  <ul>
   <li>Be sure your write up and the text-file version of your test suite are
   included in your grammar directory (under <code>doc</code> and <code>data</code> respectively)
   <li>Likewise, make sure to include your most current tsdb profile in the grammar directory (ideally inside tsdb/home/).
-  <li>Commit them to <a href='https://github.com/bond-lab/Grammar-Engineering'>https://github.com/bond-lab/Grammar-Engineering</a>
-</ul>
+  <li>Commit them to <a href='https://github.com/bond-lab/Grammar-Engineering-Grammars'>https://github.com/bond-lab/Grammar-Engineering-Grammars</a>
+  <li> Concrete steps (first time only)
+    <ul>
+      <li>Clone the repository
+	<br><code>$ git clone https://github.com/bond-lab/Grammar-Engineering-Grammars.git</code>
+      <li>Add your grammar directly to the top directory
+      <br><code>$ git add grammar_name</code>
+      <li>Commit your grammar
+	<br><code>$ git commit grammar_name "first version"</code>
+      <li>When it is ready upload it
+	<br><code>$ git push grammar_name "first version"</code>
+    </ul>
+     <li> Concrete steps (supsequently)
+       <ul>
+	 <li>commit often
+	 <li>pull, push when you are ready
+     </li>
+  </ul>
 
 <p><a href="lab2.html">Back to top</a>
 <p><a href="index.html">Back to course page</a>
