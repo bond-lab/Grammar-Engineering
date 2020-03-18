@@ -6,33 +6,41 @@
 <body>
 <h1>Lab 5</h1>
 
+<p>Check the <a href="#writeup">write up instructions</a> first.
+
+
+
 <h2>Preliminaries</h2>
-
-<p>These instructions might get edited a bit over the next
-couple of days.  I'll try to flag changes.
-
-<p>As usual, check the <a href="#writeup">write up instructions</a> first.
 
 
 <a name="req"><h3>Requirements for this assignment</h2></a>
 
-<ul>
-  <li>0. Make sure you have a baseline test suite corresponding
-  to your lab 4 grammar.
-  <li><a href="#adjadv">1.</a> Add adjectival and adverbial modifiers.
-  <li><a href="#adjagr">2.</a> If your language has agreement between
+<ol>
+  <li>Make sure you have a baseline test suite corresponding to your
+    lab 4 grammar (the final grammar from the Matrix).  Add some
+    (positive and negative) examples of adjectival and adverbial
+    modifiers.
+    <ul>
+      <li>update your skeleton
+      <li>create a profile and parse it (this is the baseline test suite)
+    </ul>
+    
+  <li><a href="#adjadv">Add adjectival and adverbial modifiers.</a>
+  <li><a href="#adjagr"> If your language has agreement between
   adjectives and head nouns, implement the appropriate lexical rules
-  for adjectives to model this.
-  <li><a href="#cogst">3.</a> Add demontratives and markers of definiteness (if any).
-  <li><a href="#pro-d">4.</a> Refine the rules allowing for optional arguments (argument drop) to reflect the discourse constraints on when arguments can be dropped.
+  for adjectives to model this.</a>
+  <li><a href="#cogst"> Add demontratives and markers of definiteness (if any).</a>
+  <li><a href="#pro-d"> Refine the rules allowing for optional arguments (argument drop) to reflect the discourse constraints on when arguments can be dropped.</a>
   <li>5. If there's anything simple that you've been waiting for tdl editing to fix, optionally fix it now.  (Keyword here is simple1)
-  <li><a href="#corpus">6.</a> Collect a small test corpus and create a testsuite file for it.
-  <li>7. Test your grammar using [incr tsdb()].
-[incr tsdb()] should be part of your test-development
-cycle.  In addition, you'll need to run a final test suite instance
-for this lab to submit along with your basline.
-<li><a href="#write">8.</a> Write up the phenomena you have analyzed.
-</ul>
+  <li><a href="#corpus">Collect a small test corpus and create a testsuite file for it.</a>
+  <li>Test!
+    <ul>
+      <li>create a profile and parse it (this is the baseline test
+	suite)
+	<li>analyse with PyDelphin and compare to the baseline
+    </ul>
+  <li><a href="#write">Write up the phenomena you have analyzed.</a>
+</ol>
 
 <hr>
 
@@ -486,7 +494,7 @@ the item (and relations) file to create a testsuite skeleton.
 <a name="write"><h2>Write up your analyses</h2></a>
 
 <p>For each of the following phenomena, please include
-the following your write up:
+the following in your final write up:
 
 <ol>
   <li>A descriptive statement of the facts of your language.
@@ -506,9 +514,9 @@ the following your write up:
 
 <p>In addition, your write up should include a statement of the current
 coverage of your grammar over your test suite (using numbers you can
-get from Analyze | Coverage and Analyze | Overgeneration in [incr tsdb()])
+get from PyDelphin);
 and a comparison between your baseline test suite run and your final
-one for this lab (see Compare | Competence).
+one for this lab.
 
 <P>Finally please briefly describe your test corpus, including: where
 you collected it, how many sentences it contains, and what format
