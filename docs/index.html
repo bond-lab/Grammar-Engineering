@@ -233,7 +233,7 @@ in HPSG; <a href='pdf/early-lec.pdf'>Chart Parsing</a>
     </ul>
   <li> <b>40%</b> Grammar 
     <ul>
-      <li> the grammar should be tarred and gzipped into a single file
+      <li> the grammar should be uploaded to a github repository
       <li> it should be working (I should be able to load and test it)
       <li> it should contain a  skeleton created from the testsuite
     </ul>
@@ -245,6 +245,32 @@ in HPSG; <a href='pdf/early-lec.pdf'>Chart Parsing</a>
       <li> Suggest ways the grammar should be extended
     </ul>
 </ul>
+
+<h4>Submission Instructions</h4>
+
+<p>From week 5 (when we have stopped making changes via the Matrix),
+  please upload your grammar to github.  
+
+  <ul>
+    <li>There are general instructions <a href='http://moin.delph-in.net/VersionControlForGrammarDevelopment#Git'>here</a>
+    <li>Please put your testsuite under <code>data/</code>
+      <br>e.g., <code>data/testsuite</code
+   <li>Please put your skeletons under <code>tsdb/skeletons/</code>
+     <br>e.g., <code>tsdb/skeletons/testsuite/</code>
+     <br>e.g., <code>tsdb/skeletons/corpus/</code> 
+   <li>Please put your write up under <code>docs</code>   
+     <br>e.g., <code>docs/writeup.tex</code>
+   <li>Please also commit a pdf version of your writeup
+      <br>e.g., <code>docs/writeup.pdf</code>
+  </ul>
+<p>I recommend you add to .gitattributes
+  <pre>
+    *.odt binary
+    *.pdf binary
+  </pre>
+  This will mean git does not try to save diffs.
+
+  
 
 <h3>Acknowledgment</h4>
 <p>Course materials borrow heavily
