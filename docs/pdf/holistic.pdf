@@ -1,0 +1,1009 @@
+% -*- Mode: LaTeX -*-
+
+\documentclass[12pt,a4,landscape]{article}
+
+\newif \ifteaser \teaserfalse
+\newif \ifproject \projectfalse
+
+\usepackage{latexsym}
+\usepackage{epsfig}
+\usepackage{fancybox}
+\usepackage{graphics}
+\usepackage{graphpap}
+\usepackage{qtree}
+\usepackage{avm}
+\usepackage{relsize}
+
+\usepackage{pst-all}
+
+\psset{boxsep=false}
+\psset{linewidth=1mm}
+
+\input{coling}
+
+\ifteaser
+   \usepackage {color}
+   \definecolor{light}{gray}{.2}
+\fi
+
+\special{landscape}
+
+\textheight 18.1cm
+\textwidth 25.5cm
+\headheight 0cm
+\topmargin -0.9cm
+\oddsidemargin -0.4cm
+\headsep 0cm
+\parindent 0.6cm
+
+\newcommand\hpt{\hbox{$\cdot$}}
+\newcommand{\testset}[1]{{\upshape `\hspace*{-0.25ex}{\itshape #1}\/'}}
+\newcommand{\cplusplus}{{\mbox{C$^{\left\lbrack++\right\rbrack}$}}}
+\newcommand{\itsdb}{{\sf \lbrack incr tsdb()\rbrack}}
+
+\renewcommand{\rmdefault}{phv}
+\renewcommand{\sfdefault}{phv}
+
+\newfont{\footerold}{cmmi10}
+\newfont{\footersc}{cmcsc10}
+\newfont{\footertt}{cmtt10}
+
+\newfont{\headerup}{phvb at 28pt}
+
+\newfont{\titlehvr}{phvr at 40pt}
+\newfont{\subtitlehvr}{phvr at 20pt}
+\newfont{\ssubtitlehvr}{phvr at 28pt}
+
+\newfont{\tinyhvr}{phvr at 6pt}
+
+\newfont{\authorhvb}{phvb at 20pt}
+\newfont{\affiliationhvr}{phvr at 20pt}
+\newfont{\emailtt}{cmtt10 scaled \magstep3}
+
+\newfont{\collaboratorshvr}{phvr at 32pt}
+
+\newfont{\itsdbhvr}{phvr at 120pt}
+\newfont{\itsdbhvb}{phvb at 110pt}
+\newfont{\itsdbhvro}{phvro at 48pt}
+
+\newcommand{\hpsg}{{\sc hpsg}}
+\newcommand{\tsnlp}{{\sc tsnlp}}
+\newcommand{\perform}{{\sc perform}}
+\newcommand{\page}{{\sf PAGE}}
+
+\newcommand{\footerbody}%
+           {Towards Holistic Testing (\thepage)}
+
+
+\newcommand{\header}[1]{\begin{center}{\headerup {#1}}\end{center}}
+
+\newcommand{\cslifooter}{%
+  \vspace*{\fill}
+  \begin{center}
+    \rule{0.75cm}{1pt}%
+    \raisebox{0.5em}{%
+      \vbox to 1em{%
+        \hbox to 2.8cm{\ \epsfig{file=include/stanford.eps,width=2.5cm}\ }}}
+    \rule{11.4cm}{1pt}%
+    \raisebox{-0.2ex}{\ {\footersc hainan ---
+                        {\footerold 20}-mar-{\footerold 04}
+                        ({\footertt oe@csli.stanford.edu})}\ }%
+    \rule{1cm}{1pt}\\
+    {\Large\footerbody}
+  \end{center}}
+\let\footer\cslifooter
+
+\pagestyle{empty}
+\raggedright
+
+\begin{titlepage}
+\end{titlepage}
+
+\begin{document}
+  \setcounter{page}{1}
+\begin{LARGE}
+
+
+\newcommand{\collaboration}{%
+  {\collaboratorshvr
+    Tim Baldwin, John Beavers, Ezra Callahan,\\[1ex]
+    Emily M. Bender, Kathryn Campbell-Kibler,\\[1ex]
+    John Carroll, Ann Copestake,\\[1ex]
+    Dan Flickinger, Rob Malouf, Chris Manning,\\[1ex] Ivan A.\ Sag,
+    Stuart Shieber,\\[1ex] Kristina Toutanova, Tom Wasow,\\[1ex] and others.}}
+
+
+  \vspace*{-2cm}
+  \begin{center}\mbox{%    
+    \begin{minipage}{9.5cm}
+      \vspace{2cm}
+      \hspace*{-0.5cm}\epsfig{file=include/redwoods.eps,width=9.5cm}
+    \end{minipage}
+    \hspace{-0em}
+    \begin{minipage}{16cm}
+      \begin{center}
+        \vspace{2cm}
+        {\titlehvr Towards Holistic Testing}\\[0.7cm]
+        {\subtitlehvr Grafting Treebank Maintenance into the\\[0.5ex]
+                       Grammar Revision Cycle}\\[1.6cm]
+
+        \begin{tabular}{@{}c@{\hspace{1em}}c@{}}
+          {\authorhvb Stephan Oepen}
+          & {\authorhvb Dan Flickinger}\\[0.2cm]
+          {\affiliationhvr Universitetet i Oslo}
+          & \raisebox{-1.5ex}{\affiliationhvr CSLI Stanford}\\[-0.6ex]
+          {\affiliationhvr \& CSLI Stanford}
+          & \\
+          {\emailtt oe@csli.stanford.edu}
+          & {\emailtt danf@csli.stanford.edu}
+        \end{tabular}\\[0.7cm]
+        {\authorhvb Francis Bond}\\[0.2cm]
+        {\affiliationhvr NTT Communication Science Laboratory}\\
+        {\emailtt bond@cslab.kecl.ntt.co.jp}
+      \end{center}
+    \end{minipage}}\\
+  \end{center}
+  \newpage
+
+
+  \header{Why Both a Grammar and a Treebank?}
+  \vspace{-0em}
+\ifteaser\else
+  \begin{center}
+    \setlength{\fboxsep}{15pt}
+    \shadowbox{%
+      \begin{minipage}[t]{24.5cm}
+        \centerline{\bf Ambiguity Management}
+        \vspace{0.3ex}
+        \begin{itemize}
+          \item With broad-coverage grammars, even moderately complex
+                sentences typically have multiple analyses
+                (tens or hundreds, rarely thousands);
+          \vspace{0.3ex}
+          \item unlike in grammar writing, exhaustive parsing is
+                useless for applications;
+          \vspace{0.3ex}
+          \item identifying the `right' (intended) analysis is
+                an `AI-complete' problem;
+          \vspace{0.3ex}
+          \item [$\rightarrow$]
+                emerging work on stochastic parse selection requires
+                training material.
+        \end{itemize}
+      \end{minipage}}\\[0.5ex]
+    \setlength{\fboxsep}{15pt}
+    \shadowbox{%
+      \begin{minipage}[t]{24.5cm}
+        \centerline{\bf Sustained Coverage}
+        \vspace{0.3ex}
+        \begin{itemize}
+          \item Large-scale grammars are intricate:\
+                systematic regression testing;
+          \vspace{0.3ex}
+          \item variety of constructions across different data sets;
+                corpora and test suites; 
+          \vspace{-1.9ex}
+          \item [$\rightarrow$]
+                need to identify and maintain {\em intended\/} analyses, trees,
+                semantics, et al.
+        \end{itemize}
+      \end{minipage}}
+  \end{center}
+\fi
+  \vspace{-0em}
+  \footer
+  \newpage
+
+
+  \header{Our Grammar: LinGO English Resource Grammar}
+  \vspace{0.5em}
+  \begin{center}
+    \setlength{\fboxsep}{15pt}
+    \shadowbox{%
+      \begin{minipage}[t]{22.8cm}
+        \centerline{\bf Development Background (1993 -- present)}
+        \begin{itemize}
+          \vspace{0.5ex}
+          \item General-purpose, wide-coverage, computational English grammar;
+          \item mainly Dan Flickinger, with Rob Malouf, Emily
+                M.\ Bender, Jeff Smith;
+          \item supported in multiple \hpsg\ processing
+                environments (LKB \& PET). 
+        \end{itemize}
+      \end{minipage}}\\[1.5ex]
+    \setlength{\fboxsep}{15pt}
+    \shadowbox{%
+      \begin{minipage}[t]{22.8cm}
+        \centerline{\bf Design}
+        \begin{itemize}
+          \vspace{0.5ex}
+          \item \hpsg\ [Pollard \& Sag 1994]: constraint-based,
+                strongly lexicalized;
+          \item MRS [Copestake et al., 1999]:
+                flat, event-based, underspecified;
+          \item type hierarchies defining principles, lexical
+                classes, constructions;
+          \item strict grammaticality assumption:\ generator using same
+                grammar. 
+        \end{itemize}
+      \end{minipage}}
+  \end{center}
+  \vspace{-1.6em}
+  \footer
+  \newpage
+
+
+  \header{LinGO ERG: Coverage and Size}
+  \vspace{-0.6em}
+\ifteaser\else
+  \begin{center}
+    \setlength{\fboxsep}{15pt}
+    \shadowbox{%
+      \begin{minipage}[t]{22.8cm}
+        \centerline{\bf Linguistic Coverage}
+        \begin{itemize}
+          \vspace{0.5ex}
+          \item 85$\,$\% of 12,000 transcribed dialogue turns from
+                VerbMobil domains;
+          \item 80$^+\,$\% of customer emails in financial and
+                ecommerce domains;
+          \item both fairly short utterances: average 9 words,
+                ranging from 1$\,$--$\,$40;
+          \item 80$\,$\% of phenomena-based examples in Hewlett Packard
+                test suite.;
+          \item more recently, 95$\,$\% on excerpts from tourism
+                brochures (13 words).
+        \end{itemize}
+      \end{minipage}}\\[1ex]
+    \setlength{\fboxsep}{15pt}
+    \shadowbox{%
+      \begin{minipage}[t]{22.8cm}
+        \centerline{\bf Size of Grammar (as of October 2003)}
+        \begin{itemize}
+          \vspace{0.5ex}
+          \item some 2,600 types for fundamentals, lexicon, rules, and
+                sematics; 
+          \item 11,152 lexical entry stems (around 2,500 verbs
+                and 3,100 nouns);
+          \item 27 lexical (15 inflectional) rules and 96 phrase
+                structure schemata.
+        \end{itemize}
+      \end{minipage}}
+  \end{center}
+  \vspace{-0.6em}
+\fi
+  \footer
+  \newpage
+
+
+  \header{Sample Data (Tourism Domain)\\[0.5ex]
+          Analyzed by LinGO ERG}
+  \vspace{0.5em}
+  \begin{center}
+    \setlength{\fboxsep}{25pt}
+    \shadowbox{%
+      \begin{minipage}[t]{23cm}
+        \begin{itemize}
+          \item[1] 
+               {\it Be considerate of game, farm animals and other hikers.}
+          \item[109]
+               {\it Kjeragveggen has interested climbers since the 1970s.}
+          \item[304] 
+               {\it But there are things to do for those with
+                    knickers and anoraks too.} 
+          \item[39] 
+               {\it Follow the road past NUTEC and continue up along
+                    Kvarvenveien, past the recreation area.} 
+          \item[248] 
+               {\it The first part of the trip goes with the
+                    Hurtigruta to Torvik, with a bicycle ride at night
+                    into the sunrise out to Runde, and a hike to
+                    Norway's southernmost bird mountain.}  
+          \item[326] 
+               {\it If there is one thing Swedes are concerned with,
+                    it is preparing delicious dishes.} 
+        \end{itemize}
+      \end{minipage}}
+  \end{center}
+  \vspace{0em}
+  \footer
+  \newpage
+
+
+  \header{Grammatical Coverage on Tourism Excerpts}
+  \vspace{0.7em}
+  \begin{center}
+    \renewcommand{\arraystretch}{1.1}
+    \begin{tabular}{@{}|l|c|c|c|c|c|c|@{}}
+      \hline
+      \multicolumn{7}{|c|}
+        {\bf `lingo/08-nov-03/hike/03-11-14/pet' Coverage Profile}\\
+      \hline\hline
+      & {\bf  total} & {\bf word} & {\bf lexical}
+        & {\bf parser} & {\bf total} & {\bf overall}\\
+      {\bf Aggregate} & {\bf items} & {\bf string}
+        & {\bf items} & {\bf analyses} & {\bf results}
+        & {\bf coverage}\\
+      & $\sharp$ & $\phi$ & $\phi$ & $\phi$
+        & $\sharp$ & $\%$\\
+      \hline
+      \hline
+      \multicolumn{1}{|c|}{35 $\leq$ {\em i-length\/} $<$ 40} & 1 & 35.00 & 109.00 & 2372.00 & 1 & 100.0\\
+      \multicolumn{1}{|c|}{30 $\leq$ {\em i-length\/} $<$ 35} & 2 & 32.50 & 109.00 & 1768.00 & 2 & 100.0\\
+      \multicolumn{1}{|c|}{25 $\leq$ {\em i-length\/} $<$ 30} & 7 & 26.71 & 100.57 & 1393.14 & 7 & 100.0\\
+      \multicolumn{1}{|c|}{20 $\leq$ {\em i-length\/} $<$ 25} & 28 & 21.68 & 78.36 & 931.93 & 28 & 100.0\\
+      \multicolumn{1}{|c|}{15 $\leq$ {\em i-length\/} $<$ 20} & 72 & 16.89 & 54.08 & 136.18 & 67 & 93.1\\
+      \multicolumn{1}{|c|}{10 $\leq$ {\em i-length\/} $<$ 15} & \psovalbox{119} & 11.77 & 39.85 & 35.87 & 113 & 95.0\\
+      \multicolumn{1}{|c|}{5 $\leq$ {\em i-length\/} $<$ 10} & 95 & 7.47 & 23.49 & 5.79 & 89 & 93.7\\
+      \multicolumn{1}{|c|}{0 $\leq$ {\em i-length\/} $<$ 5} & 6 & 4.00 & 7.67 & 1.33 & 6 & 100.0\\
+      \hline
+      \hline
+      {\bf Total} & {\bf 330} & \psovalbox{\bf 12.86} & {\bf 42.85}
+        & \psovalbox{\bf 177.17} & {\bf 313} & \psovalbox{\bf 94.8}\\
+      \hline
+      \multicolumn{7}{r}{\raisebox{1ex}{\tiny 
+        (generated by [incr tsdb()] at 14-nov-2003 (22:49 h))}}
+    \end{tabular}
+  \end{center}
+  \vspace{-1em}
+  \footer
+  \newpage
+
+
+
+  \header{Why (Yet) Another (Type of) Treebank?}
+  \vspace{0.5em}
+\ifteaser\else
+  \begin{center}
+    \setlength{\fboxsep}{15pt}
+    \shadowbox{%
+      \begin{minipage}[t]{23cm}
+        \centerline{\bf Requirements for Disambiguation}
+        \vspace{0.8ex}
+        \begin{itemize}
+          \item {\bf syntax vs.\ semantics}\hspace{1em}
+                topicalization vs.\ attachment ambiguity;
+          \vspace{0.3ex}
+          \item {\bf granularity}\hspace{1em}
+                adequate match to degree of granularity in grammar;
+          \vspace{0.3ex}
+          \item {\bf adaptability}\hspace{1em}
+                map into various formats; semi-automated updates.
+        \end{itemize}
+      \end{minipage}}\\[2ex]
+    \shadowbox{%
+      \begin{minipage}[t]{23cm}
+        \centerline{\bf Existing Resources (PTB, SUSANNE, NeGra, PDT,
+                     et al.)}
+        \vspace{0.8ex}
+        \begin{itemize}
+          \item {\bf (primarily) mono-stratal}\hspace{1em}
+                topological {\em or\/} tectogrammatical;
+          \vspace{0.3ex}
+          \item {\bf (relatively) shallow}\hspace{1em}
+                limited syntax, little or no semantics;
+          \vspace{0.3ex}
+          \item {\bf (mostly) static}\hspace{1em}
+                (manual) ground truth annotation, no evolution.
+        \end{itemize}
+      \end{minipage}}
+  \end{center}
+  \vspace{-1em}
+\fi
+  \footer
+  \newpage
+
+
+  \header{LinGO Redwoods: a Rich and Dynamic Treebank}
+  \vspace{0em}
+  \begin{center}
+    \setlength{\fboxsep}{20pt}
+    \shadowbox{%
+      \begin{minipage}[t]{23.3cm}
+        \begin{itemize}
+          \item Tie treebank development to existing broad-coverage grammar;
+          \vspace{0.1ex}
+          \item hand-select (or reject) intended analyses from parsed corpus;
+          \vspace{0.1ex}
+          \item \mbox{}[Carter, 1997]: annotation by {\em basic
+                discriminating\/} properties;
+          \vspace{0.1ex}
+          \item record {\em annotator decisions\/} (and entailment) as
+                first-class data; 
+          \vspace{0.1ex}
+          \item provide toolkits for dynamic mappings into various formats; 
+          \vspace{0.1ex}
+          \item integrate treebank maintenance with grammar regression testing.
+        \end{itemize}
+      \end{minipage}}\\[1ex]
+    \shadowbox{%
+      \begin{minipage}[t]{23.3cm}
+        \centerline{\bf Key Challenges}
+        \vspace{0.5ex}
+        \begin{itemize}
+          \item Derivative of grammar:\ undergeneration
+                results in gaps in treebank; 
+          \vspace{0.1ex}
+          \item grammar evolution gradually invalidates treebank;
+                update procedures.
+        \end{itemize}
+      \end{minipage}}
+  \end{center}
+  \vspace{-1em}
+  \footer
+  \newpage
+
+
+  \header{LinGO Redwoods: A Quick Test Drive}
+  \vspace{0.5em}
+  \begin{center}
+    \mbox{\epsfig{file=include/screenshot,height=13.5cm}}
+  \end{center}
+  \vspace{-1em}
+  \footer
+  \newpage
+
+
+
+  \header{Annotation: Basic Discriminating Properties}
+  \vspace{-0.5em}
+  \begin{center}
+    \setlength{\fboxsep}{20pt}
+    \shadowbox{%
+      \begin{minipage}[t]{23.5cm}
+        \centerline{\bf Key Notions}
+        \vspace{0.5ex}
+        \begin{itemize}
+          \item Extract minimal set of {\em basic discriminants\/} from set of
+                \hpsg\ analyses;
+          \vspace{0.1ex}
+          \item quick navigation through parse forest; easy to judge
+                [Carter, 1997];
+          \vspace{0.1ex}
+          \item constituents: use of particular construction over
+                substring of input;
+          \vspace{0.1ex}
+          \item lexical items: use of particular lexical entry for
+                input token (a `word');
+          \vspace{0.1ex}
+          \item labeling: assignment of particular abbreviatory label
+                to a constituent; 
+          \vspace{0.1ex}
+          \item semantics: appearance of particular key relation on
+                constituent.
+        \end{itemize}
+      \end{minipage}}\\[1ex]
+    \shadowbox{%
+      \begin{minipage}[t]{23.5cm}
+        \centerline{\bf Preliminary Experience}
+        \vspace{0.5ex}
+        \begin{itemize}
+          \item Stanford undergraduate annotates some 2000
+                sentences per week.
+        \end{itemize}
+      \end{minipage}}
+  \end{center}
+  \vspace{-1em}
+  \footer
+  \newpage
+
+
+  \header{Redwoods Representations: Native Encoding}
+  \vspace{-0.3em}
+  \begin{center}
+    {\large
+    \leaf{\em do}
+    \branch{1}{do1\_pos}
+    \branch{1}{sailr}
+    \leaf{\em you}
+    \branch{1}{you}
+    \branch{2}{hcomp}
+    \leaf{\em want}
+    \branch{1}{want\_v2}
+    \branch{1}{bse\_verb}
+    \leaf{\em to}
+    \branch{1}{to\_c\_prop}
+    \leaf{\em meet}
+    \branch{1}{meet\_v1}
+    \branch{1}{bse\_verb}
+    \leaf{\em on}
+    \branch{1}{on\_day}
+    \leaf{\em Tuesday}
+    \branch{1}{tuesday1}
+    \branch{1}{sing\_noun}
+    \branch{1}{noptcomp}
+    \branch{1}{proper\_np}
+    \branch{2}{hcomp}
+    \branch{2}{hadj\_i\_uns}
+    \branch{2}{hcomp}
+    \branch{2}{hcomp}
+    \branch{2}{hcomp}
+    \branch{1}{yesno}
+    \qobitree}\\
+  \end{center}
+  \vspace{-1em}
+  \footer
+  \newpage
+
+  \header{Derived Encodings: Labeled Phrase Structure Trees}
+  \vspace{0.5em}
+\ifteaser\else
+  \begin{center}
+    \begin{tabular}{@{}c@{\hspace{2.5em}}c@{}}
+      \begin{minipage}[t]{8cm}
+        \begin{itemize}
+          \vspace{-2ex}
+          \item reconstruct full \hpsg\ analysis from derivation tree;
+          \vspace{1ex}
+          \item optionally, collapse or suppress nodes.
+          \vspace{1ex}
+          \item match underspecified feature structure `templates'
+                against each node:
+          \vspace{0.1ex}
+          \item []
+                \mbox{\hbox to 0.3cm{}\hbox to 3cm{\Large
+                \tavm{label$\,$}{%
+                  \av{SYNSEM.LOCAL.CAT}{\avm{%
+                                         \av{HEAD}{verbal}
+                                         \av{VAL}{\avm{%
+                                                    \av{SUBJ}{\sequence{}}
+                                                    \av{COMPS}{*olist*}}}}}}%
+                  \hspace{1.5ex}$\rightarrow$\hspace{1.3ex}`S'}}
+        \end{itemize}
+      \end{minipage}
+      &
+      {\large
+      \leaf{\em do}
+      \branch{1}{V}
+      \branch{1}{V}
+      \leaf{\em you}
+      \branch{1}{NP}
+      \branch{2}{V}
+      \leaf{\em want}
+      \branch{1}{V}
+      \branch{1}{V}
+      \leaf{\em to}
+      \branch{1}{COMP}
+      \leaf{\em meet}
+      \branch{1}{VP-NF}
+      \branch{1}{VP-NF}
+      \leaf{\em on}
+      \branch{1}{P}
+      \leaf{\em Tuesday}
+      \branch{1}{N}
+      \branch{1}{N}
+      \branch{1}{N}
+      \branch{1}{NP-T}
+      \branch{2}{PP}
+      \branch{2}{VP-NF}
+      \branch{2}{VP-NF}
+      \branch{2}{VP-NF}
+      \branch{2}{S}
+      \branch{1}{S}
+      \qobitree}
+    \end{tabular}
+  \end{center}
+  \vspace{-0.5em}
+\fi
+  \footer
+  \newpage
+
+
+  \header{Derived Encodings: Elementary Dependencies}
+  \vspace{0em}
+\ifteaser\else
+  \begin{center}
+    \setlength{\fboxsep}{10pt}
+    \shadowbox{%
+      \begin{minipage}[t]{24cm}
+        \begin{itemize}
+          \item Reconstruct full \hpsg\ analysis, compute MRS meaning
+                representation;
+          \vspace{-2ex}
+          \item extract basic predicate$\,$--$\,$argument structure
+                with uninterpreted roles;
+          \vspace{0.2ex}
+          \item [$\rightarrow$] labeled dependency graph fragments of
+                (primarily) lexical relations.
+        \end{itemize}
+      \end{minipage}}\\[3ex]
+    \setlength{\fboxsep}{20pt}
+    \Ovalbox{%
+      \begin{minipage}[t]{21.5cm}
+        \begin{center}
+          \hskip 2em\parbox[t]{20cm}{%
+          \llap{e2:$\lbrace$}\mbox{}%
+          \_1:int\_m[MARG \_2:prpstn\_m]\\
+          \_2:prpstn\_m[MARG e2:\_want\_v\_1]\\
+          e2:\_want\_v\_1[ARG1 x6:pron, ARG2 \_3:prpstn\_m]\\
+          \_3:prpstn\_m[MARG e14:\_meet\_v\_1]\\
+          e14:\_meet\_v\_1[ARG1 x6:pron]\\
+          e15:\_on\_p\_temp[ARG1 e14:\_meet\_v\_1, ARG2 x16:dofw(tue)]\\
+          \llap{$\rbrace$}}
+        \end{center}
+      \end{minipage}}
+  \end{center}
+  \vspace{-0.5em}
+\fi
+  \footer
+  \newpage
+
+
+  \header{Holistic Testing in Grammar Engineering}
+  \vspace{0.1em}
+  \begin{center}
+    \setlength{\fboxsep}{15pt}
+    \shadowbox{%
+      \begin{minipage}[t]{23cm}
+        \begin{itemize}
+          \item Resource grammar serves multiple purposes
+            \subitem Implementation of linguistic analyses
+            \subitem Coverage of corpus phenomena for multiple applications
+          \vspace{0.3ex}
+          \item Grammar tuning for one `customer' can affect others
+            \subitem Additional analyses --- more ambiguity
+            \subitem Dropped analyses --- loss of coverage
+          \item Exhaustive testing is required to ensure consistency
+            \subitem Representative data exhibiting all relevant phenomena
+            \subitem Identification of the intended analysis for each item
+          \item Cost of testing must be kept low
+            \subitem Multiple test--tune--test cycles needed for each grammar release
+            \subitem Only essential discriminants presented to grammar writer
+        \end{itemize}
+      \end{minipage}}\\[1.5ex]
+  \end{center}
+  \vspace{-1em}
+  \footer
+  \newpage
+
+
+  \header{Semi-Automatic Update Procedure}
+  \vspace{0.8em}
+\ifteaser\else
+  \begin{center}
+    \setlength{\fboxsep}{20pt}
+    \shadowbox{%
+      \begin{minipage}[t]{23.5cm}
+        \centerline{\bf Bi-Weekly Internal Releases of Revised Grammar}
+        \vspace{1ex}
+        \begin{itemize}
+          \item Regularly, with new grammar version, obtain updated
+                parsed corpus; 
+          \vspace{0.5ex}
+          \item propagate annotator decisions (discriminants), primary
+                and entailed.
+          \vspace{0.5ex}
+          \item new ambiguity: distinctions added to the grammar,
+                manual resolution;
+          \vspace{0.5ex}
+          \item invalid or spurious discriminants: distinctions lost
+                or reformulated;
+          \vspace{0.5ex}
+          \item `misleading' discriminants: theoretically possible but
+                (highly) unlikely;
+          \vspace{0.5ex}
+          \item inspection of mismatches provides diagnostic
+                feedback to grammar;
+          \vspace{0.5ex}
+          \item integration with grammar development cycle, minimize
+                manual work.
+        \end{itemize}
+      \end{minipage}}
+  \end{center}
+  \vspace{-1em}
+\fi
+  \footer
+  \newpage
+
+
+  \header{Some of the Active Development Sets}
+  \vspace{0.1em}
+  \begin{center}
+    \setlength{\fboxsep}{10pt}
+    \Ovalbox{%
+      \begin{minipage}[t]{23cm}\begin{center}
+        \setlength\tabcolsep{0.6em}
+        \renewcommand{\arraystretch}{1.3}
+        \begin{tabular}{@{\hspace*{1ex}}c|rrr|rrr|rrr@{\hspace*{1ex}}}
+          \multicolumn{1}{c}{} 
+            & \multicolumn{3}{c}{\bf active $=$ 0} 
+            & \multicolumn{3}{c}{\bf active $=$ 1} 
+            & \multicolumn{3}{c}{\bf active $>$ 1}\\
+          \raisebox{1ex}{} 
+            & \multicolumn{1}{c}{$\sharp$} 
+            & \multicolumn{1}{c}{$\|$}
+            & \multicolumn{1}{c|}{$\times$} 
+            & \multicolumn{1}{|c}{$\sharp$}
+            & \multicolumn{1}{c}{$\|$}
+            & \multicolumn{1}{c|}{$\times$} 
+            & \multicolumn{1}{|c}{$\sharp$}
+            & \multicolumn{1}{c}{$\|$}
+            & \multicolumn{1}{c}{$\times$} \\
+          \hline
+            {\bf VM$_{\mbox{6}}$}
+              & 15 & 14\hpt 3 & 8670
+              & 3811 & 7\hpt 9 & 111
+              & 0 & 0\hpt 0 & 0\\
+          \hline
+             {\bf EC$_{\mbox{\smaller OC}}$}
+              & 38 & 13\hpt 1 & 259
+              & 1144 & 7\hpt 4 & 47
+              & 2 & 6\hpt 0 & 21\\[0.3ex]
+          \hline
+             {\bf TREC}
+              & 4 & 11\hpt 5 & 86
+              & 662 & 7\hpt 9 & 20
+              & 0 & 0\hpt 0 & 0\\
+          \hline
+             {\bf HIKE}
+              & 1 & 22\hpt 0 & 876
+              & 318 & 12\hpt 9 & 187
+              & 0 & 0\hpt 0 & 0\\
+          \hline
+        \end{tabular}
+      \end{center}\end{minipage}}\\[1ex]
+    \setlength{\fboxsep}{10pt}
+    \shadowbox{%
+      \begin{minipage}[t]{23cm}
+        \begin{itemize}
+          \item Variation in domain, type (spoken, email, QA,
+                narrative), complexity;
+          \vspace{0.2ex}
+          \item minor residues of rejected analyses and
+                unresolved ambiguity;
+          \vspace{0.2ex}
+          \item complemented by syntactic (1348) and semantic
+                (107) test suites.
+        \end{itemize}
+      \end{minipage}}
+  \end{center}
+  \vspace{-1em}
+  \footer
+  \newpage
+
+
+  \header{LinGO ERG: June 2001 vs.\ October 2002}
+  \vspace{1em}
+  \begin{center}
+    \setlength{\fboxsep}{20pt}
+    \shadowbox{%
+      \begin{minipage}[t]{23.5cm}\begin{center}
+        \setlength\tabcolsep{0.275em}
+        \renewcommand{\arraystretch}{1.6}
+        \begin{tabular}{@{\hspace{1ex}}l|rr|c@{\hspace{1ex}}}
+          & {\bf jun-01} & {\bf oct-02} & {\bf $\Delta$}\\
+          \hline
+            {\bf appropriate features} & 148 & 149 & $-$6\% $+$7\%\\
+            {\bf type hierarchy (excluding lexicon)} 
+            & 3,062 & 3,895 & $+$27\%\\
+            {\bf grammar rules (including lexical rules)} & 86 & 94 
+            & $-$11\% $+$26\%\\
+            {\bf lexical types (`parts of speech')} & 400 & 580 & $+$45\%\\
+            {\bf semantic relations (`predicates')} 
+            & 5,406 & 6,162 & $+$14\%\\
+            {\bf lexical entries} & 8,135 & 9,954 & $+$22\%\\
+            {\bf lines of source (excluding lexicon)} & 25,847 
+            & 32,199 & $+$25\%\\
+            \hline
+        \end{tabular}
+      \end{center}\end{minipage}}
+  \end{center}
+  \vspace{-1em}
+  \footer
+  \newpage
+
+
+  \header{Semi-Automated Updates: It Actually Works}
+  \vspace{0em}
+  \begin{center}
+    \setlength{\fboxsep}{20pt}
+    \shadowbox{%
+      \begin{minipage}[t]{23.5cm}\begin{center}
+        \setlength\tabcolsep{0.275em}
+        \renewcommand{\arraystretch}{1.35}
+        \begin{tabular}{@{}l|c|cc|cc|cc|c|cc@{}}
+          \multicolumn{1}{c}{} & \multicolumn{1}{c}{}
+            & \multicolumn{2}{c}{\bf original} 
+            & \multicolumn{2}{c}{\bf matches} 
+            & \multicolumn{2}{c}{\bf update} 
+            & \multicolumn{1}{c}{}
+            & \multicolumn{2}{c}{\bf final}\\[-1ex]
+          \multicolumn{1}{c|}{\bf Aggregate} & {\bf items}
+            & {\bf in} & {\bf out}
+            & {\bf yes} & {\bf no}
+            & {\bf in} & {\bf out}
+            & {\bf new}
+            & {\bf in} & {\bf out}\\[-1.5ex]
+          & $\sharp$ 
+            & $\phi$ & $\phi$ 
+            & $\phi$ & $\phi$ 
+            & $\phi$ & $\phi$ 
+            & $\phi$
+            & $\phi$ & $\phi$\\
+          \hline
+            {\bf new $=$ 0} 
+              & 1421 & 1\hpt 1 & 23\hpt 6 & 8\hpt 1 & 8\hpt 5 
+              & 1\hpt 0 & 13\hpt 9 & 0\hpt 0 & 1\hpt 0 & 13\hpt 9\\
+            {\bf new $=$ 1} 
+              & 708 & 1\hpt 1 & 38\hpt 1 & 6\hpt 9 & 9\hpt 8 
+              & 2\hpt 2 & 29\hpt 6 & 1\hpt 0 & 1\hpt 0 & 30\hpt 8\\
+            {\bf new $\geq$ 2}
+              & 273 & 1\hpt 3 & 61\hpt 5 & 12\hpt 1 & 15\hpt 2 
+              & 4\hpt 2 & 72\hpt 0 & 2\hpt 8 & 1\hpt 0 & 75\hpt 2\\
+            {\bf Total}
+              & {\bf 2402} & {\bf 1\hpt 1} & {\bf 32\hpt 2} 
+              & {\bf 8\hpt 2} & {\bf 9\hpt 6} & {\bf 1\hpt 8} & {\bf 25\hpt 1} 
+              & \psovalbox{\bf 0\hpt 6} & {\bf 1\hpt 0} & {\bf 25\hpt 9}\\
+            \hline\hline
+            {\bf new $=$ 0}
+              & 2195 & 1\hpt 0 & 72\hpt 2 & 17\hpt 2 & 1\hpt 0 
+              & 1\hpt 0 & 69\hpt 3 & 0\hpt 0 & 1\hpt 0 & 69\hpt 3\\
+            {\bf new $=$ 1} 
+              & 73 & 1\hpt 0 & 31\hpt 9 & 11\hpt 7 & 1\hpt 4 
+              & 2\hpt 2 & 116\hpt 0 & 1\hpt 0 & 1\hpt 0 & 117\hpt 3\\
+            {\bf new $\geq$ 2}
+              & 20 & 1\hpt 0 & 192\hpt 6 & 13\hpt 3 & 0\hpt 8 
+              & 16\hpt 7 & 297\hpt 5 & 2\hpt 9 & 1\hpt 0 & 313\hpt 2\\
+            {\bf Total}
+              & {\bf 2288} & {\bf 1\hpt 0} & {\bf 72\hpt 0} 
+              & {\bf 17\hpt 0} & {\bf 1\hpt 1} & {\bf 1\hpt 2} & {\bf 72\hpt 8} 
+              & \psovalbox{\bf 0\hpt 1} & {\bf 1\hpt 0} & {\bf 73\hpt 0}\\
+            \hline
+        \end{tabular}
+      \end{center}\end{minipage}}
+  \end{center}
+  \vspace{-1em}
+  \footer
+  \newpage
+
+
+  \header{Related Work}
+  \vspace{0.6em}
+\ifteaser\else
+  \begin{center}
+    \setlength{\fboxsep}{15pt}
+    \shadowbox{%
+      \begin{minipage}[t]{23cm}
+        \centerline{\bf Non-Public Environments}
+        \vspace{0.5ex}
+        \begin{itemize}
+          \item Related work at SRI Cambridge, (Xerox) PARC, and 
+                M\$ Research; 
+          \item grammars, language corpora, and treebanks not publicly
+                available; 
+          \item results published in some cases, generally difficult to
+                reproduce. 
+        \end{itemize}
+      \end{minipage}}\\[2.5ex]
+    \setlength{\fboxsep}{15pt}
+    \shadowbox{%
+      \begin{minipage}[t]{23cm}
+        \centerline{\bf Academic Environments}
+        \vspace{0.5ex}
+        \begin{itemize}
+          \item \mbox{} [Dipper, 2000]\hspace{1em}
+                {\sc lfg} for German, `transfer' into TiGer format;
+          \item \mbox{} [Bouma et al., 2001]\hspace{1em}
+                \hpsg\ for Dutch, dependency structures only;
+          \item \mbox{} [Simov et al., 2002]\hspace{1em}
+                parallel treebanking and grammar writing;
+          \item to our best knowledge, no existing {\em rich\/} and
+                {\em dynamic\/} treebanks.
+        \end{itemize}
+      \end{minipage}}
+  \end{center}
+  \vspace{0em}
+\fi
+  \footer
+  \newpage
+
+
+  \header{Conclusions --- Outlook}
+  \vspace{0em}
+  \hspace*{-1cm}%
+  \begin{center}
+    \setlength{\fboxsep}{15pt}
+    \shadowbox{%
+      \begin{minipage}[t]{25cm}
+        \begin{itemize}
+          \item `Deep' grammar-based processing requires adequate
+                stochastic models;  
+          \vspace{0.3ex}
+          \item no existing treebank resources with suitable granularity and
+                flexibility; 
+          \vspace{0.3ex}
+          \item LinGO Redwoods treebank tied to broad-coverage \hpsg\
+                implementation;
+          \vspace{0.3ex}
+          \item [$\rightarrow$]
+                paradigm shift in sustainable, broad-coverage
+                grammar engineering.
+        \end{itemize}
+      \end{minipage}}\\[2ex]
+    \shadowbox{%
+      \begin{minipage}[t]{25cm}
+        \centerline{\bf More Recent Developments}
+        \vspace{0.5ex}
+        \begin{itemize}
+          \item Expanded annotation in multiple domains with varied
+                characteristics; 
+          \vspace{0.3ex}
+          \item Japanese off-spring:\ {\em Hinoki\/} (NTT); 92$\,$\%
+                coverage on dictionary definitions;
+          \vspace{-1.9ex}
+          \item systematic inter-annotator agreement experiments;
+                `blazing' the trail.  
+        \end{itemize}
+      \end{minipage}}
+  \end{center}
+  \vspace{-0.5em}
+  \footer
+  \newpage
+
+
+  \header{Outlook: Go, Take a Stroll!}
+  \vspace{-0em}
+  \begin{center}
+    \mbox{\epsfig{file=include/trees.eps,height=11.5cm,width=19.5cm}}\\[1ex]
+    \setlength{\fboxsep}{15pt}
+    \shadowbox{\makebox[18.3cm][c]{\em
+       http://redwoods.stanford.edu}}\\
+  \end{center}
+  \vspace{-0.2em}
+  \footer
+  \newpage
+
+
+  \begin{center}
+  \setlength{\fboxsep}{0.4cm}
+  \vspace*{0.8cm}
+  \shadowbox{%
+    \makebox[21cm][c]{\headerup Based on Research and Contributions of
+                      \headerup }}\\[2.5cm]
+  \collaboration
+  \end{center}
+  \newpage
+
+
+
+  \header{Redwoods Applications: Parse Disambiguation}
+  \vspace{1em}
+  \begin{center}
+    \setlength{\fboxsep}{20pt}
+    \shadowbox{%
+      \begin{minipage}[t]{23.5cm}
+        \begin{itemize}
+          \item Manning \& Toutanova (Stanford): generative and
+                conditional models;
+          \vspace{0.8ex}
+          \item Baldridge \& Osborne (Edinburgh): active learning and
+                co-training;
+          \vspace{0.8ex}
+          \item restrict to Redwoods subset of fully disambiguated
+                ambiguous items;
+          \vspace{0.8ex}
+          \item feature selection: phrase structure, morpho-syntax,
+                dependencies; 
+          \vspace{0.8ex}
+          \item ten-fold cross validation: score against annotated
+                gold standard;
+          \vspace{0.8ex}
+          \item preliminary results: 80$^+\,$\% {\em exact match\/} parse
+                selection accuracy;
+          \vspace{0.8ex}
+          \item on-line use in parser: n-best beam search guided by
+                MaxEnt scores;
+          \vspace{0.8ex}
+          \item [$\rightarrow$]
+                native encoding performs far better than labeled constituent
+                trees.
+        \end{itemize}
+      \end{minipage}}
+  \end{center}
+  \vspace{0em}
+  \footer
+  \newpage
+
+
+\end{LARGE} 
+\end{document}
